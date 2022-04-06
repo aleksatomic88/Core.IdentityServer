@@ -1,14 +1,8 @@
 using DelegateDecompiler;
-using EDD.Domain.Model;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Prato.IdentityProvider.Entities;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
-namespace Identity.Domain.Model
+namespace IdentityServer.Domain.Model
 {
     public class User : BaseModel
     {

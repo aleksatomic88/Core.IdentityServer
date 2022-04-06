@@ -1,17 +1,18 @@
 using Common.Model;
-using Identity.Core.Profiles;
 using Identity.Domain;
-using Identity.Domain.Constants;
 using Identity.Domain.Initializers;
 using IdentityServer4.Services;
 using IdentityServer4.Validation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using Prato.IdentityProvider.Validation;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
+using IdentityServer.Validation;
+using IdentityServer.Domain;
+using IdentityServer.Services;
+using IdentityServer.Domain.Constants;
 
-namespace Identity.Web.Extensions
+namespace IdentityServer.Extensions
 {
     public static class ServiceExtensions
     {

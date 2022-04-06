@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Identity.Web.Extensions;
+using IdentityServer.Extensions;
 using Microsoft.Extensions.Configuration;
 
-namespace Identity
+namespace IdentityServer
 {
     public class Startup
     {

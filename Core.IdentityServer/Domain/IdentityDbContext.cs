@@ -1,10 +1,8 @@
 using Common.Model;
-using Common.Model.Auth;
-using Identity.Domain.Model;
+using IdentityServer.Domain.Model;
 using Microsoft.EntityFrameworkCore;
-using Prato.IdentityProvider.Entities;
 
-namespace Identity.Domain
+namespace IdentityServer.Domain
 {
     public class IdentityDbContext : DbContext, IDatabaseContext
     {

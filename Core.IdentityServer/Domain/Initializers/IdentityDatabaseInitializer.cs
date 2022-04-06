@@ -1,15 +1,8 @@
 using Identity.Domain.Initializers;
-using Identity.Domain.Model;
-using IdentityServer4.EntityFramework.DbContexts;
-using IdentityServer4.EntityFramework.Entities;
-using IdentityServer4.EntityFramework.Mappers;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Prato.IdentityProvider.Entities;
+using IdentityServer.Domain.Model;
 using System.Linq;
 
-namespace Identity.Domain
+namespace IdentityServer.Domain
 {
     /// <summary>
     /// Populates db with data that must exist for app to work properly

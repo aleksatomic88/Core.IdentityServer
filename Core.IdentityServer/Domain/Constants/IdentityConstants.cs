@@ -1,4 +1,4 @@
-﻿namespace Identity.Domain.Constants
+namespace IdentityServer.Domain.Constants
 {
     public class DefaultIdentityConstants
     {

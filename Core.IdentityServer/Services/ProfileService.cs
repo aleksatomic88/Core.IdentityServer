@@ -1,15 +1,13 @@
-using Identity.Domain;
-using Identity.Domain.Model;
 using IdentityModel;
+using IdentityServer.Domain;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace Identity.Core.Profiles
+namespace IdentityServer.Services
 {
     /// <summary>
     /// The ProfileService class is responsible for adding/deleting claims from the user profile to the access token.

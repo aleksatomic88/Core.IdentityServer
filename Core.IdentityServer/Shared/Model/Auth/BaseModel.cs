@@ -1,7 +1,6 @@
 using System;
-using System.ComponentModel.DataAnnotations;
 
-namespace EDD.Domain.Model
+namespace IdentityServer.Domain.Model
 {
     public abstract class BaseModel
     {

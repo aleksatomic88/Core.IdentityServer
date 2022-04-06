@@ -1,11 +1,10 @@
-using Identity.Domain;
+using IdentityServer.Domain;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System;
 
-namespace Identity.Web.Extensions
+namespace IdentityServer.Extensions
 {
     public static class ApplicationBuilderExtensions
     {

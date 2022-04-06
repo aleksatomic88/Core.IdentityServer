@@ -1,8 +1,6 @@
-using EDD.Domain.Model;
-using Prato.IdentityProvider.Entities;
 using System.Collections.Generic;
 
-namespace Identity.Domain.Model
+namespace IdentityServer.Domain.Model
 {
     public class Role
     {

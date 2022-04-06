@@ -1,4 +1,4 @@
-﻿using Common.Model.Auth;
+using IdentityServer.Domain.Model;
 
 namespace Common.Model
 {

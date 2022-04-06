@@ -1,16 +1,14 @@
-using Identity.Domain;
-using Identity.Domain.Model;
+using IdentityServer.Domain;
 using IdentityModel;
 using IdentityServer.Utilities;
 using IdentityServer4.Models;
 using IdentityServer4.Validation;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace Prato.IdentityProvider.Validation
+namespace IdentityServer.Validation
 {
     public class ResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
     {

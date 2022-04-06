@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Identity.Shared.Model
+namespace IdentityServer.Shared.Model
 {
     public class Response<T>
     {

@@ -1,5 +1,5 @@
-using Identity.Domain.Model;
-using Prato.IdentityProvider.Entities;
+using IdentityServer.Domain;
+using IdentityServer.Domain.Model;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -35,7 +35,7 @@ namespace Identity.Domain.Initializers
                 else
                 {
                     existing.Name = role.Name;
-                    existing.Description = role.Description;
+                    ((Role)existing).Description = role.Description;
                 }
             }
 

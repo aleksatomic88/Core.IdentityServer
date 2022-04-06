@@ -1,6 +1,4 @@
-using Identity.Domain.Model;
-
-namespace Prato.IdentityProvider.Entities
+namespace IdentityServer.Domain.Model
 {
     public class UserRole
     {

@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace Identity.Shared.Model
+namespace IdentityServer.Shared.Model
 {
     public class ApiError
     {

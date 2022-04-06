@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Common.Model.Auth
+namespace IdentityServer.Domain.Model
 {
     public class AuthenticatedUser
     {

@@ -1,10 +1,9 @@
 using Identity.Domain.Initializers;
-using Identity.Domain.Model;
+using IdentityServer.Domain.Model;
 using IdentityServer.Utilities;
-using Prato.IdentityProvider.Entities;
 using System.Linq;
 
-namespace Identity.Domain
+namespace IdentityServer.Domain
 {
     /// <summary>
     /// Populets db with some data for testing
