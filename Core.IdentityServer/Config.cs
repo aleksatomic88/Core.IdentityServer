@@ -15,9 +15,9 @@ namespace IdentityServer
 
         public static IEnumerable<ApiResource> GetApiResources() => new List<ApiResource>
             {
-                new ApiResource("api1", "FULL API 1" )
+                new ApiResource("core.users.api", "Core.Users.API" )
                 {
-                    Scopes = new [] { "api-user", "api-address" },
+                    Scopes = new [] { "users-api", "addresses-api" },
                     ApiSecrets = new List<Secret>{ new Secret("secret".Sha256()) }
                 },
             };
@@ -25,8 +25,8 @@ namespace IdentityServer
         public static IEnumerable<ApiScope> GetApiScopes() =>  new List<ApiScope>
             {
                 new ApiScope("sub", "sub", new [] { JwtClaimTypes.Id, JwtClaimTypes.PreferredUserName, JwtClaimTypes.Email, JwtClaimTypes.Name, JwtClaimTypes.Role } ),
-                new ApiScope("api-user", "API - User Endpoints"),
-                new ApiScope("api-address", "API - Address Endpoints"),
+                new ApiScope("users-api", "User Endpoints"),
+                new ApiScope("addresses-api", "Address Endpoints"),
             };
 
         public static IEnumerable<Client> GetClients() => new List<Client>
@@ -42,8 +42,8 @@ namespace IdentityServer
                     
                     AllowedScopes = new []{
                                             "sub",
-                                            "api-user",
-                                            "api-address"
+                                            "users-api",
+                                            "addresses-api"
                                            }
                 },
                 new Client
@@ -57,8 +57,8 @@ namespace IdentityServer
                     
                     AllowedScopes = new []{
                                             "sub",
-                                            "api-user",
-                                            "api-address"
+                                            "users-api",
+                                            "addresses-api"
                                            }
                 }
             };
