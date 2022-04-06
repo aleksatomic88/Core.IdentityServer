@@ -1,5 +1,5 @@
 using Identity.Domain.Model;
-using Microsoft.AspNetCore.Identity;
+using Prato.IdentityProvider.Entities;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,16 +7,16 @@ namespace Identity.Domain.Initializers
 {
     public class RolesInitializer
     {
-        private readonly IdentityDbContext ctx;
+        private readonly IdentityDbContext _ctx;
 
         public RolesInitializer(IdentityDbContext ctx)
         {
-            this.ctx = ctx;
+            _ctx = ctx;
         }
 
         public void Initialize()
         {
-            var existingRoles = ctx.Roles.ToList();
+            var existingRoles = _ctx.Roles.ToList();
 
             foreach (var role in Roles)
             {
@@ -24,7 +24,7 @@ namespace Identity.Domain.Initializers
 
                 if (existing == null)
                 {
-                    ctx.Roles.Add(
+                    _ctx.Roles.Add(
                         new Role
                         {
                             Id = role.Id,
@@ -35,45 +35,49 @@ namespace Identity.Domain.Initializers
                 else
                 {
                     existing.Name = role.Name;
-                    ((Role)existing).Description = role.Description;
+                    existing.Description = role.Description;
                 }
             }
 
-            ctx.SaveChanges();
+            _ctx.SaveChanges();
         }
 
         public void AddAllRolesToUser(User user)
         {
-            var roles = ctx.Roles.ToList();
+            var roles = _ctx.Roles.ToList();
 
-            var existingUserRoles = ctx.UserRoles.Where(ur => ur.UserId == user.Id)?.ToList();
+            var existingUserRoles = _ctx.UserRoles.Where(ur => ur.UserId == user.Id)?.ToList();
 
             foreach (var role in roles)
             {
                 if (!existingUserRoles.Any(ur => ur.RoleId == role.Id))
                 {
-                    ctx.UserRoles.Add(new IdentityUserRole<string> { UserId = user.Id, RoleId = role.Id });
+                    _ctx.UserRoles.Add(new UserRole { UserId = user.Id, RoleId = role.Id });
                 }
             }
         }
 
-        private static List<Role> Roles => new List<Role>
+        public static List<Role> Roles => new()
         {
             new Role
             {
-                Name = "SuperAdmin",
+                Name = SuperAdminRole,
                 Description = "Super Administrator"
             },
             new Role
             {
-                Name = "Admin",
+                Name = AdminRole,
                 Description = "Administrator"
             },
             new Role
             {
-                Name = "Customer",
+                Name = CustomerRole,
                 Description = "Customer"
             }
         };
+
+        public const string SuperAdminRole = "SuperAdmin";
+        public const string AdminRole = "Admin";
+        public const string CustomerRole = "Customer";
     }
 }

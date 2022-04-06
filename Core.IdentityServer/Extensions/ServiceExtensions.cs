@@ -3,14 +3,13 @@ using Identity.Core.Profiles;
 using Identity.Domain;
 using Identity.Domain.Constants;
 using Identity.Domain.Initializers;
-using Identity.Domain.Model;
 using IdentityServer4.Services;
 using IdentityServer4.Validation;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Prato.IdentityProvider.Validation;
 using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 
 namespace Identity.Web.Extensions
 {
@@ -32,14 +31,12 @@ namespace Identity.Web.Extensions
         public static IServiceCollection AddIdentityService(this IServiceCollection services,
                                                             string connectionString)
         {
-            services.AddDbContext<IdentityDbContext>(options =>options.UseSqlServer(connectionString));
-
-            services.AddIdentity<User, Role>(options =>
-            {
-                options.SignIn.RequireConfirmedEmail = false;
-            })
-            .AddEntityFrameworkStores<IdentityDbContext>()
-            .AddDefaultTokenProviders();
+            //services.AddIdentity<User, Role>(options =>
+            //{
+            //    options.SignIn.RequireConfirmedEmail = false;
+            //})
+            //.AddEntityFrameworkStores<IdentityDbContext>()
+            //.AddDefaultTokenProviders();
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -57,19 +54,16 @@ namespace Identity.Web.Extensions
         public static IServiceCollection AddIdentityServerService(this IServiceCollection services,
                                                                   string connectionString)
         {
+
+            services.AddDbContext<IdentityDbContext>(options => options.UseSqlServer(connectionString));
+
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
             var builder = services.AddIdentityServer()
                                   .AddDeveloperSigningCredential() // this is for dev only scenarios when you don’t have a certificate to use.
-                                  .AddConfigurationStore(options =>
-                                  {
-                                      options.ConfigureDbContext = b => b.UseSqlServer(connectionString,
-                                          sql => sql.MigrationsAssembly(migrationsAssembly));
-                                  })
-                                  .AddOperationalStore(options =>
-                                  {
-                                      options.ConfigureDbContext = b => b.UseSqlServer(connectionString,
-                                          sql => sql.MigrationsAssembly(migrationsAssembly));
-                                  })
+                                  .AddInMemoryIdentityResources(Config.GetIdentityResources())
+                                  .AddInMemoryApiResources(Config.GetApiResources())
+                                  .AddInMemoryApiScopes(Config.GetApiScopes())
+                                  .AddInMemoryClients(Config.GetClients())
                                   .AddProfileService<ProfileService>();
 
             return services;

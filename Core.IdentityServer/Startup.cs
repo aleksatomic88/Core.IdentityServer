@@ -28,13 +28,13 @@ namespace Identity
         {
             services.RegisterApplicationServices();
 
-            services.AddIdentityService(ConnectionString);
+            // services.AddIdentityService(ConnectionString);
 
             services.AddIdentityServerService(ConnectionString);
 
-            services.AddMvcServices();
-            services.AddCorsServices();
-            services.AddHealthChecks();
+            // services.AddMvcServices();
+            // services.AddCorsServices();
+            // services.AddHealthChecks();
         }
 
         public void Configure(IApplicationBuilder app)
@@ -44,19 +44,19 @@ namespace Identity
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors("AllowAll");
-            app.UseStaticFiles();
-            app.UseRouting();
+            //app.UseCors("AllowAll");
+            //app.UseStaticFiles();
+            //app.UseRouting();
             
             app.UseIdentityServer();
 
-            app.UseAuthentication();
-            app.UseAuthorization();
+            // app.UseAuthentication();
+            // app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapControllers();
+            //});
 
             app.MigrateDatabase();
         }

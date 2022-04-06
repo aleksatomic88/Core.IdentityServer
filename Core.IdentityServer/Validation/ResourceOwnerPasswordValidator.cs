@@ -1,8 +1,11 @@
+using Identity.Domain;
 using Identity.Domain.Model;
 using IdentityModel;
+using IdentityServer.Utilities;
 using IdentityServer4.Models;
 using IdentityServer4.Validation;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -11,18 +14,18 @@ namespace Prato.IdentityProvider.Validation
 {
     public class ResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
     {
-        protected readonly UserManager<User> _userManager;
+        private readonly IdentityDbContext _ctx;
 
-        public ResourceOwnerPasswordValidator(UserManager<User> userManager)
+        public ResourceOwnerPasswordValidator(IdentityDbContext ctx)
         {
-            _userManager = userManager;
+            _ctx = ctx;
         }
 
         public async Task ValidateAsync(ResourceOwnerPasswordValidationContext context)
         {
-            var user = await _userManager.FindByEmailAsync(context.UserName);
+            var user = await _ctx.Users.FirstOrDefaultAsync(x => x.UserName == context.UserName);
 
-            if (user != null && await _userManager.CheckPasswordAsync(user, context.Password))
+            if (user != null && user.EmailConfirmed && SecurePasswordHasher.Verify(context.Password, user.Password))
             {
                 context.Result = new GrantValidationResult(
                     subject: user.Id.ToString(),

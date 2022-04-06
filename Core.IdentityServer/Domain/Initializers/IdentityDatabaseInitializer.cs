@@ -6,6 +6,7 @@ using IdentityServer4.EntityFramework.Mappers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Prato.IdentityProvider.Entities;
 using System.Linq;
 
 namespace Identity.Domain
@@ -15,125 +16,115 @@ namespace Identity.Domain
     /// </summary>
     public class IdentityDatabaseInitializer
     {
-        private readonly IdentityDbContext ctx;
-        private readonly UserManager<User> userManager;
-        private readonly RolesInitializer rolesInitializer;
-        private readonly ConfigurationDbContext configurationDbContext;
-
-        public IdentityDatabaseInitializer(
-            IdentityDbContext ctx,
-            UserManager<User> userManager,
-            ConfigurationDbContext configurationDbContext,
-            RolesInitializer rolesInitializer
-            )
+        private readonly IdentityDbContext _ctx;
+        private readonly RolesInitializer _rolesInitializer;
+        
+        public IdentityDatabaseInitializer(IdentityDbContext ctx,
+                                           RolesInitializer rolesInitializer)
         {
-            this.ctx = ctx;
-            this.userManager = userManager;
-            this.rolesInitializer = rolesInitializer;
-            this.configurationDbContext = configurationDbContext;
+            _ctx = ctx;
+            _rolesInitializer = rolesInitializer;
         }
 
         public void Initialize()
         {
             InsertRoles();
             InsertUsers();
-            InsertClientsAndResources();
+            //InsertClientsAndResources();
         }
 
         private void InsertRoles()
         {
-            rolesInitializer.Initialize();
+            _rolesInitializer.Initialize();
         }
 
         private void InsertUsers()
         {
-            var superAdmin = ctx.Users.Where(e => e.Email == "superadmin@super.admin").IgnoreQueryFilters().FirstOrDefault();
+            var superAdminEmail = "super.admin@super.admin";
+            var superAdminRole = _ctx.Roles.First(r => r.Name == RolesInitializer.SuperAdminRole);
+            var superAdmin = _ctx.Users.FirstOrDefault(e => e.Email == superAdminEmail);
 
             if (superAdmin == null)
             {
-                var identityResult = userManager.CreateAsync(new User
+                _ctx.Users.Add(new User
                 {
-                    UserName = "superadmin@super.admin",
-                    Email = "superadmin@super.admin",
+                    UserName = superAdminEmail,
+                    Email = superAdminEmail,
                     Name = "Super Admin",
                     EmailConfirmed = true,
-                    Deleted = false
-                }, "Pass123!").Result;
+                    Deleted = false,
+                    Password = "Pass123!",
+                    UserRoles = new() { new UserRole { Role = superAdminRole } }
+                });
 
-                ctx.SaveChanges();
+                _ctx.SaveChanges();
             }
-
-            superAdmin = ctx.Users.Where(e => e.Email == "superadmin@super.admin").IgnoreQueryFilters().First();
-
-            rolesInitializer.AddAllRolesToUser(superAdmin);
-
-            ctx.SaveChanges();
         }
 
-        private void InsertClientsAndResources()
-        {
-            configurationDbContext.SaveChanges();
+        //private void InsertClientsAndResources()
+        //{
+        //    configurationDbContext.SaveChanges();
 
-            var identityResources = configurationDbContext.IdentityResources.ToList();
-            foreach (var identityResource in Config.IdentityResources)
-            {
-                if (!identityResources.Any(e => e.Name == identityResource.Name))
-                {
-                    configurationDbContext.IdentityResources.Add(identityResource.ToEntity());
-                }
-            }
+        //    var identityResources = configurationDbContext.IdentityResources.ToList();
+        //    foreach (var identityResource in Config.IdentityResources)
+        //    {
+        //        if (!identityResources.Any(e => e.Name == identityResource.Name))
+        //        {
+        //            configurationDbContext.IdentityResources.Add(identityResource.ToEntity());
+        //        }
+        //    }
 
-            var apiResources = configurationDbContext.ApiResources.ToList();
-            foreach (var apiResource in Config.ApiResources)
-            {
-                if (!apiResources.Any(e => e.Name == apiResource.Name))
-                {
-                    configurationDbContext.ApiResources.Add(apiResource.ToEntity());
-                }
-            }
+        //    var apiResources = configurationDbContext.ApiResources.ToList();
+        //    foreach (var apiResource in Config.ApiResources)
+        //    {
+        //        if (!apiResources.Any(e => e.Name == apiResource.Name))
+        //        {
+        //            configurationDbContext.ApiResources.Add(apiResource.ToEntity());
+        //        }
+        //    }
 
-            var apiScopes = configurationDbContext.ApiScopes.ToList();
-            foreach (var scope in Config.ApiScopes)
-            {
-                if (!apiScopes.Any(e => e.Name == scope.Name))
-                {
-                    configurationDbContext.ApiScopes.Add(scope.ToEntity());
-                }
-                else
-                {
-                    apiScopes.Where(e => e.Name == scope.Name).First().Enabled = true;
-                }
-            }
+        //    var apiScopes = configurationDbContext.ApiScopes.ToList();
+        //    foreach (var scope in Config.ApiScopes)
+        //    {
+        //        if (!apiScopes.Any(e => e.Name == scope.Name))
+        //        {
+        //            configurationDbContext.ApiScopes.Add(scope.ToEntity());
+        //        }
+        //        else
+        //        {
+        //            apiScopes.Where(e => e.Name == scope.Name).First().Enabled = true;
+        //        }
+        //    }
 
-            var clients = configurationDbContext.Clients.Include(e => e.AllowedScopes).ToList();
+        //    var clients = configurationDbContext.Clients.Include(e => e.AllowedScopes).ToList();
 
-            foreach (var client in Config.Clients)
-            {
-                var existingClient = clients
-                    .Where(e => e.ClientId == client.ClientId)
-                    .FirstOrDefault();
+        //    foreach (var client in Config.Clients)
+        //    {
+        //        var existingClient = clients
+        //            .Where(e => e.ClientId == client.ClientId)
+        //            .FirstOrDefault();
 
-                if (existingClient == null)
-                {
-                    configurationDbContext.Clients.Add(client.ToEntity());
-                }
-                else
-                {
-                    foreach (var scope in client.AllowedScopes)
-                    {
-                        if (!existingClient.AllowedScopes.Any(e => e.Scope == scope))
-                        {
-                            existingClient.AllowedScopes.Add(new ClientScope
-                            {
-                                Scope = scope
-                            });
-                        }
-                    }
-                }
-            }
+        //        if (existingClient == null)
+        //        {
+        //            configurationDbContext.Clients.Add(client.ToEntity());
+        //        }
+        //        else
+        //        {
+        //            foreach (var scope in client.AllowedScopes)
+        //            {
+        //                if (!existingClient.AllowedScopes.Any(e => e.Scope == scope))
+        //                {
+        //                    existingClient.AllowedScopes.Add(new ClientScope
+        //                    {
+        //                        Scope = scope
+        //                    });
+        //                }
+        //            }
+        //        }
+        //    }
 
-            configurationDbContext.SaveChanges();
-        }
+        //    configurationDbContext.SaveChanges();
+        //}
     }
 }
 

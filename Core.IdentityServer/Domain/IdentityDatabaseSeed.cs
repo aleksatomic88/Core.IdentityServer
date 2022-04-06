@@ -1,7 +1,7 @@
 using Identity.Domain.Initializers;
 using Identity.Domain.Model;
-using IdentityServer4.EntityFramework.DbContexts;
-using Microsoft.AspNetCore.Identity;
+using IdentityServer.Utilities;
+using Prato.IdentityProvider.Entities;
 using System.Linq;
 
 namespace Identity.Domain
@@ -11,20 +11,11 @@ namespace Identity.Domain
     /// </summary>
     public class IdentityDatabaseSeed
     {
-        private readonly IdentityDbContext ctx;
-        private readonly ConfigurationDbContext configurationDbContext;
-        private readonly UserManager<User> userManager;
-        private readonly RolesInitializer rolesInitializer;
+        private readonly IdentityDbContext _ctx;
 
-        public IdentityDatabaseSeed(IdentityDbContext ctx,
-            UserManager<User> userManager,
-            ConfigurationDbContext configurationDbContext,
-            RolesInitializer rolesInitializer)
+        public IdentityDatabaseSeed(IdentityDbContext ctx)
         {
-            this.ctx = ctx;
-            this.userManager = userManager;
-            this.configurationDbContext = configurationDbContext;
-            this.rolesInitializer = rolesInitializer;
+            _ctx = ctx;
         }
 
         public void Seed()
@@ -34,34 +25,25 @@ namespace Identity.Domain
 
         private void InsertUsers()
         {
-            //var email = "coa@test.com";
-            var email = "test@test.test";
+            var customerEmail = "test@test.test";
+            var customerRole = _ctx.Roles.First(r => r.Name == RolesInitializer.CustomerRole);
+            var customerUser = _ctx.Users.FirstOrDefault(u => u.Email == customerEmail);
 
-            var users = ctx.Users.ToList();
-
-            var coaUser = ctx.Users.FirstOrDefault(u => u.Email == email);
-
-            if (coaUser != null)
+            if (customerUser == null)
             {
-                rolesInitializer.AddAllRolesToUser(coaUser);
-                ctx.SaveChanges();
-                return;
+                _ctx.Users.Add(new User
+                {
+                    UserName = customerEmail,
+                    Email = customerEmail,
+                    Name = "Test Customer",
+                    EmailConfirmed = true,
+                    Deleted = false,
+                    Password = SecurePasswordHasher.Hash("Pass123!"),
+                    UserRoles = new() { new UserRole { Role = customerRole } }
+                });
+
+                _ctx.SaveChanges();
             }
-
-            var identityResult = userManager.CreateAsync(new User
-            {
-                UserName = email,
-                Email = email,
-                EmailConfirmed = true,
-                Name = "Coa Coa"
-            }, "Pass123!").Result;
-
-            coaUser = ctx.Users.First(u => u.Email == email);
-
-            rolesInitializer.AddAllRolesToUser(coaUser);
-
-            ctx.SaveChanges();
         }
     }
 }
-
