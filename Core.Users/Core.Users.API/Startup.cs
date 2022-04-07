@@ -66,7 +66,7 @@ namespace Core.Users.API
 
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
 
-            services.AddDbContext<CoreUsersDbContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("IdentityDatabase")));
+            services.AddDbContext<UsersDbContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("IdentityDatabase")));
              
             services.AddSwaggerGen(
                 options =>

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
+using Users.Core.Service;
 using Users.Core.Service.Interface;
 
 namespace Core.Users.API.Controllers
@@ -12,7 +13,7 @@ namespace Core.Users.API.Controllers
     [ApiController]
     [Route("[controller]")]
     [ApiVersion("1.0")]
-    // [Authorize]
+    [Authorize]
 #pragma warning disable CS1591
     public class UsersController : ControllerBase
     {
@@ -35,11 +36,13 @@ namespace Core.Users.API.Controllers
             try
             {
                 var user = await _userService.Get(id, new string[] { "UserRoles.Role" });
+                var userCustom = await ((UserService)_userService).Get(id);
+
                 return Ok(user);
             }
             catch (Exception ex)
             {
-                return BadRequest($"Unhandled error. {(JsonConvert.SerializeObject(ex))}");
+                return BadRequest($"Unhandled error. {JsonConvert.SerializeObject(ex)}");
             }
         }
 
@@ -52,13 +55,13 @@ namespace Core.Users.API.Controllers
         {
             try
             {
-                var users = await _userService.GetAll();
+                var users = await _userService.GetAll(new string[] { "UserRoles.Role" });
 
                 return Ok(users);
             }
             catch (Exception ex)
             {
-                return BadRequest($"Unhandled error. {(JsonConvert.SerializeObject(ex))}");
+                return BadRequest($"Unhandled error. {JsonConvert.SerializeObject(ex)}");
             }
         }
     }

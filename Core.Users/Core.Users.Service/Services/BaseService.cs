@@ -1,4 +1,5 @@
 using AutoMapper;
+using Core.Users.DAL;
 using Core.Users.DAL.Repositories.Interface;
 using Core.Users.Domain.Model;
 using Core.Users.Domain.Response;
@@ -13,16 +14,19 @@ namespace Users.Core.Service
         where T :  BaseEntity
         where TResponse : BaseResponse
     {
-        //private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-        private readonly IGenericRepository<T> _repository;
+        protected readonly UsersDbContext _ctx;
+        protected readonly IMapper _mapper;
+        //protected readonly IUnitOfWork _unitOfWork;
+        protected readonly IGenericRepository<T> _repository;
 
-        public BaseService(IMapper mapper,
+        public BaseService(UsersDbContext ctx,
+                           IMapper mapper,
                            //IUnitOfWork unitOfWork,
                            IGenericRepository<T> repository)
         {
-            //_unitOfWork = unitOfWork;
+            _ctx = ctx;
             _mapper = mapper;
+            //_unitOfWork = unitOfWork;
             _repository = repository;
         }
 

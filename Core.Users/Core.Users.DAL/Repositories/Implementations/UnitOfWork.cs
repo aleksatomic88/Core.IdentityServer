@@ -6,9 +6,9 @@ namespace Core.Users.DAL.Repositories.Implementations
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly CoreUsersDbContext _ctx;
+        private readonly UsersDbContext _ctx;
 
-        public UnitOfWork(CoreUsersDbContext ctx)
+        public UnitOfWork(UsersDbContext ctx)
         {
             _ctx = ctx;
         }

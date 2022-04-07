@@ -13,9 +13,9 @@ namespace Core.Users.DAL.Repositories.Implementations
     public class GenericRepository<T> : IGenericRepository<T>
         where T : BaseEntity
     {
-        protected readonly CoreUsersDbContext _context;
+        protected readonly UsersDbContext _context;
 
-        public GenericRepository(CoreUsersDbContext context)
+        public GenericRepository(UsersDbContext context)
         {
             _context = context;
         }

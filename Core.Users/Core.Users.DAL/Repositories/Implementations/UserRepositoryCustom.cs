@@ -8,7 +8,7 @@ namespace Core.Users.DAL.Repositories.Implementations
 {
     public class UserRepositoryCustom : GenericRepository<User>, IUserRepositoryCustom
     {
-        public UserRepositoryCustom(CoreUsersDbContext context)
+        public UserRepositoryCustom(UsersDbContext context)
              : base(context)
         {
 

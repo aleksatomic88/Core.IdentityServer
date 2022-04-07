@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Core.Users.DAL
 {
-    public class CoreUsersDbContext : DbContext
+    public class UsersDbContext : DbContext
     {
-        public CoreUsersDbContext(DbContextOptions options)
+        public UsersDbContext(DbContextOptions options)
              : base(options)
         {
 
