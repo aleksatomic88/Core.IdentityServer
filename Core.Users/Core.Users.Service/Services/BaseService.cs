@@ -3,6 +3,7 @@ using Core.Users.DAL.Repositories.Interface;
 using Core.Users.Domain.Model;
 using Core.Users.Domain.Response;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Users.Core.Service.Interface;
 
@@ -12,29 +13,29 @@ namespace Users.Core.Service
         where T :  BaseEntity
         where TResponse : BaseResponse
     {
-        private readonly IUnitOfWork _unitOfWork;
+        //private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IGenericRepository<T> _repository;
 
         public BaseService(IMapper mapper,
-                           IUnitOfWork unitOfWork,
+                           //IUnitOfWork unitOfWork,
                            IGenericRepository<T> repository)
         {
-            _unitOfWork = unitOfWork;
+            //_unitOfWork = unitOfWork;
             _mapper = mapper;
             _repository = repository;
         }
 
-        public async Task<TResponse> Get(int id)
+        public async Task<TResponse> Get(int id, string[] includes = default)
         {
-            var result = await _repository.Get(id);
+            var result = await _repository.Get(id, includes);
 
             return _mapper.Map<TResponse>(result);
         }
 
-        public async Task<List<TResponse>> GetAll()
+        public async Task<List<TResponse>> GetAll(string[] includes = default)
         {
-            var result = await _repository.GetAll();
+            var result = await _repository.GetAll(includes);
 
             return _mapper.Map<List<TResponse>>(result);
         }

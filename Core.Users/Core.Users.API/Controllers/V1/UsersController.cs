@@ -12,7 +12,7 @@ namespace Core.Users.API.Controllers
     [ApiController]
     [Route("[controller]")]
     [ApiVersion("1.0")]
-    [Authorize]
+    // [Authorize]
 #pragma warning disable CS1591
     public class UsersController : ControllerBase
     {
@@ -34,7 +34,7 @@ namespace Core.Users.API.Controllers
         {
             try
             {
-                var user = await _userService.Get(id);
+                var user = await _userService.Get(id, new string[] { "UserRoles.Role" });
                 return Ok(user);
             }
             catch (Exception ex)
@@ -53,6 +53,7 @@ namespace Core.Users.API.Controllers
             try
             {
                 var users = await _userService.GetAll();
+
                 return Ok(users);
             }
             catch (Exception ex)

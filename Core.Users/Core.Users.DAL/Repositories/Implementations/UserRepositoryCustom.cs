@@ -2,7 +2,6 @@ using Core.Users.DAL.Repositories.Interface;
 using Core.Users.Domain.Model;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Core.Users.DAL.Repositories.Implementations
@@ -15,7 +14,9 @@ namespace Core.Users.DAL.Repositories.Implementations
 
         }
 
-        public async Task<IEnumerable<User>> GetCustom(string name)
-            => await _context.Users.Where(x => x.UserName == name).ToListAsync();
+        public async Task<IEnumerable<User>> GetAllWithRoles()
+            => await _context.Users
+                             .Include("UserRoles.Role")
+                             .ToListAsync();
     }
 }

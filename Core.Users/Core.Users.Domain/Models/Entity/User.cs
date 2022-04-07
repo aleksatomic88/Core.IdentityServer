@@ -19,7 +19,6 @@ namespace Core.Users.Domain.Model
 
         public List<UserRole> UserRoles { get; set; }
 
-        [Computed]
         [NotMapped]
         public List<Role> Roles
             => UserRoles != null ? UserRoles.Select(ur => ur.Role).ToList() : new List<Role>();

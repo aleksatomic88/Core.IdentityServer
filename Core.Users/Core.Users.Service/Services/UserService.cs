@@ -8,9 +8,11 @@ namespace Users.Core.Service
 {
     public sealed class UserService : BaseService<User, UserResponse>, IUserService
     {
-        public UserService(IMapper mapper, IUnitOfWork unitOfWork, IGenericRepository<User> userRepository)
+        public UserService(IMapper mapper,
+                           // IUnitOfWork unitOfWork,
+                           IGenericRepository<User> userRepository)
             : base(mapper,
-                   unitOfWork,
+                   // unitOfWork,
                    userRepository)
         {
         }

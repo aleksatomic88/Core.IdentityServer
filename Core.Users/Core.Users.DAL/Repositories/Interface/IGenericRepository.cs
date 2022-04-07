@@ -9,11 +9,11 @@ namespace Core.Users.DAL.Repositories.Interface
     public interface IGenericRepository<T>
        where T : BaseEntity
     {
-        Task<T> Get(int id);
-        Task<T> Find(Expression<Func<T, bool>> predicate);
+        Task<T> Get(int id, string[] includes = default);
+        Task<T> Find(Expression<Func<T, bool>> predicate, string[] includes = default);
 
-        Task<IEnumerable<T>> GetAll();
-        Task<IEnumerable<T>> GetWhere(Expression<Func<T, bool>> predicate);
+        Task<IEnumerable<T>> GetAll(string[] includes = default);
+        Task<IEnumerable<T>> GetWhere(Expression<Func<T, bool>> predicate, string[] includes = default);
 
         void Add(T entity);
         void AddRange(IEnumerable<T> entities);

@@ -6,6 +6,6 @@ namespace Core.Users.DAL.Repositories.Interface
 {
     public interface IUserRepositoryCustom : IGenericRepository<User> 
     {
-        Task<IEnumerable<User>> GetCustom(string name); 
+        Task<IEnumerable<User>> GetAllWithRoles(); 
     }
 }

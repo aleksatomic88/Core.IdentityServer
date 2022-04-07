@@ -1,5 +1,6 @@
 using Core.Users.DAL.Repositories.Interface;
 using Core.Users.Domain.Model;
+using DelegateDecompiler.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -19,17 +20,18 @@ namespace Core.Users.DAL.Repositories.Implementations
             _context = context;
         }
 
-        public async Task<T> Find(Expression<Func<T, bool>> predicate)
-            => await _context.Set<T>().FirstOrDefaultAsync(predicate);
+        public async Task<T> Get(int id, string[] includes = default)
+            => await GetQuery(includes).FirstOrDefaultAsync(x => x.Id == id);
+        
 
-        public async Task<T> Get(int id)
-            => await _context.Set<T>().FindAsync(id);
+        public async Task<T> Find(Expression<Func<T, bool>> predicate, string[] includes = default)
+            => await GetQuery(includes).FirstOrDefaultAsync(predicate);
 
-        public async Task<IEnumerable<T>> GetAll()
-            => await _context.Set<T>().ToListAsync();
+        public async Task<IEnumerable<T>> GetAll(string[] includes = default)
+            => await GetQuery(includes).ToListAsync();  
 
-        public async Task<IEnumerable<T>> GetWhere(Expression<Func<T, bool>> predicate)
-            => await _context.Set<T>().Where(predicate).ToListAsync();
+        public async Task<IEnumerable<T>> GetWhere(Expression<Func<T, bool>> predicate, string[] includes = default)
+            => await GetQuery(includes).Where(predicate).ToListAsync();
 
         public void Add(T entity)
         {
@@ -59,6 +61,19 @@ namespace Core.Users.DAL.Repositories.Implementations
         public void UpdateRange(IEnumerable<T> entities)
         {
             _context.Set<T>().UpdateRange(entities);
+        }
+
+        private IQueryable<T> GetQuery(string[] includes = default)
+        {
+            var query = _context.Set<T>().AsQueryable();
+
+            if (includes == default)
+                return query;
+
+            foreach (var include in includes)
+                query = query.Include(include);
+
+            return query;
         }
     }
 }

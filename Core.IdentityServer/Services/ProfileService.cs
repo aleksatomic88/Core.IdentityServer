@@ -28,9 +28,7 @@ namespace IdentityServer.Services
             var id = int.Parse(context.Subject.FindFirstValue("sub"));
             var scope = context.ValidatedRequest.Raw.Get("scope");
 
-            var user = await _ctx.Users.Include(u => u.UserRoles)
-                                       .ThenInclude(ur => ur.Role)
-                                       .FirstAsync(x => x.Id == id);
+            var user = await _ctx.Users.Include("UserRoles.Role").FirstAsync(x => x.Id == id);
 
             var claims = new List<Claim>
             {
