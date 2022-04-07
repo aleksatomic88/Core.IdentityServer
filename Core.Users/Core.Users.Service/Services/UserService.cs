@@ -13,11 +13,9 @@ namespace Users.Core.Service
     {
         public UserService(UsersDbContext ctx,
                            IMapper mapper,
-                           // IUnitOfWork unitOfWork,
                            IGenericRepository<User> userRepository)
              : base(ctx,
                     mapper,
-                    // unitOfWork,
                     userRepository)
         {
         }

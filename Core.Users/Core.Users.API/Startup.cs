@@ -125,7 +125,6 @@ namespace Core.Users.API
 
             #region Repositories
 
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             #endregion
 

@@ -16,17 +16,14 @@ namespace Users.Core.Service
     {
         protected readonly UsersDbContext _ctx;
         protected readonly IMapper _mapper;
-        //protected readonly IUnitOfWork _unitOfWork;
         protected readonly IGenericRepository<T> _repository;
 
         public BaseService(UsersDbContext ctx,
                            IMapper mapper,
-                           //IUnitOfWork unitOfWork,
                            IGenericRepository<T> repository)
         {
             _ctx = ctx;
             _mapper = mapper;
-            //_unitOfWork = unitOfWork;
             _repository = repository;
         }
 
