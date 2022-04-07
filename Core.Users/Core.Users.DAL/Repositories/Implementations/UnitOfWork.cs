@@ -1,5 +1,5 @@
-using Core.Users.DAL.Entities;
 using Core.Users.DAL.Repositories.Interface;
+using Core.Users.Domain.Model;
 using System.Threading.Tasks;
 
 namespace Core.Users.DAL.Repositories.Implementations
@@ -13,13 +13,13 @@ namespace Core.Users.DAL.Repositories.Implementations
             _ctx = ctx;
         }
 
-        private readonly IGenericRepository<WeatherForecasts> _weatherForecastsRepository;
-        public IGenericRepository<WeatherForecasts> WeatherForecastsRepository
-            => _weatherForecastsRepository ?? new GenericRepository<WeatherForecasts>(_ctx);
+        private readonly IGenericRepository<User> _userRepository;
+        public IGenericRepository<User> UserRepository
+            => _userRepository ?? new GenericRepository<User>(_ctx);
 
-        private readonly IUserRepositoryCustom _weatherForecastsRepositoryCustom;
-        public IUserRepositoryCustom WeatherForecastsRepositoryCustom
-            => _weatherForecastsRepositoryCustom ?? new UserForecastsRepositoryCustom(_ctx);
+        private readonly IUserRepositoryCustom _userRepositoryCustom;
+        public IUserRepositoryCustom UserRepositoryCustom
+            => _userRepositoryCustom ?? new UserRepositoryCustom(_ctx);
 
         public async Task<bool> Complete()
             => await _ctx.SaveChangesAsync() > 0;

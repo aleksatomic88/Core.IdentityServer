@@ -1,5 +1,6 @@
+using Common.Interface;
 using Common.Model;
-using IdentityServer.Domain.Model;
+using Core.Users.Domain.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace IdentityServer.Domain

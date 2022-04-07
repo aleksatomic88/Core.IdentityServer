@@ -1,5 +1,5 @@
-using Core.Users.DAL.Entities;
-using Core.Users.Domain;
+using Core.Users.Domain.Model;
+using Core.Users.Domain.Response;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -12,16 +12,16 @@ namespace Core.Users.API.Controllers
     [ApiController]
     [Route("[controller]")]
     [ApiVersion("1.0")]
-    //[Authorize]
+    [Authorize]
 #pragma warning disable CS1591
     public class UsersController : ControllerBase
     {
 
-        private readonly IBaseService<WeatherForecasts, UserResponse> _usersService;
+        private readonly IBaseService<User, UserResponse> _userService;
 
-        public UsersController(IBaseService<WeatherForecasts, UserResponse> usersService)
+        public UsersController(IBaseService<User, UserResponse> userService)
         {
-            _usersService = usersService;
+            _userService = userService;
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace Core.Users.API.Controllers
         {
             try
             {
-                var user = await _usersService.Get(id);
+                var user = await _userService.Get(id);
                 return Ok(user);
             }
             catch (Exception ex)
@@ -47,24 +47,18 @@ namespace Core.Users.API.Controllers
         /// Return All Users
         /// </summary>
         /// <returns></returns>
-        //[HttpGet]
-        //public async Task<IActionResult> GetAll()
-        //{
-        //    try
-        //    {
-        //        var users = await _usersService.GetAll();
-        //        return Ok(users);
-        //    }
-        //    catch (Exception ex)
-        //    { 
-        //        return BadRequest($"Unhandled error. {(JsonConvert.SerializeObject(ex))}");
-        //    }
-        //}
         [HttpGet]
-        [Authorize]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            return Ok("Authorized!!!");
+            try
+            {
+                var users = await _userService.GetAll();
+                return Ok(users);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Unhandled error. {(JsonConvert.SerializeObject(ex))}");
+            }
         }
     }
 }

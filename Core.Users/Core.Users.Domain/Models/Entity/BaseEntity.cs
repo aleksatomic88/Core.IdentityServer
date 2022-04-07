@@ -1,8 +1,8 @@
 using System;
 
-namespace IdentityServer.Domain.Model
+namespace Core.Users.Domain.Model
 {
-    public abstract class BaseModel
+    public abstract class BaseEntity
     {
         public int Id { get; set; }
 

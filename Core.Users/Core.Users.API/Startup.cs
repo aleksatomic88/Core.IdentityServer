@@ -17,11 +17,11 @@ using Core.Users.API.SwaggerSetup;
 using Core.Users.DAL;
 using Users.Core.Service.MapperProfile;
 using Users.Core.Service.Interface;
-using Core.Users.DAL.Entities;
-using Core.Users.Domain;
 using Users.Core.Service;
 using Core.Users.DAL.Repositories.Interface;
 using Core.Users.DAL.Repositories.Implementations;
+using Core.Users.Domain.Response;
+using Core.Users.Domain.Model;
 
 namespace Core.Users.API
 {
@@ -119,7 +119,7 @@ namespace Core.Users.API
 
             #region services
             
-            services.AddScoped<IBaseService<WeatherForecasts, UserResponse>, UserService>();
+            services.AddScoped<IBaseService<User, UserResponse>, UserService>();
 
             #endregion
 

@@ -1,6 +1,6 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
-namespace IdentityServer.Shared.Model
+namespace Common.Model
 {
     public class ApiError
     {

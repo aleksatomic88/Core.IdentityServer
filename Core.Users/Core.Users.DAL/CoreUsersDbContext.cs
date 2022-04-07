@@ -1,8 +1,5 @@
-using Core.Users.DAL.Entities;
+using Core.Users.Domain.Model;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Core.Users.DAL
 {
@@ -14,7 +11,7 @@ namespace Core.Users.DAL
 
         }
 
-        public DbSet<WeatherForecasts> WeatherForecasts { get; set; }
+        public DbSet<User> Users { get; set; }
          
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

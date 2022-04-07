@@ -1,5 +1,5 @@
+using Core.Users.Domain.Model;
 using IdentityServer.Domain;
-using IdentityServer.Domain.Model;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -72,11 +72,23 @@ namespace Identity.Domain.Initializers
             {
                 Name = CustomerRole,
                 Description = "Customer"
+            },
+            new Role
+            {
+                Name = ManagerRole,
+                Description = "Manager"
+            },
+            new Role
+            {
+                Name = EmployeeRole,
+                Description = "Employee"
             }
         };
 
         public const string SuperAdminRole = "SuperAdmin";
         public const string AdminRole = "Admin";
         public const string CustomerRole = "Customer";
+        public const string ManagerRole = "Manager";
+        public const string EmployeeRole = "Employee";
     }
 }

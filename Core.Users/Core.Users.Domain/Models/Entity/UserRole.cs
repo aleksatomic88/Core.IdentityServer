@@ -1,4 +1,4 @@
-namespace IdentityServer.Domain.Model
+namespace Core.Users.Domain.Model
 {
     public class UserRole
     {

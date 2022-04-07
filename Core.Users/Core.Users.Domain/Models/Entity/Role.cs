@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace IdentityServer.Domain.Model
+namespace Core.Users.Domain.Model
 {
     public class Role
     {

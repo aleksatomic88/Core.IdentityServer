@@ -1,6 +1,6 @@
-using IdentityServer.Domain.Model;
+using Common.Model;
 
-namespace Common.Model
+namespace Common.Interface
 {
     public interface IDatabaseContext
     {

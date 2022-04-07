@@ -1,7 +1,7 @@
 using AutoMapper;
-using Core.Users.DAL.Entities;
 using Core.Users.DAL.Repositories.Interface;
-using Core.Users.Domain;
+using Core.Users.Domain.Model;
+using Core.Users.Domain.Response;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Users.Core.Service.Interface;
@@ -16,7 +16,9 @@ namespace Users.Core.Service
         private readonly IMapper _mapper;
         private readonly IGenericRepository<T> _repository;
 
-        public BaseService(IMapper mapper, IUnitOfWork unitOfWork, IGenericRepository<T> repository)
+        public BaseService(IMapper mapper,
+                           IUnitOfWork unitOfWork,
+                           IGenericRepository<T> repository)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;

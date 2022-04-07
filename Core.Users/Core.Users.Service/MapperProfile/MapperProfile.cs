@@ -1,6 +1,6 @@
 using AutoMapper;
-using Core.Users.DAL.Entities;
-using Core.Users.Domain;
+using Core.Users.Domain.Model;
+using Core.Users.Domain.Response;
 
 namespace Users.Core.Service.MapperProfile
 {
@@ -13,11 +13,8 @@ namespace Users.Core.Service.MapperProfile
 
         private void CreateMapper()
         {
-            #region User
-
-            CreateMap<WeatherForecasts, UserResponse>();
-
-            #endregion
+            CreateMap<User, UserResponse>();
+            CreateMap<Role, RoleResponse>();
         }
 
     }

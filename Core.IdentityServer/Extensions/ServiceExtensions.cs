@@ -19,7 +19,7 @@ namespace IdentityServer.Extensions
         public static IServiceCollection RegisterApplicationServices(this IServiceCollection services)
         {
             services.AddScoped<IdentityDbContext>();
-            services.AddScoped<IDatabaseContext>(x => x.GetRequiredService<IdentityDbContext>());
+            //services.AddScoped<IDatabaseContext>(x => x.GetRequiredService<IdentityDbContext>());
             services.AddScoped<IdentityDatabaseInitializer>();
             services.AddScoped<IdentityDatabaseSeed>();
             services.AddScoped<RolesInitializer>();

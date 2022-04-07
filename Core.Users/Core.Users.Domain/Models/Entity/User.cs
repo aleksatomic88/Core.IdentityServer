@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
-namespace IdentityServer.Domain.Model
+namespace Core.Users.Domain.Model
 {
-    public class User : BaseModel
+    public class User : BaseEntity
     {
         public string Name { get; set; }
 
@@ -24,7 +24,6 @@ namespace IdentityServer.Domain.Model
         public List<Role> Roles
             => UserRoles != null ? UserRoles.Select(ur => ur.Role).ToList() : new List<Role>();
 
-        [Computed]
         public bool HasRole(string roleName)
             => Roles.Any(r => r.Name == roleName);
 

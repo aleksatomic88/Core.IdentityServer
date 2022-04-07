@@ -1,5 +1,5 @@
+using Core.Users.Domain.Model;
 using Identity.Domain.Initializers;
-using IdentityServer.Domain.Model;
 using IdentityServer.Utilities;
 using System.Linq;
 

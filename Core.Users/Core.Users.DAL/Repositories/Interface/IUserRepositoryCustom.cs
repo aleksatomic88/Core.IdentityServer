@@ -1,11 +1,11 @@
-using Core.Users.DAL.Entities;
+using Core.Users.Domain.Model;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Core.Users.DAL.Repositories.Interface
 {
-    public interface IUserRepositoryCustom : IGenericRepository<WeatherForecasts> 
+    public interface IUserRepositoryCustom : IGenericRepository<User> 
     {
-        Task<IEnumerable<WeatherForecasts>> GetCustom(string name); 
+        Task<IEnumerable<User>> GetCustom(string name); 
     }
 }

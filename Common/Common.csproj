@@ -4,4 +4,8 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="DelegateDecompiler.EntityFrameworkCore5" Version="0.30.0" />
+  </ItemGroup>
+
 </Project>

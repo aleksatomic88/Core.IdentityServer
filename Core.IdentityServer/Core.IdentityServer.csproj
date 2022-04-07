@@ -21,4 +21,9 @@
     <PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
       
   </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\Core.Users\Core.Users.Domain\Core.Users.Domain.csproj" />
+  </ItemGroup>
 </Project>
