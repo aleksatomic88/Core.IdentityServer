@@ -1,5 +1,6 @@
 using Identity.Domain.Initializers;
 using IdentityServer.Domain.Model;
+using IdentityServer.Utilities;
 using System.Linq;
 
 namespace IdentityServer.Domain
@@ -34,7 +35,6 @@ namespace IdentityServer.Domain
         private void InsertUsers()
         {
             var superAdminEmail = "super.admin@super.admin";
-            var superAdminRole = _ctx.Roles.First(r => r.Name == RolesInitializer.SuperAdminRole);
             var superAdmin = _ctx.Users.FirstOrDefault(e => e.Email == superAdminEmail);
 
             if (superAdmin == null)
@@ -46,8 +46,8 @@ namespace IdentityServer.Domain
                     Name = "Super Admin",
                     EmailConfirmed = true,
                     Deleted = false,
-                    Password = "Pass123!",
-                    UserRoles = new() { new UserRole { Role = superAdminRole } }
+                    Password = SecurePasswordHasher.Hash("Pass123!"),
+                    UserRoles = new () { new UserRole { Role = _ctx.Roles.First(r => r.Name == RolesInitializer.SuperAdminRole) }}
                 });
 
                 _ctx.SaveChanges();

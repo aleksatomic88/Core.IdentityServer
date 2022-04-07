@@ -1,5 +1,6 @@
 using DelegateDecompiler;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
 namespace IdentityServer.Domain.Model
@@ -19,6 +20,7 @@ namespace IdentityServer.Domain.Model
         public List<UserRole> UserRoles { get; set; }
 
         [Computed]
+        [NotMapped]
         public List<Role> Roles
             => UserRoles != null ? UserRoles.Select(ur => ur.Role).ToList() : new List<Role>();
 

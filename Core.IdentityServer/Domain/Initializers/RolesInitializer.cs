@@ -20,14 +20,13 @@ namespace Identity.Domain.Initializers
 
             foreach (var role in Roles)
             {
-                var existing = existingRoles.FirstOrDefault(r => r.Id == role.Id);
+                var existing = existingRoles.FirstOrDefault(r => r.Name == role.Name);
 
                 if (existing == null)
                 {
                     _ctx.Roles.Add(
                         new Role
                         {
-                            Id = role.Id,
                             Name = role.Name,
                             Description = role.Description,
                         });
@@ -35,7 +34,7 @@ namespace Identity.Domain.Initializers
                 else
                 {
                     existing.Name = role.Name;
-                    ((Role)existing).Description = role.Description;
+                    existing.Description = role.Description;
                 }
             }
 
