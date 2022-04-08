@@ -24,15 +24,15 @@ namespace IdentityServer.Extensions
 
                 Log.Information("Environment: " + Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
 
-                //identityDbContext.Database.EnsureDeleted();
-                //identityDbContext.Database.EnsureCreated(); ;
-                //Log.Information("Database migrations executed.");
+                identityDbContext.Database.EnsureDeleted();
+                identityDbContext.Database.EnsureCreated(); ;
+                Log.Information("Database migrations executed.");
 
-                //dbInitializer.Initialize();
-                //Log.Information("Database initialized with required data.");
+                dbInitializer.Initialize();
+                Log.Information("Database initialized with required data.");
 
-                //dbSeed.Seed();
-                //Log.Information("Database seeded with test data.");
+                dbSeed.Seed();
+                Log.Information("Database seeded with test data.");
             }
 
             return webHost;

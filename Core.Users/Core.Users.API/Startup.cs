@@ -23,6 +23,8 @@ using Core.Users.DAL.Repositories.Implementations;
 using Core.Users.Domain.Response;
 using Core.Users.Domain.Model;
 using IdentityServer4.AccessTokenValidation;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Core.Users.API
 {
@@ -107,25 +109,20 @@ namespace Core.Users.API
                     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
                 }
                 );
-
-            // Auto Mapper Configurations
+            #region AutoMapper
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new MapperProfile());
             });
-
             IMapper mapper = mapperConfig.CreateMapper();
-
             services.AddSingleton(mapper);
+            #endregion
 
-            #region services
-            
+            #region Services
             services.AddScoped<IBaseService<User, UserResponse>, UserService>();
-
             #endregion
 
             #region Repositories
-
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             #endregion
 
@@ -137,6 +134,13 @@ namespace Core.Users.API
                                                                     options.Authority = "https://localhost:5001"; 
                                                                 });
 
+            services.AddAuthorization(options =>
+            {
+                options.DefaultPolicy = new AuthorizationPolicyBuilder()
+                  .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                  .RequireAuthenticatedUser()
+                  .Build();
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

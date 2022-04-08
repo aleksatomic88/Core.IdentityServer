@@ -85,10 +85,10 @@ namespace Identity.Domain.Initializers
             }
         };
 
-        public const string SuperAdminRole = "SuperAdmin";
-        public const string AdminRole = "Admin";
-        public const string CustomerRole = "Customer";
-        public const string ManagerRole = "Manager";
-        public const string EmployeeRole = "Employee";
+        public const string SuperAdminRole = "super-admin";
+        public const string AdminRole = "admin";
+        public const string CustomerRole = "customer";
+        public const string ManagerRole = "manager";
+        public const string EmployeeRole = "employee";
     }
 }

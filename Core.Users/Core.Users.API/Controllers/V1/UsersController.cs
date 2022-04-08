@@ -18,11 +18,11 @@ namespace Core.Users.API.Controllers
     public class UsersController : ControllerBase
     {
 
-        private readonly IBaseService<User, UserResponse> _userService;
+        private readonly IBaseService<User, UserResponse> _service;
 
         public UsersController(IBaseService<User, UserResponse> userService)
         {
-            _userService = userService;
+            _service = userService;
         }
 
         /// <summary>
@@ -35,8 +35,8 @@ namespace Core.Users.API.Controllers
         {
             try
             {
-                var user = await _userService.Get(id, new string[] { "UserRoles.Role" });
-                var userCustom = await ((UserService)_userService).Get(id);
+                var user = await _service.Get(id, new string[] { "UserRoles.Role" });
+                var userCustom = await ((UserService)_service).Get(id);
 
                 return Ok(user);
             }
@@ -55,7 +55,7 @@ namespace Core.Users.API.Controllers
         {
             try
             {
-                var users = await _userService.GetAll(new string[] { "UserRoles.Role" });
+                var users = await _service.GetAll(new string[] { "UserRoles.Role" });
 
                 return Ok(users);
             }

@@ -9,7 +9,7 @@ using Users.Core.Service.Interface;
 
 namespace Users.Core.Service
 {
-    public sealed class UserService : BaseService<User, UserResponse>, IUserService
+    public sealed class UserService : BaseService<User, UserResponse>
     {
         public UserService(UsersDbContext ctx,
                            IMapper mapper,
