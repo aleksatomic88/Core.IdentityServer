@@ -22,6 +22,7 @@ using Core.Users.DAL.Repositories.Interface;
 using Core.Users.DAL.Repositories.Implementations;
 using Core.Users.Domain.Response;
 using Core.Users.Domain.Model;
+using IdentityServer4.AccessTokenValidation;
 
 namespace Core.Users.API
 {
@@ -128,12 +129,13 @@ namespace Core.Users.API
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             #endregion
 
-            services.AddAuthentication("Bearer")
-            .AddIdentityServerAuthentication("Bearer", options =>
-            {
-                options.ApiName = "core.users.api";
-                options.Authority = "https://localhost:5001"; //launchSettings.json from identity SLN
-            });
+            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+                    .AddIdentityServerAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme,
+                                                     options =>
+                                                                {
+                                                                    options.ApiName = "core.users.api";
+                                                                    options.Authority = "https://localhost:5001"; 
+                                                                });
 
         }
 

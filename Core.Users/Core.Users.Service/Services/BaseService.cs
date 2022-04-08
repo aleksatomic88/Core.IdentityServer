@@ -4,7 +4,6 @@ using Core.Users.DAL.Repositories.Interface;
 using Core.Users.Domain.Model;
 using Core.Users.Domain.Response;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Users.Core.Service.Interface;
 

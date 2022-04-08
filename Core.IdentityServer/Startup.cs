@@ -28,13 +28,7 @@ namespace IdentityServer
         {
             services.RegisterApplicationServices();
 
-            // services.AddIdentityService(ConnectionString);
-
             services.AddIdentityServerService(ConnectionString);
-
-            // services.AddMvcServices();
-            // services.AddCorsServices();
-            // services.AddHealthChecks();
         }
 
         public void Configure(IApplicationBuilder app)
@@ -43,20 +37,8 @@ namespace IdentityServer
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            //app.UseCors("AllowAll");
-            //app.UseStaticFiles();
-            //app.UseRouting();
             
             app.UseIdentityServer();
-
-            // app.UseAuthentication();
-            // app.UseAuthorization();
-
-            //app.UseEndpoints(endpoints =>
-            //{
-            //    endpoints.MapControllers();
-            //});
 
             app.MigrateDatabase();
         }
