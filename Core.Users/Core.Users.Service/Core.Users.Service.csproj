@@ -11,7 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Common\Common.csproj" />
+    <ProjectReference Include="..\..\Shared\Common\Common.csproj" />
+    <ProjectReference Include="..\..\Shared\Localization\Localization.csproj" />
     <ProjectReference Include="..\Core.Users.DAL\Core.Users.DAL.csproj" />
     <ProjectReference Include="..\Core.Users.Domain\Core.Users.Domain.csproj" />
   </ItemGroup>

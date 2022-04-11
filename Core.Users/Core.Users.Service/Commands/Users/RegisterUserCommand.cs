@@ -1,6 +1,7 @@
 using Core.Users.DAL;
 using FluentValidation;
-using Microsoft.EntityFrameworkCore;
+using Localization.Resources;
+using Microsoft.Extensions.Localization;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -25,35 +26,39 @@ namespace Core.Users.Service.Command.Users
     public class RegisterUserCommandValidator : AbstractValidator<RegisterUserCommand>
     {
         private readonly UsersDbContext _ctx;
+        private readonly AuthValidations _authValidations;
 
         public RegisterUserCommandValidator(UsersDbContext ctx,
-                                            AuthValidations authValidations)
+                                            AuthValidations authValidations,
+                                            IStringLocalizer<SharedResource> stringLocalizer)
         {
-            this._ctx = ctx;
+            _ctx = ctx;
+            _authValidations = authValidations;
 
             RuleFor(cmd => cmd.Name).NotEmpty();
             RuleFor(cmd => cmd.UserName).NotEmpty();
             RuleFor(cmd => cmd.Email).NotEmpty().EmailAddress();
             RuleFor(cmd => cmd.PhoneNumber).NotEmpty();
+            RuleFor(cmd => cmd.Password).NotEmpty();
 
             RuleFor(cmd => cmd.Password)
                 .Must(password => authValidations.IsPasswordOk(password))
                 .When(cmd => !string.IsNullOrEmpty(cmd.Password))
-                //.WithMessage(stringLocalizer["PasswordRules"]);
-                .WithMessage("PasswordRules");
+                .WithMessage(stringLocalizer["PasswordRules"]);                
 
             RuleFor(cmd => cmd)
-                .MustAsync((cmd, cancellationToken) => CanRegister(cmd)).WithMessage("InvalidRegisterAttemptEmailAlreadyUsed");
+                .MustAsync((cmd, cancellationToken) => CanRegister(cmd))
+                .WithMessage(stringLocalizer["InvalidRegisterAttempt_EmailAlreadyUsed"]);
+
+            RuleFor(cmd => cmd.Roles).NotEmpty();
+            RuleFor(cmd => cmd.Roles)
+                .Must(roles => roles.Count == 1)
+                .WithMessage(stringLocalizer["InvalidRegisterAttempt_SingleRole"]);
         }
 
         private async Task<bool> CanRegister(RegisterUserCommand registerCommand)
         {
-            var user = await _ctx.Users
-                .IgnoreQueryFilters()
-                .Where(u => u.UserName == registerCommand.Email)
-                .FirstOrDefaultAsync();
-
-            return user == null;
+           return !await _authValidations.EmailExistsAsync(registerCommand.Email);
         }
     }
 }

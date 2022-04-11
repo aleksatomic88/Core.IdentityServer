@@ -149,6 +149,8 @@ namespace Core.Users.API
                   .RequireAuthenticatedUser()
                   .Build();
             });
+
+            services.AddLocalization();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
