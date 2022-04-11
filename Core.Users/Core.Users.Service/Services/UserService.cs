@@ -1,10 +1,11 @@
 using AutoMapper;
 using Core.Users.DAL;
 using Core.Users.DAL.Repositories.Interface;
-using Core.Users.Domain.Command.User;
 using Core.Users.Domain.Model;
 using Core.Users.Domain.Response;
-using Shared.Common.Utilities;
+using Core.Users.Service.Command.Users;
+using Common.Extensions;
+using Common.Utilities;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Transactions;
@@ -14,18 +15,25 @@ namespace Users.Core.Service
 {
     public sealed class UserService : BaseService<User, UserResponse>, IUserService
     {
+
+        private readonly RegisterUserCommandValidator _registerUserCmdValidator;
+
         public UserService(UsersDbContext ctx,
                            IMapper mapper,
-                           IGenericRepository<User> userRepository)
+                           IGenericRepository<User> userRepository,
+                           RegisterUserCommandValidator registerUserCommandValidator)
              : base(ctx,
                     mapper,
                     userRepository)
         {
+            _registerUserCmdValidator = registerUserCommandValidator;
         }
 
         public async Task<User> Create(RegisterUserCommand cmd)
         {
-            //_registerUserCmdValidator.ValidateCmd(cmd);
+            //var results = _registerUserCmdValidator.Validate(cmd);
+
+            _registerUserCmdValidator.ValidateCmd(cmd);
 
             using (var scope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled))
             {
@@ -38,7 +46,7 @@ namespace Users.Core.Service
                     PhoneNumber = cmd.PhoneNumber,
                     PhoneNumberConfirmed = true,
                     Deleted = false,
-                    Password = SecurePasswordHasher.Hash("Pass123!"),
+                    Password = SecurePasswordHasher.Hash(cmd.Password),
                     UserRoles = new() { new UserRole { Role = _ctx.Roles.First(r => r.Id == cmd.Roles.First()) } }
                 };
 

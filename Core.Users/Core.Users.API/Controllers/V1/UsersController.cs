@@ -1,15 +1,14 @@
 using Core.Users.Domain.Model;
 using Core.Users.Domain.Response;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 using Users.Core.Service;
 using Users.Core.Service.Interface;
-using Shared.Common.Model;
-using Core.Users.Domain.Command.User;
+using Common.Model;
 using System.Collections.Generic;
+using Core.Users.Service.Command.Users;
 
 namespace Core.Users.API.Controllers
 {

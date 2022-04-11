@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Shared.Common.Utilities;
+using Common.Utilities;
 
 namespace IdentityServer.Validation
 {

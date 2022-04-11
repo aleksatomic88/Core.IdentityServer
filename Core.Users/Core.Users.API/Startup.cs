@@ -25,6 +25,8 @@ using Core.Users.Domain.Model;
 using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Core.Users.Service.Command.Users;
+using Common.Filters;
 
 namespace Core.Users.API
 {
@@ -41,7 +43,11 @@ namespace Core.Users.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers(opt =>
+            {
+                opt.Filters.Add(typeof(GlobalExceptionFilter));
+                opt.Filters.Add(typeof(LogFilter));
+            });
 
             services.AddHealthChecks()
                     .AddSqlServer(Configuration.GetConnectionString("IdentityDatabase"),
@@ -120,6 +126,8 @@ namespace Core.Users.API
 
             #region Services
             services.AddScoped<IBaseService<User, UserResponse>, UserService>();
+            services.AddScoped<RegisterUserCommandValidator>();
+            services.AddScoped<AuthValidations>();
             #endregion
 
             #region Repositories

@@ -27,7 +27,7 @@ namespace IdentityServer
 
             try
             {
-                Log.Information("Starting host...");
+                Log.Information("Starting Identity Server...");
                 CreateHostBuilder(args).Build().Run();
                 return 0;
             }
