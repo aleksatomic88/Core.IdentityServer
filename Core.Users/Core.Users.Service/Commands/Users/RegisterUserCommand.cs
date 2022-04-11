@@ -3,7 +3,6 @@ using FluentValidation;
 using Localization.Resources;
 using Microsoft.Extensions.Localization;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Core.Users.Service.Command.Users
@@ -42,7 +41,7 @@ namespace Core.Users.Service.Command.Users
             RuleFor(cmd => cmd.Password).NotEmpty();
 
             RuleFor(cmd => cmd.Password)
-                .Must(password => authValidations.IsPasswordOk(password))
+                .Must(password => AuthValidations.IsPasswordOk(password))
                 .When(cmd => !string.IsNullOrEmpty(cmd.Password))
                 .WithMessage(stringLocalizer["PasswordRules"]);                
 
@@ -53,6 +52,7 @@ namespace Core.Users.Service.Command.Users
             RuleFor(cmd => cmd.Roles).NotEmpty();
             RuleFor(cmd => cmd.Roles)
                 .Must(roles => roles.Count == 1)
+                .When(cmd => cmd.Roles != null && cmd.Roles.Count > 0)
                 .WithMessage(stringLocalizer["InvalidRegisterAttempt_SingleRole"]);
         }
 

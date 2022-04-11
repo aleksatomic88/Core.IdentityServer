@@ -29,7 +29,7 @@ namespace Core.Users.Service.Command.Users
             return user != null;
         }
 
-        public bool IsPasswordOk(string password)
+        public static bool IsPasswordOk(string password)
         {
             return password.Length >= DefaultIdentityConstants.PasswordLength
                    && password.Any(char.IsDigit)
