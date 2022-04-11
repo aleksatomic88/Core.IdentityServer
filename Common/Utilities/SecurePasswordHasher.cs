@@ -1,7 +1,7 @@
 using System;
 using System.Security.Cryptography;
 
-namespace IdentityServer.Utilities
+namespace Shared.Common.Utilities
 {
     public static class SecurePasswordHasher
     {

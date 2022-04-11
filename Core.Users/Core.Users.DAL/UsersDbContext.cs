@@ -17,7 +17,13 @@ namespace Core.Users.DAL
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
- 
+            modelBuilder.Entity<User>()
+                        .HasIndex(u => u.Email)
+                        .IsUnique();
+
+            modelBuilder.Entity<User>()
+                        .HasIndex(u => u.PhoneNumber)
+                        .IsUnique();
         }
     }
 }

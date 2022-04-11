@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Common.Model
+namespace Shared.Common.Model
 {
     public class Response<T>
     {

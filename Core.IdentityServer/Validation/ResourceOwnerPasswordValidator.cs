@@ -1,12 +1,12 @@
 using IdentityServer.Domain;
 using IdentityModel;
-using IdentityServer.Utilities;
 using IdentityServer4.Models;
 using IdentityServer4.Validation;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Shared.Common.Utilities;
 
 namespace IdentityServer.Validation
 {

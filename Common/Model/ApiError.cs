@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Common.Model
+namespace Shared.Common.Model
 {
     public class ApiError
     {

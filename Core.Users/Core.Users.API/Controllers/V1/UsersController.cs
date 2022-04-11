@@ -7,13 +7,16 @@ using System;
 using System.Threading.Tasks;
 using Users.Core.Service;
 using Users.Core.Service.Interface;
+using Shared.Common.Model;
+using Core.Users.Domain.Command.User;
+using System.Collections.Generic;
 
 namespace Core.Users.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
     [ApiVersion("1.0")]
-    [Authorize]
+    // [Authorize]
 #pragma warning disable CS1591
     public class UsersController : ControllerBase
     {
@@ -28,17 +31,16 @@ namespace Core.Users.API.Controllers
         /// <summary>
         /// Return a User by ID
         /// </summary>
-        /// <returns></returns>
         [Route("{id}")]
         [HttpGet]
-        public async Task<IActionResult> Get(int id)
+        public async Task<ActionResult<Response<UserResponse>>> Get(int id)
         {
             try
             {
                 var user = await _service.Get(id, new string[] { "UserRoles.Role" });
                 var userCustom = await ((UserService)_service).Get(id);
 
-                return Ok(user);
+                return new Response<UserResponse>(user);
             }
             catch (Exception ex)
             {
@@ -48,21 +50,32 @@ namespace Core.Users.API.Controllers
 
         /// <summary>
         /// Return All Users
-        /// </summary>
-        /// <returns></returns>
+        /// </summary>s
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<ActionResult<Response<List<UserResponse>>>> GetAll()
         {
             try
             {
                 var users = await _service.GetAll(new string[] { "UserRoles.Role" });
 
-                return Ok(users);
+                return new Response<List<UserResponse>>(users);
             }
             catch (Exception ex)
             {
                 return BadRequest($"Unhandled error. {JsonConvert.SerializeObject(ex)}");
             }
+        }
+
+        /// <summary>
+        /// Register an User
+        /// </summary>s
+        [HttpPost]
+        //[Authorize(Roles = "super-admin, admin")]
+        public async Task<ActionResult<Response<UserResponse>>> Register([FromBody] RegisterUserCommand cmd)
+        {
+            var user = await ((UserService)_service).Create(cmd);
+
+            return await Get(user.Id);
         }
     }
 }

@@ -1,6 +1,6 @@
 using Core.Users.Domain.Model;
 using Identity.Domain.Initializers;
-using IdentityServer.Utilities;
+using Shared.Common.Utilities;
 using System.Linq;
 
 namespace IdentityServer.Domain
