@@ -1,4 +1,4 @@
-using Core.Users.Domain.Model;
+using Core.Users.Domain;
 using IdentityServer.Domain;
 using System.Collections.Generic;
 using System.Linq;

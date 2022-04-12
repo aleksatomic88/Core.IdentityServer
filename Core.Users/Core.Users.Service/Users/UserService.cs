@@ -1,15 +1,14 @@
 using AutoMapper;
 using Core.Users.DAL;
 using Core.Users.DAL.Repositories.Interface;
-using Core.Users.Domain.Model;
-using Core.Users.Domain.Response;
-using Core.Users.Service.Command.Users;
-using Common.Extensions;
+using Core.Users.Domain;
 using Common.Utilities;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Transactions;
 using Users.Core.Service.Interface;
+using Core.Users.Service;
+using Common.Extensions;
 
 namespace Users.Core.Service
 {
@@ -31,16 +30,14 @@ namespace Users.Core.Service
 
         public async Task<User> Create(RegisterUserCommand cmd)
         {
-            //var results = _registerUserCmdValidator.Validate(cmd);
-
             _registerUserCmdValidator.ValidateCmd(cmd);
 
             using (var scope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled))
             {
                 var user = new User
                 {
-                    Name = cmd.Name,
-                    UserName = cmd.UserName,
+                    FirstName = cmd.FirstName,
+                    LastName = cmd.LastName,
                     Email = cmd.Email,
                     EmailConfirmed = true,
                     PhoneNumber = cmd.PhoneNumber,

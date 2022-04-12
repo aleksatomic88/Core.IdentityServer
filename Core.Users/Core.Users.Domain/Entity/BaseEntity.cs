@@ -1,6 +1,6 @@
 using System;
 
-namespace Core.Users.Domain.Model
+namespace Core.Users.Domain
 {
     public abstract class BaseEntity
     {

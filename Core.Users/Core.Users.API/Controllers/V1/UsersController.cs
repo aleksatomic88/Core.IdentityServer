@@ -1,5 +1,4 @@
-using Core.Users.Domain.Model;
-using Core.Users.Domain.Response;
+using Core.Users.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
@@ -8,7 +7,7 @@ using Users.Core.Service;
 using Users.Core.Service.Interface;
 using Common.Model;
 using System.Collections.Generic;
-using Core.Users.Service.Command.Users;
+using Core.Users.Service;
 
 namespace Core.Users.API.Controllers
 {
@@ -37,7 +36,6 @@ namespace Core.Users.API.Controllers
             try
             {
                 var user = await _service.Get(id, new string[] { "UserRoles.Role" });
-                var userCustom = await ((UserService)_service).Get(id);
 
                 return new Response<UserResponse>(user);
             }

@@ -5,13 +5,13 @@ using Microsoft.Extensions.Localization;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Core.Users.Service.Command.Users
+namespace Core.Users.Service
 {
     public class RegisterUserCommand //  : BaseCommand
     {
-        public string Name { get; set; }
+        public string FirstName { get; set; }
 
-        public string UserName { get; set; }
+        public string LastName { get; set; }
 
         public string Email { get; set; }
 
@@ -34,8 +34,8 @@ namespace Core.Users.Service.Command.Users
             _ctx = ctx;
             _authValidations = authValidations;
 
-            RuleFor(cmd => cmd.Name).NotEmpty();
-            RuleFor(cmd => cmd.UserName).NotEmpty();
+            RuleFor(cmd => cmd.FirstName).NotEmpty();
+            RuleFor(cmd => cmd.LastName).NotEmpty();
             RuleFor(cmd => cmd.Email).NotEmpty().EmailAddress();
             RuleFor(cmd => cmd.PhoneNumber).NotEmpty();
             RuleFor(cmd => cmd.Password).NotEmpty();

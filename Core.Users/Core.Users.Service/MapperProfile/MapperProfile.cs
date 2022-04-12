@@ -1,6 +1,6 @@
 using AutoMapper;
-using Core.Users.Domain.Model;
-using Core.Users.Domain.Response;
+using Core.Users.Domain;
+using Core.Users.Service;
 
 namespace Users.Core.Service.MapperProfile
 {
@@ -16,6 +16,5 @@ namespace Users.Core.Service.MapperProfile
             CreateMap<User, UserResponse>();
             CreateMap<Role, RoleResponse>();
         }
-
     }
 }

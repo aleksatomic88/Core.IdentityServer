@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Core.Users.Service.Command.Users
+namespace Core.Users.Service
 {
     public class AuthValidations
     {

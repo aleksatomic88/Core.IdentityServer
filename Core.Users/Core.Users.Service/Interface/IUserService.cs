@@ -1,5 +1,5 @@
-using Core.Users.Service.Command.Users;
-using Core.Users.Domain.Model;
+using Core.Users.Service;
+using Core.Users.Domain;
 using System.Threading.Tasks;
 
 namespace Users.Core.Service.Interface

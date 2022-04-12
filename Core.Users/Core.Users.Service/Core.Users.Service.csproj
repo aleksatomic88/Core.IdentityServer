@@ -17,4 +17,14 @@
     <ProjectReference Include="..\Core.Users.Domain\Core.Users.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Common\Query\Extension\" />
+    <Folder Include="Common\Query\Request\" />
+    <Folder Include="Roles\Command\" />
+    <Folder Include="Roles\Query\Extension\" />
+    <Folder Include="Roles\Query\Request\" />
+    <Folder Include="Users\Query\Extension\" />
+    <Folder Include="Users\Query\Request\" />
+  </ItemGroup>
+
 </Project>

@@ -1,4 +1,4 @@
-using Core.Users.Domain.Model;
+using Core.Users.Domain;
 using Identity.Domain.Initializers;
 using Common.Utilities;
 using System.Linq;
@@ -32,9 +32,9 @@ namespace IdentityServer.Domain
             {
                 _ctx.Users.Add(new User
                 {
-                    UserName = customerEmail,
+                    FirstName = "Test",
+                    LastName = "Customer",
                     Email = customerEmail,
-                    Name = "Test Customer",
                     EmailConfirmed = true,
                     Deleted = false,
                     Password = SecurePasswordHasher.Hash("Pass123!"),

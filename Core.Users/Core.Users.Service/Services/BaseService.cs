@@ -1,8 +1,8 @@
 using AutoMapper;
 using Core.Users.DAL;
 using Core.Users.DAL.Repositories.Interface;
-using Core.Users.Domain.Model;
-using Core.Users.Domain.Response;
+using Core.Users.Domain;
+using Core.Users.Service;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Users.Core.Service.Interface;

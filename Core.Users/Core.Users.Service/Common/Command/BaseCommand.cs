@@ -1,4 +1,4 @@
-namespace Core.Users.Domain.Command.Common
+namespace Core.Users.Service
 {
     public class BaseCommand
     {

@@ -1,14 +1,15 @@
+using DelegateDecompiler;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
-namespace Core.Users.Domain.Model
+namespace Core.Users.Domain
 {
     public class User : BaseEntity
     {
-        public string Name { get; set; }
+        public string FirstName { get; set; }
 
-        public string UserName { get; set; }
+        public string LastName { get; set; }
 
         public string Email { get; set; }
 
@@ -21,6 +22,10 @@ namespace Core.Users.Domain.Model
         public bool PhoneNumberConfirmed { get; set; }
 
         public List<UserRole> UserRoles { get; set; }
+
+        [NotMapped]
+        [Computed]
+        public string FullName => FirstName + " " + LastName;
 
         [NotMapped]
         public List<Role> Roles

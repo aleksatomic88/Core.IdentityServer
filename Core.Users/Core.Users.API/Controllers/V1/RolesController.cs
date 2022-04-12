@@ -1,8 +1,8 @@
 using AutoMapper;
 using Core.Users.DAL;
 using Core.Users.DAL.Repositories.Interface;
-using Core.Users.Domain.Model;
-using Core.Users.Domain.Response;
+using Core.Users.Domain;
+using Core.Users.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

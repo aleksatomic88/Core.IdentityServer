@@ -1,6 +1,5 @@
 using Core.Users.DAL.Repositories.Interface;
-using Core.Users.Domain.Model;
-using DelegateDecompiler.EntityFrameworkCore;
+using Core.Users.Domain;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

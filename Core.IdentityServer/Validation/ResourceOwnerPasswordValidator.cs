@@ -21,7 +21,7 @@ namespace IdentityServer.Validation
 
         public async Task ValidateAsync(ResourceOwnerPasswordValidationContext context)
         {
-            var user = await _ctx.Users.FirstOrDefaultAsync(x => x.UserName == context.UserName);
+            var user = await _ctx.Users.FirstOrDefaultAsync(x => x.Email == context.UserName);
 
             if (user != null && user.EmailConfirmed && SecurePasswordHasher.Verify(context.Password, user.Password))
             {
@@ -30,7 +30,6 @@ namespace IdentityServer.Validation
                     authenticationMethod: "CustomResourceOwnerPassword",
                     claims: new List<Claim>
                     {
-                        new Claim(JwtClaimTypes.Name, user.UserName),
                         new Claim(JwtClaimTypes.Email, user.Email),
                     });
                 return;

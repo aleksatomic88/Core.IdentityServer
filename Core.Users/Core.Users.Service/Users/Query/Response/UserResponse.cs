@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Core.Users.Domain.Response
+namespace Core.Users.Service
 {
     public class UserResponse : BaseResponse
     {

@@ -33,9 +33,10 @@ namespace IdentityServer.Services
             var claims = new List<Claim>
             {
                 new Claim(JwtClaimTypes.Id, user.Id.ToString()),
-                new Claim(JwtClaimTypes.PreferredUserName, user.UserName),                
+                new Claim(JwtClaimTypes.GivenName, user.FirstName ?? string.Empty),
+                new Claim(JwtClaimTypes.FamilyName, user.LastName ?? string.Empty),
+                new Claim(JwtClaimTypes.Name, user.FullName),                
                 new Claim(JwtClaimTypes.Email, user.Email),
-                new Claim(JwtClaimTypes.Name, user.Name ?? string.Empty)
             };
 
             foreach (var role in user.Roles)

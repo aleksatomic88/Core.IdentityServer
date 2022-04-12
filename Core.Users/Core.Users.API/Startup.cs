@@ -20,13 +20,12 @@ using Users.Core.Service.Interface;
 using Users.Core.Service;
 using Core.Users.DAL.Repositories.Interface;
 using Core.Users.DAL.Repositories.Implementations;
-using Core.Users.Domain.Response;
-using Core.Users.Domain.Model;
+using Core.Users.Domain;
 using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Core.Users.Service.Command.Users;
 using Common.Filters;
+using Core.Users.Service;
 
 namespace Core.Users.API
 {
