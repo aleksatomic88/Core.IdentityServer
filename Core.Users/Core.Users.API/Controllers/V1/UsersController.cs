@@ -8,13 +8,14 @@ using Users.Core.Service.Interface;
 using Common.Model;
 using System.Collections.Generic;
 using Core.Users.Service;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Core.Users.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
     [ApiVersion("1.0")]
-    // [Authorize]
+    [Authorize]
 #pragma warning disable CS1591
     public class UsersController : ControllerBase
     {
