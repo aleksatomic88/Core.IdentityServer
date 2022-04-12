@@ -25,6 +25,10 @@ namespace Core.Users.Domain
 
         [NotMapped]
         [Computed]
+        public bool Verified => EmailConfirmed || PhoneNumberConfirmed;
+
+        [NotMapped]
+        [Computed]
         public string FullName => FirstName + " " + LastName;
 
         [NotMapped]
