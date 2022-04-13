@@ -14,6 +14,8 @@ namespace Users.Core.Service.MapperProfile
         private void CreateMapper()
         {
             CreateMap<User, UserResponse>();
+            CreateMap<User, UserBasicResponse>();
+
             CreateMap<Role, RoleResponse>();
         }
     }

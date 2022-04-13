@@ -1,7 +1,5 @@
 using AutoMapper;
 using Core.Users.DAL;
-using Core.Users.DAL.Repositories.Interface;
-using Core.Users.Domain;
 using Core.Users.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +8,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Users.Core.Service.Interface;
 
 namespace Core.Users.API.Controllers
 {

@@ -1,6 +1,4 @@
 using AutoMapper;
-using Core.Users.DAL;
-using Core.Users.DAL.Repositories.Interface;
 using Core.Users.Domain;
 using Common.Utilities;
 using System.Linq;
@@ -9,21 +7,20 @@ using System.Transactions;
 using Users.Core.Service.Interface;
 using Core.Users.Service;
 using Common.Extensions;
+using Core.Users.DAL;
 
 namespace Users.Core.Service
 {
-    public sealed class UserService : BaseService<User, UserResponse>, IUserService
+    public sealed class UserService : BaseService<User, UserResponse, UserBasicResponse>, IUserService
     {
 
         private readonly RegisterUserCommandValidator _registerUserCmdValidator;
 
         public UserService(UsersDbContext ctx,
                            IMapper mapper,
-                           IGenericRepository<User> userRepository,
                            RegisterUserCommandValidator registerUserCommandValidator)
              : base(ctx,
-                    mapper,
-                    userRepository)
+                    mapper)
         {
             _registerUserCmdValidator = registerUserCommandValidator;
         }

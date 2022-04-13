@@ -14,18 +14,17 @@ using System.Collections.Generic;
 using System.IO; 
 using System.Reflection;
 using Core.Users.API.SwaggerSetup;
-using Core.Users.DAL;
 using Users.Core.Service.MapperProfile;
 using Users.Core.Service.Interface;
 using Users.Core.Service;
-using Core.Users.DAL.Repositories.Interface;
-using Core.Users.DAL.Repositories.Implementations;
-using Core.Users.Domain;
 using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Common.Filters;
 using Core.Users.Service;
+using Core.Users.DAL;
+using Core.Users.DAL.Repositories.Interface;
+using Core.Users.DAL.Repositories.Implementations;
 
 namespace Core.Users.API
 {
@@ -124,7 +123,7 @@ namespace Core.Users.API
             #endregion
 
             #region Services
-            services.AddScoped<IBaseService<User, UserResponse>, UserService>();
+            services.AddScoped<IUserService, UserService>();
             services.AddScoped<RegisterUserCommandValidator>();
             services.AddScoped<AuthValidations>();
             #endregion

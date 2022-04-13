@@ -15,14 +15,14 @@ namespace Core.Users.API.Controllers
     [ApiController]
     [Route("[controller]")]
     [ApiVersion("1.0")]
-    [Authorize]
+    // [Authorize]
 #pragma warning disable CS1591
     public class UsersController : ControllerBase
     {
 
-        private readonly IBaseService<User, UserResponse> _service;
+        private readonly IUserService _service;
 
-        public UsersController(IBaseService<User, UserResponse> userService)
+        public UsersController(IUserService userService)
         {
             _service = userService;
         }
@@ -50,13 +50,13 @@ namespace Core.Users.API.Controllers
         /// Return All Users
         /// </summary>s
         [HttpGet]
-        public async Task<ActionResult<Response<List<UserResponse>>>> GetAll()
+        public async Task<ActionResult<Response<List<UserBasicResponse>>>> GetAll()
         {
             try
             {
                 var users = await _service.GetAll(new string[] { "UserRoles.Role" });
 
-                return new Response<List<UserResponse>>(users);
+                return new Response<List<UserBasicResponse>>(users);
             }
             catch (Exception ex)
             {
@@ -71,7 +71,7 @@ namespace Core.Users.API.Controllers
         //[Authorize(Roles = "super-admin, admin")]
         public async Task<ActionResult<Response<UserResponse>>> Register([FromBody] RegisterUserCommand cmd)
         {
-            var user = await ((UserService)_service).Create(cmd);
+            var user = await _service.Create(cmd);
 
             return await Get(user.Id);
         }
