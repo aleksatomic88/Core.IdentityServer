@@ -1,23 +1,27 @@
 using AutoMapper;
 using Core.Users.DAL;
 using Users.Core.Service.Interface;
-using Core.Users.DAL.Repositories.Interface;
 using Core.Users.Service;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Core.Users.Domain;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Common.Model.Search;
+using Core.Users.Service.Response;
 
 namespace Users.Core.Service
 {
-    public abstract class BaseService<T, TResponse, TBasicResponse> : IBaseService<T, TResponse, TBasicResponse>
-        where T : BaseEntity
+    public abstract class BaseService<T, TResponse, TBasicResponse, TQuery> : IBaseService<T, TResponse, TBasicResponse, TQuery>
+        where T :  BaseEntity
         where TResponse : BaseResponse
         where TBasicResponse : BaseResponse
+        where TQuery : BaseQuery
     {
         protected readonly UsersDbContext _ctx;
         protected readonly IMapper _mapper;
+
+        public const int PageSize = 10;
 
         public BaseService(UsersDbContext ctx,
                            IMapper mapper)
@@ -28,29 +32,48 @@ namespace Users.Core.Service
 
         public async Task<TResponse> Get(int id, string[] includes = default)
         {
-            var result = await GetQuery(includes).FirstOrDefaultAsync(x => x.Id == id);
+            var result = await GetQueryable(includes).FirstOrDefaultAsync(x => x.Id == id);
 
-            return _mapper.Map<TResponse>(result);
+            return _mapper.Map<TResponse>(result);            
         }
 
-        public async Task<List<TBasicResponse>> GetAll(string[] includes = default)
+        public async Task<SearchResponse<TBasicResponse>> Search(TQuery searchQuery, string[] includes = default)
         {
-            var result = await GetQuery(includes).ToListAsync();
+            var pageSize = searchQuery.PageSize <= 0 ? PageSize : searchQuery.PageSize;
+            var pageNumber = searchQuery.PageNumber <= 0 ? 1 : searchQuery.PageNumber;
 
-            return _mapper.Map<List<TBasicResponse>>(result);
+
+            var entities = await SearchQuery(GetQueryable(includes), searchQuery)
+                                    .Skip((pageNumber - 1) * pageSize).Take(pageSize)                                    
+                                    .ToListAsync();
+
+            var dtos = _mapper.Map<List<TBasicResponse>>(entities);
+
+            return new SearchResponse<TBasicResponse>
+            {
+                PageSize = pageSize,
+                PageNumber = pageNumber,
+                TotalCount = dtos.Count,
+                Result = dtos                
+            };
         }
 
-        private IQueryable<T> GetQuery(string[] includes = default)
+        protected IQueryable<T> GetQueryable(string[] includes = default)
         {
-            var query = _ctx.Set<T>().AsQueryable();
+            var queryable = _ctx.Set<T>().AsQueryable();
 
             if (includes == default)
-                return query;
+                return queryable;
 
             foreach (var include in includes)
-                query = query.Include(include);
+                queryable = queryable.Include(include);
 
-            return query;
+            return queryable;
+        }
+
+        protected virtual IQueryable<T> SearchQuery(IQueryable<T> queryable, TQuery searchQuery)
+        {
+            return queryable;
         }
     }
 }

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -24,7 +24,6 @@
     <Folder Include="Roles\Query\Extension\" />
     <Folder Include="Roles\Query\Request\" />
     <Folder Include="Users\Query\Extension\" />
-    <Folder Include="Users\Query\Request\" />
   </ItemGroup>
 
 </Project>

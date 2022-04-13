@@ -11,7 +11,7 @@ using Core.Users.DAL;
 
 namespace Users.Core.Service
 {
-    public sealed class UserService : BaseService<User, UserResponse, UserBasicResponse>, IUserService
+    public sealed class UserService : BaseService<User, UserResponse, UserBasicResponse, UserQuery>, IUserService
     {
 
         private readonly RegisterUserCommandValidator _registerUserCmdValidator;
@@ -52,6 +52,17 @@ namespace Users.Core.Service
 
                 return user;
             }
+        }
+
+        protected override IQueryable<User> SearchQuery(IQueryable<User> querable, UserQuery searchQuery)
+        {
+            querable = searchQuery.FirstName != null ? querable.Where(e => e.FirstName.ToLower().Contains(searchQuery.FirstName)) : querable;
+            querable = searchQuery.LastName != null ? querable.Where(e => e.LastName.ToLower().Contains(searchQuery.LastName)) : querable;
+            querable = searchQuery.Email != null ? querable.Where(e => e.Email.ToLower().Contains(searchQuery.Email)) : querable;
+            querable = searchQuery.PhoneNumber != null ? querable.Where(e => e.PhoneNumber.ToLower().Contains(searchQuery.FirstName)) : querable;
+            // querable = searchQuery.Verified != null ? querable.Where(e => e.Verified == searchQuery.Verified) : querable;
+
+            return querable.OrderByDescending(x => x.Id);
         }
     }
 }

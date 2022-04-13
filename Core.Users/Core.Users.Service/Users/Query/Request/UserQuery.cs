@@ -1,8 +1,8 @@
-using Core.Users.Service.Response;
+using Common.Model.Search;
 
 namespace Core.Users.Service
 {
-    public class UserBasicResponse : BaseResponse
+    public class UserQuery : BaseQuery
     {
         public string FirstName { get; set; }
 
@@ -12,13 +12,8 @@ namespace Core.Users.Service
 
         public string Email { get; set; }
 
-        public bool EmailConfirmed { get; set; }
-
         public string PhoneNumber { get; set; }
 
-        public bool PhoneNumberConfirmed { get; set; }
-
-        public bool Verified{ get; set; }
-
+        public bool? Verified { get; set; }
     }
 }

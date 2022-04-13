@@ -1,5 +1,6 @@
 using Core.Users.Domain;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Core.Users.DAL
 {
@@ -25,5 +26,8 @@ namespace Core.Users.DAL
                         .HasIndex(u => u.PhoneNumber)
                         .IsUnique();
         }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+            => optionsBuilder.LogTo(Console.WriteLine);
     }
 }
