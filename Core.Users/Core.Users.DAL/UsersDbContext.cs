@@ -27,7 +27,7 @@ namespace Core.Users.DAL
                         .IsUnique();
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder.LogTo(Console.WriteLine);
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //    => optionsBuilder.LogTo(Console.WriteLine);
     }
 }

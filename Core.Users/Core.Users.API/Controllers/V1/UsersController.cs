@@ -56,5 +56,17 @@ namespace Core.Users.API.Controllers
 
             return await Get(user.Id);
         }
+
+        /// <summary>
+        /// Delete an User
+        /// </summary>s
+        [HttpDelete("{id}")]
+        //[Authorize(Roles = "super-admin, admin")]
+        public async Task<Response<bool>> Delete(int id)
+        {
+            var result = await _service.Delete(id);
+
+            return new Response<bool>(result);
+        }
     }
 }

@@ -54,7 +54,7 @@ namespace Users.Core.Service
             }
         }
 
-        protected override IQueryable<User> SearchQuery(IQueryable<User> querable, UserQuery searchQuery)
+        protected override IQueryable<User> SearchQueryInternal(IQueryable<User> querable, UserQuery searchQuery)
         {
             querable = searchQuery.FirstName != null ? querable.Where(e => e.FirstName.ToLower().Contains(searchQuery.FirstName)) : querable;
             querable = searchQuery.LastName != null ? querable.Where(e => e.LastName.ToLower().Contains(searchQuery.LastName)) : querable;

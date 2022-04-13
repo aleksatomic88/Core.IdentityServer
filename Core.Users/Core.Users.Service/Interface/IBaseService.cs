@@ -8,5 +8,7 @@ namespace Users.Core.Service.Interface
         Task<TResponse> Get(int id, string[] includes = default);
 
         Task<SearchResponse<TBasicResponse>> Search(TQuery searchQuery, string[] includes = default);
+
+        Task<bool> Delete(int id);
     }
 }

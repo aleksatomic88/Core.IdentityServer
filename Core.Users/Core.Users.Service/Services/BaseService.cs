@@ -58,6 +58,20 @@ namespace Users.Core.Service
             };
         }
 
+        public async Task<bool> Delete(int id)
+        {
+            var entity = await _ctx.Set<T>().FindAsync(id);
+
+            if (!CanDeleteEntity(entity))
+                return false;           
+
+            entity.Deleted = true;
+
+            await _ctx.SaveChangesAsync();
+
+            return true;
+        }
+
         protected IQueryable<T> GetQueryable(string[] includes = default)
         {
             var queryable = _ctx.Set<T>().AsQueryable();
@@ -71,9 +85,24 @@ namespace Users.Core.Service
             return queryable;
         }
 
-        protected virtual IQueryable<T> SearchQuery(IQueryable<T> queryable, TQuery searchQuery)
+        protected IQueryable<T> SearchQuery(IQueryable<T> queryable, TQuery searchQuery)
         {
+            queryable = SearchQueryInternal(queryable, searchQuery);
+
+            queryable = queryable.Where(x => !x.Deleted);
+
+            queryable = queryable.OrderByDescending(x => x.Id);
+
             return queryable;
+        }
+
+        protected abstract IQueryable<T> SearchQueryInternal(IQueryable<T> queryable, TQuery searchQuery);
+
+        
+        protected virtual bool CanDeleteEntity(T entity)
+        {
+            // for example we should not be able delete SuperAdmin User
+            return true;
         }
     }
 }
