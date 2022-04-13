@@ -58,12 +58,9 @@ namespace Users.Core.Service
             };
         }
 
-        public async Task<bool> Delete(int id)
+        public virtual async Task<bool> Delete(int id)
         {
             var entity = await _ctx.Set<T>().FindAsync(id);
-
-            if (!CanDeleteEntity(entity))
-                return false;           
 
             entity.Deleted = true;
 
@@ -98,11 +95,5 @@ namespace Users.Core.Service
 
         protected abstract IQueryable<T> SearchQueryInternal(IQueryable<T> queryable, TQuery searchQuery);
 
-        
-        protected virtual bool CanDeleteEntity(T entity)
-        {
-            // for example we should not be able delete SuperAdmin User
-            return true;
-        }
     }
 }

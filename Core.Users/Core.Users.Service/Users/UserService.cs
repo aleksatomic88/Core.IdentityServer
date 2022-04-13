@@ -54,6 +54,14 @@ namespace Users.Core.Service
             }
         }
 
+        public override async Task<bool> Delete(int id)
+        {
+            if (!CanUserBeDeleted(id))
+                return false;
+
+            return await base.Delete(id);
+        }
+
         protected override IQueryable<User> SearchQueryInternal(IQueryable<User> querable, UserQuery searchQuery)
         {
             querable = searchQuery.FirstName != null ? querable.Where(e => e.FirstName.ToLower().Contains(searchQuery.FirstName)) : querable;
@@ -63,6 +71,12 @@ namespace Users.Core.Service
             // querable = searchQuery.Verified != null ? querable.Where(e => e.Verified == searchQuery.Verified) : querable;
 
             return querable.OrderByDescending(x => x.Id);
+        }
+
+        protected bool CanUserBeDeleted(int id)
+        {
+            // for example we should not be able delete SuperAdmin User
+            return true;
         }
     }
 }
