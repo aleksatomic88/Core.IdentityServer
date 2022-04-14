@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Core.Users.Domain
+namespace Core.Users.DAL.Entity
 {
     public class Role
     {

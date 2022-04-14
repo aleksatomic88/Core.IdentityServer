@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
-namespace Core.Users.Domain
+namespace Core.Users.DAL.Entity
 {
     public class User : BaseEntity
     {

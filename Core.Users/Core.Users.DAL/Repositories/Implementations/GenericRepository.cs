@@ -1,5 +1,5 @@
 using Core.Users.DAL.Repositories.Interface;
-using Core.Users.Domain;
+using Core.Users.DAL.Entity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

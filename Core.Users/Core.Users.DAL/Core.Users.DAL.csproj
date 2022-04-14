@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
       <TargetFramework>net5.0</TargetFramework>
@@ -16,11 +16,10 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Core.Users.Domain\Core.Users.Domain.csproj" />
+    <ProjectReference Include="..\..\Shared\Common\Common.csproj" />
   </ItemGroup>
 
 </Project>

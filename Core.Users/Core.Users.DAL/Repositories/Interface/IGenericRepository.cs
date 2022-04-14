@@ -1,4 +1,4 @@
-using Core.Users.Domain;
+using Core.Users.DAL.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;

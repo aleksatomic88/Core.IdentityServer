@@ -1,5 +1,5 @@
 using AutoMapper;
-using Core.Users.Domain;
+using Core.Users.DAL.Entity;
 using Core.Users.Service;
 
 namespace Users.Core.Service.MapperProfile

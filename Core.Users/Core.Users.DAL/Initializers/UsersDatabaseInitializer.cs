@@ -1,20 +1,19 @@
-using Core.Users.Domain;
-using Identity.Domain.Initializers;
+using Core.Users.DAL.Entity;
 using Common.Utilities;
 using System.Linq;
 
-namespace IdentityServer.Domain
+namespace Core.Users.DAL.Initializers
 {
     /// <summary>
     /// Populates db with data that must exist for app to work properly
     /// </summary>
-    public class IdentityDatabaseInitializer
+    public class UsersDatabaseInitializer
     {
-        private readonly IdentityDbContext _ctx;
+        private readonly UsersDbContext _ctx;
         private readonly RolesInitializer _rolesInitializer;
         
-        public IdentityDatabaseInitializer(IdentityDbContext ctx,
-                                           RolesInitializer rolesInitializer)
+        public UsersDatabaseInitializer(UsersDbContext ctx,
+                                        RolesInitializer rolesInitializer)
         {
             _ctx = ctx;
             _rolesInitializer = rolesInitializer;

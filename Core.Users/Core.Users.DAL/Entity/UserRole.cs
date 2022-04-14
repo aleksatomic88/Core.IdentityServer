@@ -1,4 +1,4 @@
-namespace Core.Users.Domain
+namespace Core.Users.DAL.Entity
 {
     public class UserRole
     {

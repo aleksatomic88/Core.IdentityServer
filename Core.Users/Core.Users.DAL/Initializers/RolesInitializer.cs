@@ -1,15 +1,14 @@
-using Core.Users.Domain;
-using IdentityServer.Domain;
+using Core.Users.DAL.Entity;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Identity.Domain.Initializers
+namespace Core.Users.DAL.Initializers
 {
     public class RolesInitializer
     {
-        private readonly IdentityDbContext _ctx;
+        private readonly UsersDbContext _ctx;
 
-        public RolesInitializer(IdentityDbContext ctx)
+        public RolesInitializer(UsersDbContext ctx)
         {
             _ctx = ctx;
         }

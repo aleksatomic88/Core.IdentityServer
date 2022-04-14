@@ -8,59 +8,59 @@ namespace IdentityServer
     {
 
         public static IEnumerable<IdentityResource> GetIdentityResources() => new IdentityResource[]
-            { 
-                // new IdentityResources.Profile(),
-                // new IdentityResources.OpenId()
-            };
+        { 
+            // new IdentityResources.Profile(),
+            // new IdentityResources.OpenId()
+        };
 
         public static IEnumerable<ApiResource> GetApiResources() => new List<ApiResource>
+        {
+            new ApiResource("core.users.api", "Core.Users.API" )
             {
-                new ApiResource("core.users.api", "Core.Users.API" )
-                {
-                    Scopes = new [] { "users-api", "addresses-api" },
-                    ApiSecrets = new List<Secret>{ new Secret("secret".Sha256()) }
-                },
-            };
+                Scopes = new [] { "users-api", "addresses-api" },
+                ApiSecrets = new List<Secret>{ new Secret("secret".Sha256()) }
+            },
+        };
 
-        public static IEnumerable<ApiScope> GetApiScopes() =>  new List<ApiScope>
-            {
-                new ApiScope("sub", "sub", new [] { JwtClaimTypes.Id, JwtClaimTypes.PreferredUserName, JwtClaimTypes.Email, JwtClaimTypes.Name, JwtClaimTypes.Role } ),
-                new ApiScope("users-api", "User Endpoints"),
-                new ApiScope("addresses-api", "Address Endpoints"),
-            };
+        public static IEnumerable<ApiScope> GetApiScopes() => new List<ApiScope>
+        {
+            new ApiScope("sub", "sub", new [] { JwtClaimTypes.Id, JwtClaimTypes.PreferredUserName, JwtClaimTypes.Email, JwtClaimTypes.Name, JwtClaimTypes.Role } ),
+            new ApiScope("users-api", "User Endpoints"),
+            new ApiScope("addresses-api", "Address Endpoints"),
+        };
 
         public static IEnumerable<Client> GetClients() => new List<Client>
+        {
+            new Client
             {
-                new Client
-                {
-                    ClientId = "NonInteractiveApp",
+                ClientId = "NonInteractiveApp",
 
-                    AllowedGrantTypes = { GrantType.ResourceOwnerPassword },
-                    AllowOfflineAccess = true,
+                AllowedGrantTypes = { GrantType.ResourceOwnerPassword },
+                AllowOfflineAccess = true,
 
-                    ClientSecrets = { new Secret("secret".Sha256()) },
-                    
-                    AllowedScopes = new []{
-                                            "sub",
-                                            "users-api",
-                                            "addresses-api"
-                                           }
-                },
-                new Client
-                {
-                    ClientId = "ClientApp",
+                ClientSecrets = { new Secret("secret".Sha256()) },
 
-                    AllowedGrantTypes = { GrantType.ClientCredentials },
-                    AllowOfflineAccess = true,
+                AllowedScopes = new []{
+                                        "sub",
+                                        "users-api",
+                                        "addresses-api"
+                                        }
+            },
+            new Client
+            {
+                ClientId = "ClientApp",
 
-                    ClientSecrets = { new Secret("secret".Sha256()) },                   
-                    
-                    AllowedScopes = new []{
-                                            "sub",
-                                            "users-api",
-                                            "addresses-api"
-                                           }
-                }
-            };
-        }
+                AllowedGrantTypes = { GrantType.ClientCredentials },
+                AllowOfflineAccess = true,
+
+                ClientSecrets = { new Secret("secret".Sha256()) },
+
+                AllowedScopes = new []{
+                                        "sub",
+                                        "users-api",
+                                        "addresses-api"
+                                        }
+            }
+        };
+    }
 }

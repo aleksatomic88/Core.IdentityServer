@@ -5,6 +5,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using IdentityServer.Extensions;
 using Microsoft.Extensions.Configuration;
+using Core.Users.DAL;
 
 namespace IdentityServer
 {
@@ -14,21 +15,20 @@ namespace IdentityServer
 
         public IConfiguration Configuration { get; }
 
-        public string ConnectionString { get; }
-
         public Startup(IWebHostEnvironment environment,
                        IConfiguration configuration)
         {
             Environment = environment;
             Configuration = configuration;
-            ConnectionString = Configuration.GetConnectionString("IdentityDatabase");
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
             services.RegisterApplicationServices();
 
-            services.AddIdentityServerService(ConnectionString);
+            services.AddDbContext<UsersDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("IdentityDatabase")));
+
+            services.AddIdentityServerService();
         }
 
         public void Configure(IApplicationBuilder app)
@@ -39,8 +39,6 @@ namespace IdentityServer
             }
             
             app.UseIdentityServer();
-
-            app.MigrateDatabase();
         }
     }
 }

@@ -25,6 +25,9 @@ using Core.Users.Service;
 using Core.Users.DAL;
 using Core.Users.DAL.Repositories.Interface;
 using Core.Users.DAL.Repositories.Implementations;
+using Core.Users.API.Extensions;
+using Core.Users.DAL.Initializers;
+using Core.Users.DAL.Seeders;
 
 namespace Core.Users.API
 {
@@ -113,24 +116,10 @@ namespace Core.Users.API
                     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
                 }
                 );
-            #region AutoMapper
-            var mapperConfig = new MapperConfiguration(mc =>
-            {
-                mc.AddProfile(new MapperProfile());
-            });
-            IMapper mapper = mapperConfig.CreateMapper();
-            services.AddSingleton(mapper);
-            #endregion
 
-            #region Services
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<RegisterUserCommandValidator>();
-            services.AddScoped<AuthValidations>();
-            #endregion
+            services.RegisterAutoMapper();
 
-            #region Repositories
-            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-            #endregion
+            services.RegisterApplicationServices();
 
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
                     .AddIdentityServerAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme,
@@ -183,6 +172,7 @@ namespace Core.Users.API
                     }
                 });
 
+            app.MigrateDatabase();
         } 
     }
 }

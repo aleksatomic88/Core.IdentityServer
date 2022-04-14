@@ -1,3 +1,4 @@
+using Core.Users.DAL;
 using IdentityModel;
 using IdentityServer.Domain;
 using IdentityServer4.Models;
@@ -16,9 +17,9 @@ namespace IdentityServer.Services
     /// </summary>
     public class ProfileService : IProfileService
     {
-        private readonly IdentityDbContext _ctx;
+        private readonly UsersDbContext _ctx;
 
-        public ProfileService(IdentityDbContext ctx)
+        public ProfileService(UsersDbContext ctx)
         {
             _ctx = ctx;
         }

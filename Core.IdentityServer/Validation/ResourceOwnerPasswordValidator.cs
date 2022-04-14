@@ -1,4 +1,3 @@
-using IdentityServer.Domain;
 using IdentityModel;
 using IdentityServer4.Models;
 using IdentityServer4.Validation;
@@ -7,14 +6,15 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Common.Utilities;
+using Core.Users.DAL;
 
 namespace IdentityServer.Validation
 {
     public class ResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
     {
-        private readonly IdentityDbContext _ctx;
+        private readonly UsersDbContext _ctx;
 
-        public ResourceOwnerPasswordValidator(IdentityDbContext ctx)
+        public ResourceOwnerPasswordValidator(UsersDbContext ctx)
         {
             _ctx = ctx;
         }

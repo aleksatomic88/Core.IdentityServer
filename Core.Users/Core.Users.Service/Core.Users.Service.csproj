@@ -1,20 +1,13 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="11.0.1" />
-    <PackageReference Include="DelegateDecompiler.EntityFrameworkCore5" Version="0.30.0" />
-    <PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\Shared\Common\Common.csproj" />
     <ProjectReference Include="..\..\Shared\Localization\Localization.csproj" />
     <ProjectReference Include="..\Core.Users.DAL\Core.Users.DAL.csproj" />
-    <ProjectReference Include="..\Core.Users.Domain\Core.Users.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>

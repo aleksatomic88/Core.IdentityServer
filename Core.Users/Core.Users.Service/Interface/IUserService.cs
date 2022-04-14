@@ -1,4 +1,4 @@
-using Core.Users.Domain;
+using Core.Users.DAL.Entity;
 using Core.Users.Service;
 using System.Threading.Tasks;
 

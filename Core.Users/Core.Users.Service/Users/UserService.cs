@@ -1,5 +1,5 @@
 using AutoMapper;
-using Core.Users.Domain;
+using Core.Users.DAL.Entity;
 using Common.Utilities;
 using System.Linq;
 using System.Threading.Tasks;

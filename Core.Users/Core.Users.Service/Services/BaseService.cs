@@ -3,7 +3,7 @@ using Core.Users.DAL;
 using Users.Core.Service.Interface;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Core.Users.Domain;
+using Core.Users.DAL.Entity;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Common.Model.Search;

@@ -1,18 +1,18 @@
-using Core.Users.Domain;
-using Identity.Domain.Initializers;
+using Core.Users.DAL.Entity;
 using Common.Utilities;
 using System.Linq;
+using Core.Users.DAL.Initializers;
 
-namespace IdentityServer.Domain
+namespace Core.Users.DAL.Seeders
 {
     /// <summary>
     /// Populets db with some data for testing
     /// </summary>
-    public class IdentityDatabaseSeed
+    public class UsersDatabaseSeed
     {
-        private readonly IdentityDbContext _ctx;
+        private readonly UsersDbContext _ctx;
 
-        public IdentityDatabaseSeed(IdentityDbContext ctx)
+        public UsersDatabaseSeed(UsersDbContext ctx)
         {
             _ctx = ctx;
         }
