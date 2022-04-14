@@ -28,8 +28,8 @@ namespace Core.Users.DAL
                         .HasIndex(u => u.PhoneNumber)
                         .IsUnique();
 
-            //modelBuilder.Entity<User>()
-            //            .ToTable("Users", b => b.IsTemporal());
+            modelBuilder.Entity<User>()
+                        .ToTable("Users", b => b.IsTemporal());
         }
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
