@@ -24,8 +24,9 @@ namespace IdentityServer.Extensions
 
                 Log.Information("Environment: " + Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
 
+                // TODO Temporary !!!
                 identityDbContext.Database.EnsureDeleted();
-                identityDbContext.Database.EnsureCreated(); ;
+                identityDbContext.Database.EnsureCreated();
                 Log.Information("Database migrations executed.");
 
                 dbInitializer.Initialize();

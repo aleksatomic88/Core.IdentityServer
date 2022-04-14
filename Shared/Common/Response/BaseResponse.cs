@@ -7,5 +7,7 @@ namespace Common.Response
         public int Id { get; set; }
 
         public DateTime CreatedAt { get; set; }
+
+        public byte[] RowVersion { get; set; }
     }
 }

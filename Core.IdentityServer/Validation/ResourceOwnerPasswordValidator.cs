@@ -26,7 +26,7 @@ namespace IdentityServer.Validation
             if (user != null && user.EmailConfirmed && SecurePasswordHasher.Verify(context.Password, user.Password))
             {
                 context.Result = new GrantValidationResult(
-                    subject: user.Id.ToString(),
+                    subject: user.Id.ToString(), // HASH
                     authenticationMethod: "CustomResourceOwnerPassword",
                     claims: new List<Claim>
                     {
