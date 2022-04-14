@@ -17,4 +17,8 @@
     <Folder Include="Users\Query\Extension\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="11.0.1" />
+  </ItemGroup>
+
 </Project>
