@@ -1,6 +1,6 @@
 using System;
 
-namespace Core.Users.Service.Response
+namespace Common.Response
 {
     public abstract class BaseResponse
     {

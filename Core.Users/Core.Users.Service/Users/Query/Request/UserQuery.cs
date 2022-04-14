@@ -2,7 +2,7 @@ using Common.Model.Search;
 
 namespace Core.Users.Service
 {
-    public class UserQuery : BaseQuery
+    public class UserQuery : BaseSearchQuery
     {
         public string FirstName { get; set; }
 

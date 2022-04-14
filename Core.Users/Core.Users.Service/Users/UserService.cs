@@ -56,7 +56,7 @@ namespace Users.Core.Service
 
         public override async Task<bool> Delete(int id)
         {
-            if (!CanUserBeDeleted(id))
+            if (!CanDeleteUser(id))
                 return false;
 
             return await base.Delete(id);
@@ -73,7 +73,7 @@ namespace Users.Core.Service
             return querable.OrderByDescending(x => x.Id);
         }
 
-        protected bool CanUserBeDeleted(int id)
+        private bool CanDeleteUser(int id)
         {
             // for example we should not be able delete SuperAdmin User
             return true;

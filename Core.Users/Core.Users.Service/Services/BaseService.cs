@@ -1,22 +1,21 @@
 using AutoMapper;
 using Core.Users.DAL;
 using Users.Core.Service.Interface;
-using Core.Users.Service;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Core.Users.Domain;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Common.Model.Search;
-using Core.Users.Service.Response;
+using Common.Response;
 
 namespace Users.Core.Service
 {
-    public abstract class BaseService<T, TResponse, TBasicResponse, TQuery> : IBaseService<T, TResponse, TBasicResponse, TQuery>
+    public abstract class BaseService<T, TResponse, TBasicResponse, TSearchQuery> : IBaseService<T, TResponse, TBasicResponse, TSearchQuery>
         where T :  BaseEntity
         where TResponse : BaseResponse
         where TBasicResponse : BaseResponse
-        where TQuery : BaseQuery
+        where TSearchQuery : BaseSearchQuery
     {
         protected readonly UsersDbContext _ctx;
         protected readonly IMapper _mapper;
@@ -37,7 +36,7 @@ namespace Users.Core.Service
             return _mapper.Map<TResponse>(result);            
         }
 
-        public async Task<SearchResponse<TBasicResponse>> Search(TQuery searchQuery, string[] includes = default)
+        public async Task<SearchResponse<TBasicResponse>> Search(TSearchQuery searchQuery, string[] includes = default)
         {
             var pageSize = searchQuery.PageSize <= 0 ? PageSize : searchQuery.PageSize;
             var pageNumber = searchQuery.PageNumber <= 0 ? 1 : searchQuery.PageNumber;
@@ -82,7 +81,7 @@ namespace Users.Core.Service
             return queryable;
         }
 
-        protected IQueryable<T> SearchQuery(IQueryable<T> queryable, TQuery searchQuery)
+        protected IQueryable<T> SearchQuery(IQueryable<T> queryable, TSearchQuery searchQuery)
         {
             queryable = SearchQueryInternal(queryable, searchQuery);
 
@@ -93,7 +92,7 @@ namespace Users.Core.Service
             return queryable;
         }
 
-        protected abstract IQueryable<T> SearchQueryInternal(IQueryable<T> queryable, TQuery searchQuery);
+        protected abstract IQueryable<T> SearchQueryInternal(IQueryable<T> queryable, TSearchQuery searchQuery);
 
     }
 }

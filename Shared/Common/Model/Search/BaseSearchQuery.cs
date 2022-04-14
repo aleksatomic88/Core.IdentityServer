@@ -1,7 +1,7 @@
 
 namespace Common.Model.Search
 {
-    public class BaseQuery
+    public class BaseSearchQuery
     {
         public int? Id { get; set; }
 

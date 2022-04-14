@@ -1,4 +1,4 @@
-using Core.Users.Service.Response;
+using Common.Response;
 
 namespace Core.Users.Service
 {
