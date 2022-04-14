@@ -6,6 +6,8 @@ namespace Users.Core.Service.Interface
 {
     public interface IUserService : IBaseService<User, UserResponse, UserBasicResponse, UserQuery>
     {
+        Task<UserResponse> GetWithRoles(int id);
+
         Task<User> Create(RegisterUserCommand cmd);
     }
 }

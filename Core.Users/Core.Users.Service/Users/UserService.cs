@@ -8,6 +8,8 @@ using Users.Core.Service.Interface;
 using Core.Users.Service;
 using Common.Extensions;
 using Core.Users.DAL;
+using Common.Model;
+using System.Collections.Generic;
 
 namespace Users.Core.Service
 {
@@ -25,6 +27,11 @@ namespace Users.Core.Service
             _registerUserCmdValidator = registerUserCommandValidator;
         }
 
+        public async Task<UserResponse> GetWithRoles(int id)
+        {
+            return await Get(id, new string[] { "UserRoles.Role" });
+        }
+
         public async Task<User> Create(RegisterUserCommand cmd)
         {
             _registerUserCmdValidator.ValidateCmd(cmd);
@@ -39,8 +46,9 @@ namespace Users.Core.Service
                     EmailConfirmed = true,
                     PhoneNumber = cmd.PhoneNumber,
                     PhoneNumberConfirmed = true,
-                    Deleted = false,
                     Password = SecurePasswordHasher.Hash(cmd.Password),
+                    CreatedById = _ctx.CurrentUser.Id,
+                    UpdatedById = _ctx.CurrentUser.Id,
                     UserRoles = new() { new UserRole { Role = _ctx.Roles.First(r => r.Id == cmd.Roles.First()) } }
                 };
 
@@ -56,8 +64,7 @@ namespace Users.Core.Service
 
         public override async Task<bool> Delete(int id)
         {
-            if (!CanDeleteUser(id))
-                return false;
+            await CheckIfDeleteUserIsSuperAdmin(id);
 
             return await base.Delete(id);
         }
@@ -73,10 +80,12 @@ namespace Users.Core.Service
             return querable.OrderByDescending(x => x.Id);
         }
 
-        private bool CanDeleteUser(int id)
+        private async Task CheckIfDeleteUserIsSuperAdmin(int id)
         {
-            // for example we should not be able delete SuperAdmin User
-            return true;
+            var user = await GetWithRoles(id);
+
+            if (user.IsSuperAdmin)
+                throw new ValidationError(new List<ApiError>() { new ApiError(400, "It is not possible to delete Super Admin user!") });
         }
     }
 }

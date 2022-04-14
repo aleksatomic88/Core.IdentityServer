@@ -15,7 +15,7 @@ namespace Core.Users.DAL
         public DbSet<Role> Roles { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
 
-        public AuthenticatedUser CurrentUser { get; set; }
+        public AuthenticatedUser CurrentUser { get; set; } = new AuthenticatedUser { Id = 1 };
         public string Token { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

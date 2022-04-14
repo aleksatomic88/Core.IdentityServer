@@ -44,7 +44,6 @@ namespace Core.Users.DAL.Initializers
                     LastName = "Admin",
                     Email = superAdminEmail,
                     EmailConfirmed = true,
-                    Deleted = false,
                     Password = SecurePasswordHasher.Hash("Pass123!"),
                     UserRoles = new () { new UserRole { Role = _ctx.Roles.First(r => r.Name == RolesInitializer.SuperAdminRole) }}
                 });

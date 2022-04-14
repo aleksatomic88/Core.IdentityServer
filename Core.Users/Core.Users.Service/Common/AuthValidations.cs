@@ -23,7 +23,7 @@ namespace Core.Users.Service
         public async Task<bool> EmailExistsAsync(string email)
         {
             var user = await _ctx.Users
-                                 .Where(u => u.Email == email && !u.Deleted)
+                                 .Where(u => u.Email == email)
                                  .FirstOrDefaultAsync();
 
             return user != null;

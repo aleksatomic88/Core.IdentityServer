@@ -36,7 +36,6 @@ namespace Core.Users.DAL.Seeders
                     LastName = "Customer",
                     Email = customerEmail,
                     EmailConfirmed = true,
-                    Deleted = false,
                     Password = SecurePasswordHasher.Hash("Pass123!"),
                     UserRoles = new() { new UserRole { Role = customerRole } }
                 });

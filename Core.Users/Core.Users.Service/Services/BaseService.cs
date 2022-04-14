@@ -29,7 +29,7 @@ namespace Users.Core.Service
             _mapper = mapper;
         }
 
-        public async Task<TResponse> Get(int id, string[] includes = default)
+        public virtual async Task<TResponse> Get(int id, string[] includes = default)
         {
             var result = await GetQueryable(includes).FirstOrDefaultAsync(x => x.Id == id);
 
@@ -61,7 +61,7 @@ namespace Users.Core.Service
         {
             var entity = await _ctx.Set<T>().FindAsync(id);
 
-            entity.Deleted = true;
+            _ctx.Remove(entity);
 
             await _ctx.SaveChangesAsync();
 
@@ -84,8 +84,6 @@ namespace Users.Core.Service
         protected IQueryable<T> SearchQuery(IQueryable<T> queryable, TSearchQuery searchQuery)
         {
             queryable = SearchQueryInternal(queryable, searchQuery);
-
-            queryable = queryable.Where(x => !x.Deleted);
 
             queryable = queryable.OrderByDescending(x => x.Id);
 

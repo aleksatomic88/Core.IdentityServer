@@ -29,7 +29,7 @@ namespace Core.Users.API.Controllers
         [HttpGet]
         public async Task<Response<UserResponse>> Get(int id)
         {
-            var user = await _service.Get(id, new string[] { "UserRoles.Role" });
+            var user = await _service.GetWithRoles(id);
 
             return new Response<UserResponse>(user);
         }
