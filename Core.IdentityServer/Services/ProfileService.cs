@@ -1,6 +1,5 @@
 using Core.Users.DAL;
 using IdentityModel;
-using IdentityServer.Domain;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using Microsoft.EntityFrameworkCore;

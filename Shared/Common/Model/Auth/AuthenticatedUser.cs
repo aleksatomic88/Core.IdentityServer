@@ -10,23 +10,27 @@ namespace Common.Model
 
         public string Email { get; set; }
 
-        //public int? PersonId { get; set; }
+        public string FirstName { get; set; }
 
-        //public List<string> PermissionList { get; set; } = new List<string>();
+        public string LastName { get; set; }
 
-        //public string Fullname { get; set; }
+        public string FullName { get; set; }
 
-        //public bool IsAdmin => false; //PermissionList.Any(p => p == Permissions.ADMIN);
+        public List<string> Roles { get; set; } = new List<string>();
 
-        //public bool HasPermission(string permission)
-        //{
-        //    return PermissionList.Any(p => p == permission);
-        //}
+        public bool IsSuperAdmin => Roles.Any(p => p == Constants.Roles.SuperAdminRole);
 
-        //public bool HasAnyPermission(params string[] permissions)
-        //{
-        //    return PermissionList.Any(p => permissions.Contains(p));
-        //}
+        public bool IsAdmin => Roles.Any(p => p == Constants.Roles.AdminRole);
+
+        public bool HasRole(string permission)
+        {
+            return Roles.Any(p => p == permission);
+        }
+
+        public bool HasAnyRole(params string[] permissions)
+        {
+            return Roles.Any(p => permissions.Contains(p));
+        }
     }
 }
 

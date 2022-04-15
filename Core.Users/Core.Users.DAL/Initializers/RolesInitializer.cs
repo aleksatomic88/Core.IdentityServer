@@ -1,3 +1,4 @@
+using Common.Constants;
 using Core.Users.DAL.Entity;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace Core.Users.DAL.Initializers
         {
             var existingRoles = _ctx.Roles.ToList();
 
-            foreach (var role in Roles)
+            foreach (var role in InitializeRoles)
             {
                 var existing = existingRoles.FirstOrDefault(r => r.Name == role.Name);
 
@@ -55,39 +56,33 @@ namespace Core.Users.DAL.Initializers
             }
         }
 
-        public static List<Role> Roles => new()
+        public static List<Role> InitializeRoles => new()
         {
             new Role
             {
-                Name = SuperAdminRole,
+                Name = Roles.SuperAdminRole,
                 Description = "Super Administrator"
             },
             new Role
             {
-                Name = AdminRole,
+                Name = Roles.AdminRole,
                 Description = "Administrator"
             },
             new Role
             {
-                Name = CustomerRole,
+                Name = Roles.CustomerRole,
                 Description = "Customer"
             },
             new Role
             {
-                Name = ManagerRole,
+                Name = Roles.ManagerRole,
                 Description = "Manager"
             },
             new Role
             {
-                Name = EmployeeRole,
+                Name = Roles.EmployeeRole,
                 Description = "Employee"
             }
         };
-
-        public const string SuperAdminRole = "super-admin";
-        public const string AdminRole = "admin";
-        public const string CustomerRole = "customer";
-        public const string ManagerRole = "manager";
-        public const string EmployeeRole = "employee";
     }
 }

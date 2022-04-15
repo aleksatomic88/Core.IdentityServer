@@ -9,6 +9,7 @@ using Core.Users.DAL.Repositories.Interface;
 using Core.Users.DAL.Repositories.Implementations;
 using AutoMapper;
 using Users.Core.Service.MapperProfile;
+using Common.Interface;
 
 namespace Core.Users.API.Extensions
 {
@@ -24,6 +25,7 @@ namespace Core.Users.API.Extensions
         public static IServiceCollection RegisterApplicationServices(this IServiceCollection services)
         {
             services.AddScoped<UsersDbContext>();
+            services.AddScoped<IDatabaseContext>(x => x.GetRequiredService<UsersDbContext>());
             services.AddScoped<UsersDatabaseInitializer>();
             services.AddScoped<UsersDatabaseSeed>();
             services.AddScoped<RolesInitializer>();

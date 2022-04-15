@@ -1,6 +1,7 @@
 using Core.Users.DAL.Entity;
 using Common.Utilities;
 using System.Linq;
+using Common.Constants;
 
 namespace Core.Users.DAL.Initializers
 {
@@ -45,7 +46,7 @@ namespace Core.Users.DAL.Initializers
                     Email = superAdminEmail,
                     Status = Constants.UserVeificationStatus.Verified,
                     Password = SecurePasswordHasher.Hash("Pass123!"),
-                    UserRoles = new () { new UserRole { Role = _ctx.Roles.First(r => r.Name == RolesInitializer.SuperAdminRole) }}
+                    UserRoles = new () { new UserRole { Role = _ctx.Roles.First(r => r.Name == Roles.SuperAdminRole) }}
                 });;
 
                 _ctx.SaveChanges();

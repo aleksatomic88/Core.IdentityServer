@@ -1,8 +1,6 @@
 using Common.Extensions;
 using Core.Users.DAL.Constants;
 using DelegateDecompiler;
-using IdentityServer.Domain.Constants;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;

@@ -2,6 +2,7 @@ using Core.Users.DAL.Entity;
 using Common.Utilities;
 using System.Linq;
 using Core.Users.DAL.Initializers;
+using Common.Constants;
 
 namespace Core.Users.DAL.Seeders
 {
@@ -25,7 +26,7 @@ namespace Core.Users.DAL.Seeders
         private void InsertUsers()
         {
             var customerEmail = "test@test.test";
-            var customerRole = _ctx.Roles.First(r => r.Name == RolesInitializer.CustomerRole);
+            var customerRole = _ctx.Roles.First(r => r.Name == Roles.CustomerRole);
             var customerUser = _ctx.Users.FirstOrDefault(u => u.Email == customerEmail);
 
             if (customerUser == null)

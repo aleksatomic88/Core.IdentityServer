@@ -14,20 +14,12 @@ using System.Collections.Generic;
 using System.IO; 
 using System.Reflection;
 using Core.Users.API.SwaggerSetup;
-using Users.Core.Service.MapperProfile;
-using Users.Core.Service.Interface;
-using Users.Core.Service;
 using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Common.Filters;
-using Core.Users.Service;
 using Core.Users.DAL;
-using Core.Users.DAL.Repositories.Interface;
-using Core.Users.DAL.Repositories.Implementations;
 using Core.Users.API.Extensions;
-using Core.Users.DAL.Initializers;
-using Core.Users.DAL.Seeders;
 
 namespace Core.Users.API
 {
@@ -46,6 +38,7 @@ namespace Core.Users.API
         {
             services.AddControllers(opt =>
             {
+                opt.Filters.Add(typeof(AuthenticationFilter));
                 opt.Filters.Add(typeof(GlobalExceptionFilter));
                 opt.Filters.Add(typeof(LogFilter));
             });

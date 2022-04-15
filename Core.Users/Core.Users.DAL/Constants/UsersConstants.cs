@@ -1,4 +1,4 @@
-namespace IdentityServer.Domain.Constants
+namespace Core.Users.DAL.Constants
 {
     public class UsersConstants
     {
