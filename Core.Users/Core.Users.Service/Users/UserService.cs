@@ -11,6 +11,7 @@ using Core.Users.DAL;
 using Common.Model;
 using System.Collections.Generic;
 using Core.Users.DAL.Constants;
+using Microsoft.EntityFrameworkCore;
 
 namespace Users.Core.Service
 {
@@ -18,14 +19,17 @@ namespace Users.Core.Service
     {
 
         private readonly RegisterUserCommandValidator _registerUserCmdValidator;
+        private readonly UpdateUserCommandValidator _updateUserCmdValidator;
 
         public UserService(UsersDbContext ctx,
                            IMapper mapper,
-                           RegisterUserCommandValidator registerUserCommandValidator)
+                           RegisterUserCommandValidator registerUserCommandValidator,
+                           UpdateUserCommandValidator updateUserCmdValidator)
              : base(ctx,
                     mapper)
         {
             _registerUserCmdValidator = registerUserCommandValidator;
+            _updateUserCmdValidator = updateUserCmdValidator;
         }
 
         public async Task<User> Create(RegisterUserCommand cmd)
@@ -57,12 +61,36 @@ namespace Users.Core.Service
             }
         }
 
+        public async Task<User> Update(int id, UpdateUserCommand cmd)
+        {
+            _updateUserCmdValidator.ValidateCmd(cmd);
+
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled))
+            {
+                var user = await GetQueryable(Includes()).FirstAsync(x => x.Id == id);
+
+                user.FirstName = user.FirstName == cmd.FirstName ? user.FirstName : cmd.FirstName;
+                user.LastName = user.LastName == cmd.LastName ? user.LastName : cmd.LastName;
+                user.PhoneNumber = user.PhoneNumber == cmd.PhoneNumber ? user.PhoneNumber : cmd.PhoneNumber;
+
+                // TO DO update roles - extract method
+                user.Roles.Clear();
+                user.UserRoles = new() { new UserRole { Role = _ctx.Roles.First(r => r.Id == cmd.Roles.First()) } };
+
+                await _ctx.SaveChangesAsync();
+
+                scope.Complete();
+
+                return user;
+            }
+        }
+
         public override async Task<bool> Delete(int id)
         {
             await CheckIfDeleteUserIsSuperAdmin(id);
 
             return await base.Delete(id);
-        }
+        }       
 
         protected override string[] Includes()
         {

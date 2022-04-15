@@ -34,8 +34,8 @@ namespace Core.Users.DAL
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => // optionsBuilder.LogTo(Console.WriteLine);
-                  optionsBuilder.LogTo(message => Debug.WriteLine(message));
+            => optionsBuilder.LogTo(message => Debug.WriteLine(message));
+            // optionsBuilder.LogTo(Console.WriteLine);
 
     }
 }

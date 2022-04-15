@@ -58,6 +58,19 @@ namespace Core.Users.API.Controllers
         }
 
         /// <summary>
+        /// Update an User
+        /// </summary>s
+        [HttpPut]
+        [Route("{id}")]
+        //[Authorize(Roles = "super-admin, admin")]
+        public async Task<Response<UserResponse>> Update(int id, [FromBody] UpdateUserCommand cmd)
+        {
+            var user = await _service.Update(id, cmd);
+
+            return await Get(user.Id);
+        }
+
+        /// <summary>
         /// Delete an User
         /// </summary>s
         [HttpDelete("{id}")]
