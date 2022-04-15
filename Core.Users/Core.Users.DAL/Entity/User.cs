@@ -1,3 +1,5 @@
+using Common.Extensions;
+using Core.Users.DAL.Constants;
 using DelegateDecompiler;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -16,21 +18,22 @@ namespace Core.Users.DAL.Entity
 
         public string Password { get; set; }
 
-        public bool EmailConfirmed { get; set; }
-
         public string PhoneNumber { get; set; }
 
-        public bool PhoneNumberConfirmed { get; set; }
+        public UserVeificationStatus Status { get; set; }
 
         public List<UserRole> UserRoles { get; set; }
 
         [NotMapped]
         [Computed]
-        public bool Verified => EmailConfirmed || PhoneNumberConfirmed;
+        public bool IsVerified => Status == UserVeificationStatus.Verified;
 
         [NotMapped]
         [Computed]
         public string FullName => FirstName + " " + LastName;
+
+        [NotMapped]
+        public string StatusDisplay => Status.ToDisplayName();
 
         [NotMapped]
         public List<Role> Roles

@@ -3,6 +3,7 @@ using Common.Model;
 using Core.Users.DAL.Entity;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Diagnostics;
 
 namespace Core.Users.DAL
 {
@@ -32,7 +33,9 @@ namespace Core.Users.DAL
                         .ToTable("Users", b => b.IsTemporal());
         }
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //    => optionsBuilder.LogTo(Console.WriteLine);
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+            => // optionsBuilder.LogTo(Console.WriteLine);
+                  optionsBuilder.LogTo(message => Debug.WriteLine(message));
+
     }
 }

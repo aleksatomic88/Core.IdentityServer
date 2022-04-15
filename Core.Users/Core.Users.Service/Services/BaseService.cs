@@ -8,6 +8,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Common.Model.Search;
 using Common.Response;
+using DelegateDecompiler.EntityFrameworkCore;
 
 namespace Users.Core.Service
 {
@@ -29,21 +30,25 @@ namespace Users.Core.Service
             _mapper = mapper;
         }
 
-        public virtual async Task<TResponse> Get(int id, string[] includes = default)
+        public virtual async Task<TResponse> Get(int id)
         {
-            var result = await GetQueryable(includes).FirstOrDefaultAsync(x => x.Id == id);
+            var result = await GetQueryable(Includes())
+                                .DecompileAsync()
+                                .FirstOrDefaultAsync(x => x.Id == id);
 
             return _mapper.Map<TResponse>(result);            
         }
 
-        public async Task<SearchResponse<TBasicResponse>> Search(TSearchQuery searchQuery, string[] includes = default)
+        public async Task<SearchResponse<TBasicResponse>> Search(TSearchQuery searchQuery)
         {
             var pageSize = searchQuery.PageSize <= 0 ? PageSize : searchQuery.PageSize;
             var pageNumber = searchQuery.PageNumber <= 0 ? 1 : searchQuery.PageNumber;
 
 
-            var entities = await SearchQuery(GetQueryable(includes), searchQuery)
-                                    .Skip((pageNumber - 1) * pageSize).Take(pageSize)                                    
+            var entities = await SearchQuery(GetQueryable(SearchIncludes()), searchQuery)
+                                    .Skip((pageNumber - 1) * pageSize)
+                                    .Take(pageSize)
+                                    .DecompileAsync()
                                     .ToListAsync();
 
             var dtos = _mapper.Map<List<TBasicResponse>>(entities);
@@ -66,6 +71,16 @@ namespace Users.Core.Service
             await _ctx.SaveChangesAsync();
 
             return true;
+        }
+
+        protected virtual string[] Includes()
+        {
+            return default;
+        }
+
+        protected virtual string[] SearchIncludes()
+        {
+            return default;
         }
 
         protected IQueryable<T> GetQueryable(string[] includes = default)

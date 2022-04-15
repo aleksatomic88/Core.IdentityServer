@@ -54,7 +54,7 @@ namespace IdentityServer.Services
 
             var user = await _ctx.Users.FirstOrDefaultAsync(x => x.Id == int.Parse(sub));
 
-            context.IsActive = user.EmailConfirmed;
+            context.IsActive = user?.IsVerified ?? false;
         }
     }
 }

@@ -43,10 +43,10 @@ namespace Core.Users.DAL.Initializers
                     FirstName = "Super",
                     LastName = "Admin",
                     Email = superAdminEmail,
-                    EmailConfirmed = true,
+                    Status = Constants.UserVeificationStatus.Verified,
                     Password = SecurePasswordHasher.Hash("Pass123!"),
                     UserRoles = new () { new UserRole { Role = _ctx.Roles.First(r => r.Name == RolesInitializer.SuperAdminRole) }}
-                });
+                });;
 
                 _ctx.SaveChanges();
             }

@@ -10,6 +10,7 @@ using Common.Extensions;
 using Core.Users.DAL;
 using Common.Model;
 using System.Collections.Generic;
+using Core.Users.DAL.Constants;
 
 namespace Users.Core.Service
 {
@@ -27,11 +28,6 @@ namespace Users.Core.Service
             _registerUserCmdValidator = registerUserCommandValidator;
         }
 
-        public async Task<UserResponse> GetWithRoles(int id)
-        {
-            return await Get(id, new string[] { "UserRoles.Role" });
-        }
-
         public async Task<User> Create(RegisterUserCommand cmd)
         {
             _registerUserCmdValidator.ValidateCmd(cmd);
@@ -43,9 +39,8 @@ namespace Users.Core.Service
                     FirstName = cmd.FirstName,
                     LastName = cmd.LastName,
                     Email = cmd.Email,
-                    EmailConfirmed = true,
                     PhoneNumber = cmd.PhoneNumber,
-                    PhoneNumberConfirmed = true,
+                    Status = UserVeificationStatus.NotVerified,
                     Password = SecurePasswordHasher.Hash(cmd.Password),
                     CreatedById = _ctx.CurrentUser.Id,
                     UpdatedById = _ctx.CurrentUser.Id,
@@ -69,20 +64,36 @@ namespace Users.Core.Service
             return await base.Delete(id);
         }
 
+        protected override string[] Includes()
+        {
+            return new string[] {
+                "UserRoles.Role"
+            };
+        }
+
         protected override IQueryable<User> SearchQueryInternal(IQueryable<User> querable, UserQuery searchQuery)
         {
-            querable = searchQuery.FirstName != null ? querable.Where(e => e.FirstName.ToLower().Contains(searchQuery.FirstName)) : querable;
-            querable = searchQuery.LastName != null ? querable.Where(e => e.LastName.ToLower().Contains(searchQuery.LastName)) : querable;
-            querable = searchQuery.Email != null ? querable.Where(e => e.Email.ToLower().Contains(searchQuery.Email)) : querable;
-            querable = searchQuery.PhoneNumber != null ? querable.Where(e => e.PhoneNumber.ToLower().Contains(searchQuery.FirstName)) : querable;
-            // querable = searchQuery.Verified != null ? querable.Where(e => e.Verified == searchQuery.Verified) : querable;
+            querable = !string.IsNullOrEmpty(searchQuery.FirstName) ?
+                querable.Where(e => e.FirstName.Contains(searchQuery.FirstName)) : querable;
+            querable = !string.IsNullOrEmpty(searchQuery.LastName) ?
+                querable.Where(e => e.LastName.Contains(searchQuery.LastName)) : querable;
+            querable = !string.IsNullOrEmpty(searchQuery.FullName)  ?
+                querable.Where(e => e.FullName.Contains(searchQuery.FullName)) : querable;      // Contains uses table scan allways
+                //querable.Where(e => e.FullName.StartsWith(searchQuery.FullName)) : querable;  // StartsWith uses index if available
+                //querable.Where(e => e.FullName == searchQuery.FullName) : querable;
+            querable = !string.IsNullOrEmpty(searchQuery.Email) ?
+                querable.Where(e => e.Email.Contains(searchQuery.Email)) : querable;
+            querable = !string.IsNullOrEmpty(searchQuery.PhoneNumber) ?
+                querable.Where(e => e.PhoneNumber.Contains(searchQuery.PhoneNumber)) : querable;
+            querable = searchQuery.IsVerified != null ?
+                querable.Where(e => e.IsVerified == searchQuery.IsVerified) : querable;
 
             return querable.OrderByDescending(x => x.Id);
         }
-
+        
         private async Task CheckIfDeleteUserIsSuperAdmin(int id)
         {
-            var user = await GetWithRoles(id);
+            var user = await Get(id);
 
             if (user.IsSuperAdmin)
                 throw new ValidationError(new List<ApiError>() { new ApiError(400, "It is not possible to delete Super Admin user!") });

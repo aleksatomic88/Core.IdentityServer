@@ -23,7 +23,7 @@ namespace IdentityServer.Validation
         {
             var user = await _ctx.Users.FirstOrDefaultAsync(x => x.Email == context.UserName);
 
-            if (user != null && user.EmailConfirmed && SecurePasswordHasher.Verify(context.Password, user.Password))
+            if (user != null && user.IsVerified && SecurePasswordHasher.Verify(context.Password, user.Password))
             {
                 context.Result = new GrantValidationResult(
                     subject: user.Id.ToString(), // HASH
