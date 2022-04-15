@@ -1,7 +1,9 @@
 using Common.Extensions;
 using Core.Users.DAL.Constants;
 using DelegateDecompiler;
+using IdentityServer.Domain.Constants;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -21,6 +23,14 @@ namespace Core.Users.DAL.Entity
         public string PhoneNumber { get; set; }
 
         public UserVeificationStatus Status { get; set; }
+
+        public string VerificationToken { get; set; } = "veify_" + Guid.NewGuid().ToString().Replace("-", "");
+
+        public DateTime VerificationExp { get; set; } = DateTime.Now.AddHours(UsersConstants.TokenValidityDuration);
+
+        public string ResetToken { get; set; }
+
+        public DateTime ResetExp { get; set; }
 
         public List<UserRole> UserRoles { get; set; }
 
