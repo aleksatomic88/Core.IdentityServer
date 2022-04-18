@@ -20,7 +20,7 @@ namespace Core.Users.DAL.Entity
 
         public string PhoneNumber { get; set; }
 
-        public UserVeificationStatus Status { get; set; }
+        public UserVerificationStatus Status { get; set; }
 
         public string VerificationToken { get; set; } = "veify_" + Guid.NewGuid().ToString().Replace("-", "");
 
@@ -34,7 +34,7 @@ namespace Core.Users.DAL.Entity
 
         [NotMapped]
         [Computed]
-        public bool IsVerified => Status == UserVeificationStatus.Verified;
+        public bool IsVerified => Status == UserVerificationStatus.Verified;
 
         [NotMapped]
         [Computed]

@@ -44,7 +44,7 @@ namespace Users.Core.Service
                     LastName = cmd.LastName,
                     Email = cmd.Email,
                     PhoneNumber = cmd.PhoneNumber,
-                    Status = UserVeificationStatus.NotVerified,
+                    Status = UserVerificationStatus.EmailNotVerified,
                     Password = SecurePasswordHasher.Hash(cmd.Password),
                     CreatedById = _ctx.CurrentUser.Id,
                     UpdatedById = _ctx.CurrentUser.Id,

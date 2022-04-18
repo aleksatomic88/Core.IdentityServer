@@ -106,11 +106,20 @@ namespace Localization.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Not Verified.
+        ///   Looks up a localized string similar to Email Not Verified.
         /// </summary>
-        public static string UserVeificationStatus_NotValid {
+        public static string UserVeificationStatus_EmailNotVerified {
             get {
-                return ResourceManager.GetString("UserVeificationStatus_NotValid", resourceCulture);
+                return ResourceManager.GetString("UserVeificationStatus_EmailNotVerified", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password Reset Requested.
+        /// </summary>
+        public static string UserVeificationStatus_PasswordResetRequested {
+            get {
+                return ResourceManager.GetString("UserVeificationStatus_PasswordResetRequested", resourceCulture);
             }
         }
         

@@ -15,7 +15,7 @@ namespace Core.Users.Service
 
         public string PhoneNumber { get; set; }
 
-        public UserVeificationStatus Status { get; set; }
+        public UserVerificationStatus Status { get; set; }
 
         public string StatusDisplay { get; set; }
 

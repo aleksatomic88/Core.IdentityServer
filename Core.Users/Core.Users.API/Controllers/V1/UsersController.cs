@@ -74,10 +74,11 @@ namespace Core.Users.API.Controllers
         /// Update an User
         /// </summary>s
         [HttpPut]
+        [Route("{id}")]
         [Authorize(Roles = "super-admin, admin")]
-        public async Task<Response<UserResponse>> Update([FromBody] UpdateUserCommand cmd)
+        public async Task<Response<UserResponse>> Update(string id, [FromBody] UpdateUserCommand cmd)
         {
-            var user = await _service.Update(_hashids.DecodeSingle(cmd.Hid), cmd);
+            var user = await _service.Update(_hashids.DecodeSingle(id), cmd);
 
             return await Get(_hashids.Encode(user.Id));
         }

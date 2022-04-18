@@ -132,8 +132,11 @@
   <data name="UnknownError" xml:space="preserve">
     <value>An error has occured.</value>
   </data>
-  <data name="UserVeificationStatus_NotValid" xml:space="preserve">
-    <value>Not Verified</value>
+  <data name="UserVeificationStatus_EmailNotVerified" xml:space="preserve">
+    <value>Email Not Verified</value>
+  </data>
+  <data name="UserVeificationStatus_PasswordResetRequested" xml:space="preserve">
+    <value>Password Reset Requested</value>
   </data>
   <data name="UserVeificationStatus_Verified" xml:space="preserve">
     <value>Verified</value>

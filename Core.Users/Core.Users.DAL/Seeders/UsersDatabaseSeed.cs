@@ -36,7 +36,7 @@ namespace Core.Users.DAL.Seeders
                     FirstName = "Test",
                     LastName = "Customer",
                     Email = customerEmail,
-                    Status = Constants.UserVeificationStatus.Verified,
+                    Status = Constants.UserVerificationStatus.Verified,
                     Password = SecurePasswordHasher.Hash("Pass123!"),
                     UserRoles = new() { new UserRole { Role = customerRole } }
                 });
