@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Common.Filters;
 using Core.Users.DAL;
 using Core.Users.API.Extensions;
+using Common.ServiceBus.Configuration;
 
 namespace Core.Users.API
 {
@@ -130,7 +131,9 @@ namespace Core.Users.API
                   .Build();
             });
 
-            services.AddLocalization();
+            services.AddLocalization(); 
+
+            services.AddServiceBusServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

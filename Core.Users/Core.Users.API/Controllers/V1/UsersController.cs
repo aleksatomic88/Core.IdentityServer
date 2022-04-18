@@ -6,6 +6,10 @@ using Core.Users.Service;
 using Common.Model.Search;
 using HashidsNet;
 using Microsoft.AspNetCore.Authorization;
+using Common.ServiceBus.Interfaces;
+using System.Collections.Generic;
+using Common.Model.ServiceBus;
+using AutoMapper;
 
 namespace Core.Users.API.Controllers
 {
@@ -19,12 +23,16 @@ namespace Core.Users.API.Controllers
 
         private readonly IUserService _service;
         private readonly IHashids _hashids;
+        private readonly IServiceBusSender _serviceBusSender;
+        private readonly IMapper _mapper;
 
-        public UsersController(IUserService userService,
-                               IHashids hashids)
+        public UsersController(IUserService userService, IServiceBusSender serviceBusSender,
+                               IHashids hashids, IMapper mapper)
         {
             _service = userService;
             _hashids = hashids;
+            _serviceBusSender = serviceBusSender;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -43,11 +51,11 @@ namespace Core.Users.API.Controllers
         /// Return All Users
         /// </summary>s
         [HttpGet]
-        public async Task<Response<SearchResponse<UserBasicResponse>>> Search([FromQuery]UserQuery searchQuery)
+        public async Task<Response<SearchResponse<UserBasicResponse>>> Search([FromQuery] UserQuery searchQuery)
         {
             var users = await _service.Search(searchQuery);
 
-            return new Response<SearchResponse<UserBasicResponse>>(users);            
+            return new Response<SearchResponse<UserBasicResponse>>(users);
         }
 
         /// <summary>
@@ -58,7 +66,7 @@ namespace Core.Users.API.Controllers
         public async Task<Response<UserResponse>> Create([FromBody] RegisterUserCommand cmd)
         {
             var user = await _service.Create(cmd);
-
+            await _serviceBusSender.SendServiceBusMessages(new List<UserServiceBusMessageObject> { _mapper.Map<UserServiceBusMessageObject>(user) });
             return await Get(_hashids.Encode(user.Id));
         }
 

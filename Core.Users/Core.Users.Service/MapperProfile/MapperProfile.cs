@@ -1,4 +1,5 @@
 using AutoMapper;
+using Common.Model.ServiceBus;
 using Core.Users.DAL.Entity;
 using Core.Users.Service;
 using HashidsNet;
@@ -19,6 +20,8 @@ namespace Users.Core.Service.MapperProfile
         {
             CreateMap<User, UserResponse>().ForMember(dst => dst.Id, opt => opt.MapFrom(src => _hashids.Encode(src.Id)));
             CreateMap<User, UserBasicResponse>().ForMember(dst => dst.Id, opt => opt.MapFrom(src => _hashids.Encode(src.Id)));
+
+            CreateMap<User, UserServiceBusMessageObject>().ForMember(dst => dst.UserID, opt => opt.MapFrom(src => _hashids.Encode(src.Id)));
 
             CreateMap<Role, RoleResponse>();
         }
