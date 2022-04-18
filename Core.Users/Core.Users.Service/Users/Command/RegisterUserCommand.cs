@@ -37,7 +37,7 @@ namespace Core.Users.Service
             RuleFor(cmd => cmd.FirstName).NotEmpty();
             RuleFor(cmd => cmd.LastName).NotEmpty();
             RuleFor(cmd => cmd.Email).NotEmpty().EmailAddress();
-            RuleFor(cmd => cmd.PhoneNumber).NotEmpty();
+            // RuleFor(cmd => cmd.PhoneNumber).NotEmpty();
             RuleFor(cmd => cmd.Password).NotEmpty();
 
             RuleFor(cmd => cmd.Password)

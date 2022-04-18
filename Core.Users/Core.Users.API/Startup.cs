@@ -111,7 +111,7 @@ namespace Core.Users.API
                 }
                 );
 
-            services.RegisterAutoMapper();
+            services.RegisterHashIdAndAutoMapper(Configuration.GetSection("HashIds"));
 
             services.RegisterApplicationServices();
 

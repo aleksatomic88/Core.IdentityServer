@@ -11,6 +11,8 @@ using AutoMapper;
 using Users.Core.Service.MapperProfile;
 using Common.Interface;
 using HashidsNet;
+using Microsoft.Extensions.Configuration;
+using System;
 
 namespace Core.Users.API.Extensions
 {
@@ -51,11 +53,11 @@ namespace Core.Users.API.Extensions
         /// <summary>
         /// Register AutoMapper
         /// </summary>s
-        public static IServiceCollection RegisterAutoMapper(this IServiceCollection services)
+        public static IServiceCollection RegisterHashIdAndAutoMapper(this IServiceCollection services, IConfigurationSection hashIdsOptions)
         {
-            // TODO add tp appSettings
-            var saltOptions = new { Salt = "EveryTableHashSalt", MinHashLength = 8 };
-            var hashIds = new Hashids(saltOptions.Salt, saltOptions.MinHashLength);
+            var hashIds = new Hashids(hashIdsOptions["Salt"],
+                                      Convert.ToInt32(hashIdsOptions["MinLength"]));
+
             services.AddSingleton<IHashids>(_ => hashIds);
 
             var mapperConfig = new MapperConfiguration(mc =>

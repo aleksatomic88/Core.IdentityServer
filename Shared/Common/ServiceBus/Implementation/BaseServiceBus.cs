@@ -1,4 +1,4 @@
-﻿using Azure.Messaging.ServiceBus;
+using Azure.Messaging.ServiceBus;
 using Newtonsoft.Json;
 
 namespace Common.ServiceBus.Implementation
@@ -8,6 +8,7 @@ namespace Common.ServiceBus.Implementation
         protected ServiceBusMessage SerializeToServiceBusMessage(object messageObject)
         {
             var messageString = JsonConvert.SerializeObject(messageObject);
+
             return new ServiceBusMessage(messageString);
         }
     }

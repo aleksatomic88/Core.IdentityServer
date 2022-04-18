@@ -26,10 +26,6 @@ namespace Core.Users.DAL
                         .IsUnique();
 
             modelBuilder.Entity<User>()
-                        .HasIndex(u => u.PhoneNumber)
-                        .IsUnique();
-
-            modelBuilder.Entity<User>()
                         .ToTable("Users", b => b.IsTemporal());
         }
 
