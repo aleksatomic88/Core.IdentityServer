@@ -1,5 +1,6 @@
 using Common.Model;
 using FluentValidation;
+using HashidsNet;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -43,10 +44,21 @@ namespace Common.Filters
 
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
             }
+            else if ((context.Exception is NoResultException) || (context.Exception is MultipleResultsException))
+            {
+                var errorMessage = _hostingEnvironment.IsDevelopment() ? context.Exception.Message + context.Exception.InnerException?.Message : string.Empty;
+                context.HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+
+                content = JsonConvert
+                    .SerializeObject(new Response<object>(null, new ApiError(context.HttpContext.Response.StatusCode, errorMessage, Severity.Error)), new JsonSerializerSettings
+                    {
+                        ContractResolver = new CamelCasePropertyNamesContractResolver()
+                    });
+            }
             else
             {
                 string errorMessage = "Something went wrong. ";
-                errorMessage += _hostingEnvironment.IsDevelopment() ? context.Exception.Message : string.Empty;
+                errorMessage += _hostingEnvironment.IsDevelopment() ? context.Exception.Message + context.Exception.InnerException?.Message : string.Empty;
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
                 if (context.Exception is DbUpdateConcurrencyException)

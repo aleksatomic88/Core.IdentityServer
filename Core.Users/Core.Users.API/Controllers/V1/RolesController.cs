@@ -14,7 +14,7 @@ namespace Core.Users.API.Controllers
     [ApiController]
     [Route("[controller]")]
     [ApiVersion("1.0")]
-    [Authorize]
+    [Authorize(Roles = "super-admin, admin")]
 #pragma warning disable CS1591
     public class RolesController : ControllerBase
     {
@@ -34,7 +34,6 @@ namespace Core.Users.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Authorize(Roles = "super-admin, admin")]
         public async Task<IActionResult> GetAll()
         {
             try

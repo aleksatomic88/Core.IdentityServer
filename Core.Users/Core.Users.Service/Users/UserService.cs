@@ -48,7 +48,7 @@ namespace Users.Core.Service
                     Password = SecurePasswordHasher.Hash(cmd.Password),
                     CreatedById = _ctx.CurrentUser.Id,
                     UpdatedById = _ctx.CurrentUser.Id,
-                    UserRoles = new() { new UserRole { Role = _ctx.Roles.First(r => r.Id == cmd.Roles.First()) } }
+                    UserRoles = new() { new UserRole { Role = _ctx.Roles.First(r => r.Name == cmd.Roles.First()) } }
                 };
 
                 var result = await _ctx.Users.AddAsync(user);
@@ -73,9 +73,11 @@ namespace Users.Core.Service
                 user.LastName = user.LastName == cmd.LastName ? user.LastName : cmd.LastName;
                 user.PhoneNumber = user.PhoneNumber == cmd.PhoneNumber ? user.PhoneNumber : cmd.PhoneNumber;
 
-                // TO DO update roles - extract method
-                user.Roles.Clear();
-                user.UserRoles = new() { new UserRole { Role = _ctx.Roles.First(r => r.Id == cmd.Roles.First()) } };
+                if (user.Roles.First().Name != cmd.Roles.First())
+                {
+                    user.Roles.Clear();
+                    user.UserRoles = new() { new UserRole { Role = _ctx.Roles.First(r => r.Name == cmd.Roles.First()) } };
+                }
 
                 await _ctx.SaveChangesAsync();
 

@@ -10,6 +10,7 @@ using Core.Users.DAL.Repositories.Implementations;
 using AutoMapper;
 using Users.Core.Service.MapperProfile;
 using Common.Interface;
+using HashidsNet;
 
 namespace Core.Users.API.Extensions
 {
@@ -52,9 +53,14 @@ namespace Core.Users.API.Extensions
         /// </summary>s
         public static IServiceCollection RegisterAutoMapper(this IServiceCollection services)
         {
+            // TODO add tp appSettings
+            var saltOptions = new { Salt = "EveryTableHashSalt", MinHashLength = 8 };
+            var hashIds = new Hashids(saltOptions.Salt, saltOptions.MinHashLength);
+            services.AddSingleton<IHashids>(_ => hashIds);
+
             var mapperConfig = new MapperConfiguration(mc =>
             {
-                mc.AddProfile(new MapperProfile());
+                mc.AddProfile(new MapperProfile(hashIds));
             });
             IMapper mapper = mapperConfig.CreateMapper();
 

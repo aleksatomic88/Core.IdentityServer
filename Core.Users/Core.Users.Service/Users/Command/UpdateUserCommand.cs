@@ -9,20 +9,20 @@ namespace Core.Users.Service
 {
     public class UpdateUserCommand //  : BaseCommand
     {
+        public string Hid { get; set; }
+
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
 
         public string PhoneNumber { get; set; }
 
-        public List<int> Roles { get; set; } = new List<int>();
+        public List<string> Roles { get; set; } = new List<string>();
     }
 
     public class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>
     {
         private readonly UsersDbContext _ctx;
-        private readonly AuthValidations _authValidations;
-
         public UpdateUserCommandValidator(UsersDbContext ctx,
                                           IStringLocalizer<SharedResource> stringLocalizer)
         {

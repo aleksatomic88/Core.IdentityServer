@@ -19,7 +19,7 @@ namespace Core.Users.Service
 
         public string PhoneNumber { get; set; }
 
-        public List<int> Roles { get; set; } = new List<int>();
+        public List<string> Roles { get; set; } = new List<string>();
     }
 
     public class RegisterUserCommandValidator : AbstractValidator<RegisterUserCommand>
