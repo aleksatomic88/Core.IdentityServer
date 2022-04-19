@@ -15,18 +15,14 @@ namespace Core.Users.Service
             _ctx = ctx;
         }
 
-        public bool EmailExists(string email)
+        public bool UserWithEmailExists(string email)
         {
             return _ctx.Users.Any(e => e.Email == email);
         }
 
-        public async Task<bool> EmailExistsAsync(string email)
+        public async Task<bool> UserWithEmailExistsAsync(string email)
         {
-            var user = await _ctx.Users
-                                 .Where(u => u.Email == email)
-                                 .FirstOrDefaultAsync();
-
-            return user != null;
+            return await _ctx.Users.AnyAsync(u => u.Email == email);
         }
 
         public static bool IsPasswordOk(string password)

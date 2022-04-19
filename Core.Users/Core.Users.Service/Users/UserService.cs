@@ -21,16 +21,19 @@ namespace Users.Core.Service
 
         private readonly RegisterUserCommandValidator _registerUserCmdValidator;
         private readonly UpdateUserCommandValidator _updateUserCmdValidator;
+        private readonly EmailVerificationValidator _emailVerificationValidator;
 
         public UserService(UsersDbContext ctx,
                            IMapper mapper,
                            RegisterUserCommandValidator registerUserCommandValidator,
-                           UpdateUserCommandValidator updateUserCmdValidator)
+                           UpdateUserCommandValidator updateUserCmdValidator,
+                           EmailVerificationValidator emailVerificationValidator)
              : base(ctx,
                     mapper)
         {
             _registerUserCmdValidator = registerUserCommandValidator;
             _updateUserCmdValidator = updateUserCmdValidator;
+            _emailVerificationValidator = emailVerificationValidator;
         }
 
         public async Task<User> Create(RegisterUserCommand cmd)
@@ -94,7 +97,20 @@ namespace Users.Core.Service
             await CheckIfDeleteUserIsSuperAdmin(id);
 
             return await base.Delete(id);
-        }       
+        }
+
+        public async Task<bool> EmailVerification(EmailVerificationCommand cmd)
+        {
+            _emailVerificationValidator.ValidateCmd(cmd);
+
+            var user = await GetQueryable(Includes()).FirstAsync(x => x.Email == cmd.Email);
+
+            user.Status = UserVerificationStatus.Verified;
+
+            await _ctx.SaveChangesAsync();
+
+            return true;
+        }
 
         protected override string[] Includes()
         {
@@ -129,6 +145,6 @@ namespace Users.Core.Service
 
             if (user.IsSuperAdmin)
                 throw new ValidationError(new List<ApiError>() { new ApiError(400, "It is not possible to delete Super Admin user!") });
-        }
+        }       
     }
 }

@@ -11,5 +11,6 @@ namespace Users.Core.Service.Interface
 
         Task<User> Create(RegisterUserCommand cmd);
 
+        Task<bool> EmailVerification(EmailVerificationCommand cmd);
     }
 }

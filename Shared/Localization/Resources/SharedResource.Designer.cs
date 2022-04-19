@@ -61,6 +61,15 @@ namespace Localization.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Verification Token Expired.
+        /// </summary>
+        public static string InvalidEmailVerificationAttempt_TokenExpired {
+            get {
+                return ResourceManager.GetString("InvalidEmailVerificationAttempt_TokenExpired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Registration failed. Email address is already in use..
         /// </summary>
         public static string InvalidRegisterAttempt_EmailAlreadyUsed {

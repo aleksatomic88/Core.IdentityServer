@@ -111,5 +111,17 @@ namespace Core.Users.API.Controllers
 
             return await Get(_hashids.Encode(user.Id));
         }
+
+        /// <summary>
+        /// SignUp an User
+        /// </summary>s
+        [HttpPost("email-verification")]
+        [AllowAnonymous]
+        public async Task<Response<bool>> EmailVerification([FromBody] EmailVerificationCommand cmd)
+        {
+           var result = await _service.EmailVerification(cmd);
+
+           return new Response<bool>(result);
+        }
     }
 }

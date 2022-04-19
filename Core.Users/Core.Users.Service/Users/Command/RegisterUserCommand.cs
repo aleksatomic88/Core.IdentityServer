@@ -58,7 +58,7 @@ namespace Core.Users.Service
 
         private async Task<bool> CanRegister(RegisterUserCommand cmd)
         {
-           return !await _authValidations.EmailExistsAsync(cmd.Email);
+           return !await _authValidations.UserWithEmailExistsAsync(cmd.Email);
         }
     }
 }
