@@ -113,7 +113,7 @@ namespace Core.Users.API.Controllers
         }
 
         /// <summary>
-        /// SignUp an User
+        /// Email Verification
         /// </summary>s
         [HttpPost("email-verification")]
         [AllowAnonymous]
@@ -122,6 +122,21 @@ namespace Core.Users.API.Controllers
            var result = await _service.EmailVerification(cmd);
 
            return new Response<bool>(result);
+        }
+
+        /// <summary>
+        /// Resend Email Verification
+        /// </summary>s
+        [HttpPost("email-verification/{email}")]
+        [AllowAnonymous]
+        public async Task<Response<bool>> ResendEmailVerification([FromQuery] string email)
+        {
+            var result = await _service.ResendEmailVerification(email);
+
+            // TODO EMIT User with Validation Token
+            //await _serviceBusSender.SendServiceBusMessages(new List<UserServiceBusMessageObject> { _mapper.Map<UserServiceBusMessageObject>(user) });
+
+            return new Response<bool>(result);
         }
     }
 }

@@ -35,6 +35,7 @@ namespace Core.Users.API.Extensions
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<RegisterUserCommandValidator>();
             services.AddScoped<UpdateUserCommandValidator>();
+            services.AddScoped<EmailVerificationValidator>();
             services.AddScoped<AuthValidations>();
 
             return services;

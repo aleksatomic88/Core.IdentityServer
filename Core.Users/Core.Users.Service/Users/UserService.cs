@@ -112,6 +112,18 @@ namespace Users.Core.Service
             return true;
         }
 
+        public async Task<bool> ResendEmailVerification(string email)
+        {
+            var user = await GetQueryable(Includes()).FirstAsync(x => x.Email == email);
+
+            user.Status = UserVerificationStatus.EmailNotVerified;
+            user.GenerateVerificationToken();
+
+            await _ctx.SaveChangesAsync();
+
+            return true;
+        }
+
         protected override string[] Includes()
         {
             return new string[] {
