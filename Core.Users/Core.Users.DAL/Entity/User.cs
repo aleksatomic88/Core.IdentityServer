@@ -22,9 +22,9 @@ namespace Core.Users.DAL.Entity
 
         public UserVerificationStatus Status { get; set; }
 
-        public string VerificationToken { get; set; } = "veify_" + Guid.NewGuid().ToString().Replace("-", "");
+        public string VerificationToken { get; set; }
 
-        public DateTime VerificationExp { get; set; } = DateTime.Now.AddHours(UsersConstants.TokenValidityDuration);
+        public DateTime VerificationExp { get; set; }
 
         public string ResetToken { get; set; }
 

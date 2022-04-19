@@ -12,6 +12,7 @@ using Common.Model;
 using System.Collections.Generic;
 using Core.Users.DAL.Constants;
 using Microsoft.EntityFrameworkCore;
+using Core.Users.Service.Users.Extensions;
 
 namespace Users.Core.Service
 {
@@ -49,7 +50,8 @@ namespace Users.Core.Service
                     CreatedById = _ctx.CurrentUser.Id,
                     UpdatedById = _ctx.CurrentUser.Id,
                     UserRoles = new() { new UserRole { Role = _ctx.Roles.First(r => r.Name == cmd.Roles.First()) } }
-                };
+                }
+                .GenerateVerificationToken();
 
                 var result = await _ctx.Users.AddAsync(user);
 

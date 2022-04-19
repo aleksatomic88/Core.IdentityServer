@@ -10,5 +10,6 @@ namespace Users.Core.Service.Interface
         Task<User> Update(int id, UpdateUserCommand cmd);
 
         Task<User> Create(RegisterUserCommand cmd);
+
     }
 }

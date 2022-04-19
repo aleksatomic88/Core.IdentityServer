@@ -59,22 +59,24 @@ namespace Core.Users.API.Controllers
         }
 
         /// <summary>
-        /// Register an User
+        /// Register an User from Admin Application
         /// </summary>s
         [HttpPost]
         [Authorize(Roles = "super-admin, admin")]
         public async Task<Response<UserResponse>> Create([FromBody] RegisterUserCommand cmd)
         {
             var user = await _service.Create(cmd);
+
+            // TODO EMIT User with Validation Token
             await _serviceBusSender.SendServiceBusMessages(new List<UserServiceBusMessageObject> { _mapper.Map<UserServiceBusMessageObject>(user) });
+
             return await Get(_hashids.Encode(user.Id));
         }
 
         /// <summary>
         /// Update an User
         /// </summary>s
-        [HttpPut]
-        [Route("{id}")]
+        [HttpPut("{id}")]
         [Authorize(Roles = "super-admin, admin")]
         public async Task<Response<UserResponse>> Update(string id, [FromBody] UpdateUserCommand cmd)
         {
@@ -93,6 +95,21 @@ namespace Core.Users.API.Controllers
             var result = await _service.Delete(_hashids.DecodeSingle(id));
 
             return new Response<bool>(result);
+        }
+
+        /// <summary>
+        /// SignUp an User
+        /// </summary>s
+        [HttpPost("signup")]
+        [AllowAnonymous]
+        public async Task<Response<UserResponse>> SignUp([FromBody] RegisterUserCommand cmd)
+        {
+            var user = await _service.Create(cmd);
+
+            // TODO EMIT User with Validation Token
+            await _serviceBusSender.SendServiceBusMessages(new List<UserServiceBusMessageObject> { _mapper.Map<UserServiceBusMessageObject>(user) });
+
+            return await Get(_hashids.Encode(user.Id));
         }
     }
 }
