@@ -127,9 +127,9 @@ namespace Core.Users.API.Controllers
         /// <summary>
         /// Resend Email Verification
         /// </summary>s
-        [HttpPost("email-verification/{email}")]
+        [HttpPost("resend-email-verification/{email}")]
         [AllowAnonymous]
-        public async Task<Response<bool>> ResendEmailVerification([FromQuery] string email)
+        public async Task<Response<bool>> ResendEmailVerification(string email)
         {
             var token = await _service.ResendEmailVerification(email);
 
