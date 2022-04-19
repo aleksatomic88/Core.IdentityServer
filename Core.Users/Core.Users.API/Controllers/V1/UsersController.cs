@@ -131,12 +131,12 @@ namespace Core.Users.API.Controllers
         [AllowAnonymous]
         public async Task<Response<bool>> ResendEmailVerification([FromQuery] string email)
         {
-            var result = await _service.ResendEmailVerification(email);
+            var token = await _service.ResendEmailVerification(email);
 
             // TODO EMIT User with Validation Token
             //await _serviceBusSender.SendServiceBusMessages(new List<UserServiceBusMessageObject> { _mapper.Map<UserServiceBusMessageObject>(user) });
 
-            return new Response<bool>(result);
+            return new Response<bool>(!string.IsNullOrEmpty(token));
         }
     }
 }

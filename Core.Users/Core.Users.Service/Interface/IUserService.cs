@@ -13,6 +13,6 @@ namespace Users.Core.Service.Interface
 
         Task<bool> EmailVerification(EmailVerificationCommand cmd);
 
-        Task<bool> ResendEmailVerification(string email);
+        Task<string> ResendEmailVerification(string email);
     }
 }

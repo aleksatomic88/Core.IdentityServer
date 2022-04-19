@@ -112,7 +112,7 @@ namespace Users.Core.Service
             return true;
         }
 
-        public async Task<bool> ResendEmailVerification(string email)
+        public async Task<string> ResendEmailVerification(string email)
         {
             var user = await GetQueryable(Includes()).FirstAsync(x => x.Email == email);
 
@@ -121,7 +121,7 @@ namespace Users.Core.Service
 
             await _ctx.SaveChangesAsync();
 
-            return true;
+            return user.VerificationToken;
         }
 
         protected override string[] Includes()
