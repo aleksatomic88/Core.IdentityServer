@@ -155,7 +155,7 @@ namespace Core.Users.API.Controllers
         /// <summary>
         /// Change Password - update user password
         /// </summary>s
-        [HttpPost("reset-password/{email}")]
+        [HttpPost("change-password")]
         [AllowAnonymous]
         public async Task<Response<bool>> ChangePassword([FromBody] ChangePasswordCommand cmd)
         {
