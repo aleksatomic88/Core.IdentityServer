@@ -11,10 +11,14 @@ namespace Users.Core.Service.Interface
 
         Task<User> Create(RegisterUserCommand cmd);
 
+        Task<bool> QuickValidation(string field, string value);
+
         Task<bool> EmailVerification(EmailVerificationCommand cmd);
 
         Task<string> ResendEmailVerification(string email);
+             
+        Task<string> ResetPassword(string email);
 
-        Task <bool> QuickValidation(string field, string value);
+        Task<bool> ChangePassword(ChangePasswordCommand cmd);
     }
 }

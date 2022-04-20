@@ -106,7 +106,7 @@ namespace Core.Users.API.Controllers
         {
             var user = await _service.Create(cmd);
 
-            // TODO EMIT User with Validation Token
+            // TODO EMIT User with Validation Token - from Service
             await _serviceBusSender.SendServiceBusMessages(new List<UserServiceBusMessageObject> { _mapper.Map<UserServiceBusMessageObject>(user) });
 
             return await Get(_hashids.Encode(user.Id));
@@ -133,10 +133,35 @@ namespace Core.Users.API.Controllers
         {
             var token = await _service.ResendEmailVerification(email);
 
-            // TODO EMIT User with Validation Token
-            //await _serviceBusSender.SendServiceBusMessages(new List<UserServiceBusMessageObject> { _mapper.Map<UserServiceBusMessageObject>(user) });
+            // TODO EMIT User with Validation Token - from Service
 
             return new Response<bool>(!string.IsNullOrEmpty(token));
+        }
+
+        /// <summary>
+        /// Reset Password - starts/restarts reset password process
+        /// </summary>s
+        [HttpPost("reset-password/{email}")]
+        [AllowAnonymous]
+        public async Task<Response<bool>> ResetPassword(string email)
+        {
+            var token = await _service.ResetPassword(email);
+
+            // TODO EMIT User with RESET Token - from Service
+
+            return new Response<bool>(!string.IsNullOrEmpty(token));
+        }
+
+        /// <summary>
+        /// Change Password - update user password
+        /// </summary>s
+        [HttpPost("reset-password/{email}")]
+        [AllowAnonymous]
+        public async Task<Response<bool>> ChangePassword([FromBody] ChangePasswordCommand cmd)
+        {
+            var result = await _service.ChangePassword(cmd);
+
+            return new Response<bool>(result);
         }
 
         /// <summary>

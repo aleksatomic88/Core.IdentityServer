@@ -17,16 +17,12 @@ namespace Core.Users.Service
     public class EmailVerificationValidator : AbstractValidator<EmailVerificationCommand>
     {
         private readonly UsersDbContext _ctx;
-        private readonly AuthValidations _authValidations;
-
+        
         public EmailVerificationValidator(UsersDbContext ctx,
-                                          AuthValidations authValidations,
                                           IStringLocalizer<SharedResource> stringLocalizer)
         {
             _ctx = ctx;
-            _authValidations = authValidations;
-
-            
+                        
             RuleFor(cmd => cmd.Email).NotEmpty().EmailAddress();
             RuleFor(cmd => cmd.Token).NotEmpty();
 

@@ -24,6 +24,7 @@ namespace Users.Core.Service
         private readonly RegisterUserCommandValidator _registerUserCmdValidator;
         private readonly UpdateUserCommandValidator _updateUserCmdValidator;
         private readonly EmailVerificationValidator _emailVerificationValidator;
+        private readonly ChangePasswordValidator _changePasswordValidator;
         private readonly IStringLocalizer<SharedResource> _stringLocalizer;
 
         public UserService(UsersDbContext ctx,
@@ -31,7 +32,8 @@ namespace Users.Core.Service
                            RegisterUserCommandValidator registerUserCommandValidator,
                            UpdateUserCommandValidator updateUserCmdValidator,
                            EmailVerificationValidator emailVerificationValidator,
-                           IStringLocalizer<SharedResource> stringLocalizer)
+                           IStringLocalizer<SharedResource> stringLocalizer,
+                           ChangePasswordValidator changePasswordValidator)
              : base(ctx,
                     mapper)
         {
@@ -39,6 +41,7 @@ namespace Users.Core.Service
             _updateUserCmdValidator = updateUserCmdValidator;
             _emailVerificationValidator = emailVerificationValidator;
             _stringLocalizer = stringLocalizer;
+            _changePasswordValidator = changePasswordValidator;
         }
 
         public async Task<User> Create(RegisterUserCommand cmd)
@@ -104,31 +107,6 @@ namespace Users.Core.Service
             return await base.Delete(id);
         }
 
-        public async Task<bool> EmailVerification(EmailVerificationCommand cmd)
-        {
-            _emailVerificationValidator.ValidateCmd(cmd);
-
-            var user = await GetQueryable(Includes()).FirstAsync(x => x.Email == cmd.Email);
-
-            user.Status = UserVerificationStatus.Verified;
-
-            await _ctx.SaveChangesAsync();
-
-            return true;
-        }
-
-        public async Task<string> ResendEmailVerification(string email)
-        {
-            var user = await GetQueryable(Includes()).FirstAsync(x => x.Email == email);
-
-            user.Status = UserVerificationStatus.EmailNotVerified;
-            user.GenerateVerificationToken();
-
-            await _ctx.SaveChangesAsync();
-
-            return user.VerificationToken;
-        }
-
         public async Task<bool> QuickValidation(string field, string value)
         {
             if (string.IsNullOrEmpty(field) || string.IsNullOrEmpty(value))
@@ -149,6 +127,61 @@ namespace Users.Core.Service
             }
 
             return false;
+        }
+
+        public async Task<bool> EmailVerification(EmailVerificationCommand cmd)
+        {
+            _emailVerificationValidator.ValidateCmd(cmd);
+
+            var user = await GetQueryable(Includes()).FirstAsync(x => x.Email == cmd.Email);
+
+            user.Status = UserVerificationStatus.Verified;
+
+            await _ctx.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<string> ResendEmailVerification(string email)
+        {
+            var user = await GetQueryable(Includes()).FirstOrDefaultAsync(x => x.Email == email);
+
+            if (user == default) return string.Empty;
+
+            user.Status = UserVerificationStatus.EmailNotVerified;
+            user.GenerateVerificationToken();
+
+            await _ctx.SaveChangesAsync();
+
+            return user.VerificationToken;
+        }       
+
+        public async Task<string> ResetPassword(string email)
+        {
+            var user = await GetQueryable(Includes()).FirstAsync(x => x.Email == email);
+
+            if (user == default) return string.Empty;
+
+            user.GenerateResetToken();
+            user.Status = UserVerificationStatus.PasswordResetRequested;
+
+            await _ctx.SaveChangesAsync();
+
+            return user.ResetToken;
+        }
+
+        public async Task<bool> ChangePassword(ChangePasswordCommand cmd)
+        {
+            _changePasswordValidator.ValidateCmd(cmd);
+
+            var user = await GetQueryable(Includes()).FirstAsync(x => x.Email == cmd.Email);
+
+            user.Password = SecurePasswordHasher.Hash(cmd.Password);
+            user.Status = UserVerificationStatus.Verified;
+
+            await _ctx.SaveChangesAsync();
+
+            return true;
         }
 
         protected override string[] Includes()
@@ -185,7 +218,6 @@ namespace Users.Core.Service
             if (user.IsSuperAdmin)
                 throw new ValidationError(new List<ApiError>() { new ApiError(400, _stringLocalizer["CannotDeleteSuperAdminUser"]) });
         }
-
         
     }
 }
