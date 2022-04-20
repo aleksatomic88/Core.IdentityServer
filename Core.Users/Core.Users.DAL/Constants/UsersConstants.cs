@@ -2,6 +2,8 @@ namespace Core.Users.DAL.Constants
 {
     public class UsersConstants
     {
+        public const string ApiName = "core.users.api";
+
         public const int PasswordLength = 6;
 
         public const int VerificationTokenValidityDuration = 24;

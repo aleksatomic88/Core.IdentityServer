@@ -21,6 +21,7 @@ using Common.Filters;
 using Core.Users.DAL;
 using Core.Users.API.Extensions;
 using Common.ServiceBus.Configuration;
+using Core.Users.DAL.Constants;
 
 namespace Core.Users.API
 {
@@ -119,8 +120,8 @@ namespace Core.Users.API
                     .AddIdentityServerAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme,
                                                      options =>
                                                                 {
-                                                                    options.ApiName = "core.users.api";
-                                                                    options.Authority = "https://localhost:5001"; 
+                                                                    options.ApiName = UsersConstants.ApiName;
+                                                                    options.Authority = Configuration["IdentityServer:Authority"]; 
                                                                 });
 
             services.AddAuthorization(options =>

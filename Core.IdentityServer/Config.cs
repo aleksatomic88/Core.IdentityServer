@@ -17,8 +17,7 @@ namespace IdentityServer
         {
             new ApiResource("core.users.api", "Core.Users.API" )
             {
-                Scopes = new [] { "users-api", "addresses-api" },
-                ApiSecrets = new List<Secret>{ new Secret("secret".Sha256()) }
+                Scopes = new [] { "users-api", "addresses-api" }
             },
         };
 
