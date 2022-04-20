@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace Core.Users.API.Extensions
 {
@@ -32,11 +33,12 @@ namespace Core.Users.API.Extensions
 
                 Log.Information("Environment: " + Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
 
-                // TODO Temporary !!!
-                identityDbContext.Database.EnsureDeleted();
-                identityDbContext.Database.EnsureCreated();
+                // identityDbContext.Database.EnsureDeleted();
+                // identityDbContext.Database.EnsureCreated();
+
+                identityDbContext.Database.Migrate();
                 Log.Information("Database migrations executed.");
-                //
+                
 
                 dbInitializer.Initialize();
                 Log.Information("Database initialized with required data.");
