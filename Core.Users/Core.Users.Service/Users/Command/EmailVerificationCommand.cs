@@ -17,21 +17,24 @@ namespace Core.Users.Service
     public class EmailVerificationValidator : AbstractValidator<EmailVerificationCommand>
     {
         private readonly UsersDbContext _ctx;
-        
+        private readonly AuthValidations _authValidations;
         public EmailVerificationValidator(UsersDbContext ctx,
+                                          AuthValidations authValidations,
                                           IStringLocalizer<SharedResource> stringLocalizer)
         {
             _ctx = ctx;
-                        
+            _authValidations = authValidations;
+
             RuleFor(cmd => cmd.Email).NotEmpty().EmailAddress();
             RuleFor(cmd => cmd.Token).NotEmpty();
 
             RuleFor(cmd => cmd)
-                .MustAsync((cmd, cancellationToken) => Verify(cmd))
+                .MustAsync((cmd, cancellationToken) => VerifyTokenAsync(cmd))
+                .WhenAsync((cmd, cancellationToken) => _authValidations.UserWithEmailExistsAsync(cmd.Email))
                 .WithMessage(stringLocalizer["InvalidEmailVerificationAttempt_TokenExpired"]);
         }        
 
-        private async Task<bool> Verify(EmailVerificationCommand cmd)
+        private async Task<bool> VerifyTokenAsync(EmailVerificationCommand cmd)
         {
             var user = await _ctx.Users.FirstAsync(x => x.Email == cmd.Email);
 

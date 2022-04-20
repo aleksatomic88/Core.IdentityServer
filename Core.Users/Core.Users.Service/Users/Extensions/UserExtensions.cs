@@ -17,9 +17,9 @@ namespace Core.Users.Service.Users.Extensions
 
         public static User GenerateResetToken(this User user)
         {
-            user.VerificationToken = "reset_" + Guid.NewGuid().ToString().Replace("-", "");
+            user.ResetToken = "reset_" + Guid.NewGuid().ToString().Replace("-", "");
 
-            user.VerificationExp = DateTime.Now.AddHours(UsersConstants.ResetTokenValidityDuration);
+            user.ResetExp = DateTime.Now.AddHours(UsersConstants.ResetTokenValidityDuration);
 
             return user;
         }

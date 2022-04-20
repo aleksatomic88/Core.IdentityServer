@@ -133,7 +133,9 @@ namespace Users.Core.Service
         {
             _emailVerificationValidator.ValidateCmd(cmd);
 
-            var user = await GetQueryable(Includes()).FirstAsync(x => x.Email == cmd.Email);
+            var user = await GetQueryable(Includes()).FirstOrDefaultAsync(x => x.Email == cmd.Email);
+
+            if (user == default) return false;
 
             user.Status = UserVerificationStatus.Verified;
 
@@ -158,7 +160,7 @@ namespace Users.Core.Service
 
         public async Task<string> ResetPassword(string email)
         {
-            var user = await GetQueryable(Includes()).FirstAsync(x => x.Email == email);
+            var user = await GetQueryable(Includes()).FirstOrDefaultAsync(x => x.Email == email);
 
             if (user == default) return string.Empty;
 
@@ -174,7 +176,9 @@ namespace Users.Core.Service
         {
             _changePasswordValidator.ValidateCmd(cmd);
 
-            var user = await GetQueryable(Includes()).FirstAsync(x => x.Email == cmd.Email);
+            var user = await GetQueryable(Includes()).FirstOrDefaultAsync(x => x.Email == cmd.Email);
+
+            if (user == default) return false;
 
             user.Password = SecurePasswordHasher.Hash(cmd.Password);
             user.Status = UserVerificationStatus.Verified;
