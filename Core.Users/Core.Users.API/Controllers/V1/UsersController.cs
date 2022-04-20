@@ -138,5 +138,17 @@ namespace Core.Users.API.Controllers
 
             return new Response<bool>(!string.IsNullOrEmpty(token));
         }
+
+        /// <summary>
+        /// Quick Validatate if an User with {field} having {value} exists
+        /// </summary>s
+        [HttpPost("quick-validation")]
+        [AllowAnonymous]
+        public async Task<Response<bool>> QuickValidation([FromQuery]string field, [FromQuery] string value)
+        {
+            var result = await _service.QuickValidation(field, value);
+
+            return new Response<bool>(result);
+        }
     }
 }

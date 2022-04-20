@@ -14,5 +14,7 @@ namespace Users.Core.Service.Interface
         Task<bool> EmailVerification(EmailVerificationCommand cmd);
 
         Task<string> ResendEmailVerification(string email);
+
+        Task <bool> QuickValidation(string field, string value);
     }
 }

@@ -61,6 +61,33 @@ namespace Localization.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Insufficient parameters provided.
+        /// </summary>
+        public static string BadParams {
+            get {
+                return ResourceManager.GetString("BadParams", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It is not possible to assign Super Admin role!.
+        /// </summary>
+        public static string CannotAssignSuperAdminRole {
+            get {
+                return ResourceManager.GetString("CannotAssignSuperAdminRole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It is not possible to delete Super Admin user!.
+        /// </summary>
+        public static string CannotDeleteSuperAdminUser {
+            get {
+                return ResourceManager.GetString("CannotDeleteSuperAdminUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Verification Token Expired.
         /// </summary>
         public static string InvalidEmailVerificationAttempt_TokenExpired {

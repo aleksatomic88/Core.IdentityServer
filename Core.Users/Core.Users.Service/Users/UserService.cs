@@ -13,6 +13,8 @@ using System.Collections.Generic;
 using Core.Users.DAL.Constants;
 using Microsoft.EntityFrameworkCore;
 using Core.Users.Service.Users.Extensions;
+using Microsoft.Extensions.Localization;
+using Localization.Resources;
 
 namespace Users.Core.Service
 {
@@ -22,18 +24,21 @@ namespace Users.Core.Service
         private readonly RegisterUserCommandValidator _registerUserCmdValidator;
         private readonly UpdateUserCommandValidator _updateUserCmdValidator;
         private readonly EmailVerificationValidator _emailVerificationValidator;
+        private readonly IStringLocalizer<SharedResource> _stringLocalizer;
 
         public UserService(UsersDbContext ctx,
                            IMapper mapper,
                            RegisterUserCommandValidator registerUserCommandValidator,
                            UpdateUserCommandValidator updateUserCmdValidator,
-                           EmailVerificationValidator emailVerificationValidator)
+                           EmailVerificationValidator emailVerificationValidator,
+                           IStringLocalizer<SharedResource> stringLocalizer)
              : base(ctx,
                     mapper)
         {
             _registerUserCmdValidator = registerUserCommandValidator;
             _updateUserCmdValidator = updateUserCmdValidator;
             _emailVerificationValidator = emailVerificationValidator;
+            _stringLocalizer = stringLocalizer;
         }
 
         public async Task<User> Create(RegisterUserCommand cmd)
@@ -124,6 +129,28 @@ namespace Users.Core.Service
             return user.VerificationToken;
         }
 
+        public async Task<bool> QuickValidation(string field, string value)
+        {
+            if (string.IsNullOrEmpty(field) || string.IsNullOrEmpty(value))
+                throw new ValidationError(new List<ApiError>() { new ApiError(400, _stringLocalizer["BadParams"]) });
+
+            if (field.ToLower().Trim().Contains("email"))
+            {
+                var user = await GetQueryable(Includes()).FirstOrDefaultAsync(x => x.Email == value);
+
+                return user == default;
+            }
+
+            if (field.ToLower().Trim().Contains("phone"))
+            {
+                var user = await GetQueryable(Includes()).FirstOrDefaultAsync(x => x.PhoneNumber == value);
+
+                return user == default;
+            }
+
+            return false;
+        }
+
         protected override string[] Includes()
         {
             return new string[] {
@@ -156,7 +183,9 @@ namespace Users.Core.Service
             var user = await Get(id);
 
             if (user.IsSuperAdmin)
-                throw new ValidationError(new List<ApiError>() { new ApiError(400, "It is not possible to delete Super Admin user!") });
-        }       
+                throw new ValidationError(new List<ApiError>() { new ApiError(400, _stringLocalizer["CannotDeleteSuperAdminUser"]) });
+        }
+
+        
     }
 }

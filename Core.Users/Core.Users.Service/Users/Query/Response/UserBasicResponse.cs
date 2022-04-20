@@ -19,7 +19,7 @@ namespace Core.Users.Service
 
         public string StatusDisplay { get; set; }
 
-        public bool IsVerified{ get; set; }
+        public bool IsVerified { get; set; }
 
     }
 }

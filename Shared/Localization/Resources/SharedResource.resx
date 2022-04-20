@@ -117,6 +117,15 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BadParams" xml:space="preserve">
+    <value>Insufficient parameters provided</value>
+  </data>
+  <data name="CannotAssignSuperAdminRole" xml:space="preserve">
+    <value>It is not possible to assign Super Admin role!</value>
+  </data>
+  <data name="CannotDeleteSuperAdminUser" xml:space="preserve">
+    <value>It is not possible to delete Super Admin user!</value>
+  </data>
   <data name="InvalidEmailVerificationAttempt_TokenExpired" xml:space="preserve">
     <value>Verification Token Expired</value>
   </data>
