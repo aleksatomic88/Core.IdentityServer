@@ -97,8 +97,6 @@ namespace Core.Users.API.Controllers
             return new Response<bool>(result);
         }
 
-
-        // TODO add CUSTOMER as default ROLE if UCUrrentUser is null
         /// <summary>
         /// SignUp an User
         /// </summary>s
@@ -106,6 +104,9 @@ namespace Core.Users.API.Controllers
         [AllowAnonymous]
         public async Task<Response<UserResponse>> SignUp([FromBody] RegisterUserCommand cmd)
         {
+            // add CUSTOMER role as default 
+            cmd.Roles = new List<string>() { "customer" };
+
             var user = await _service.Create(cmd);
 
             // TODO EMIT User with Validation Token - from Service
