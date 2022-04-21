@@ -44,21 +44,19 @@ namespace Users.Core.Service
             var pageSize = searchQuery.PageSize <= 0 ? PageSize : searchQuery.PageSize;
             var pageNumber = searchQuery.PageNumber <= 0 ? 1 : searchQuery.PageNumber;
 
+            var querable = SearchQuery(GetQueryable(SearchIncludes()), searchQuery);
 
-            var entities = await SearchQuery(GetQueryable(SearchIncludes()), searchQuery)
-                                    .Skip((pageNumber - 1) * pageSize)
-                                    .Take(pageSize)
-                                    .DecompileAsync()
-                                    .ToListAsync();
-
-            var dtos = _mapper.Map<List<TBasicResponse>>(entities);
+            var entities = await querable.Skip((pageNumber - 1) * pageSize)
+                                         .Take(pageSize)
+                                         .DecompileAsync()
+                                         .ToListAsync();
 
             return new SearchResponse<TBasicResponse>
             {
                 PageSize = pageSize,
                 PageNumber = pageNumber,
-                TotalCount = dtos.Count,
-                Result = dtos                
+                TotalCount = await querable.CountAsync(),
+                Result = _mapper.Map<List<TBasicResponse>>(entities)
             };
         }
 

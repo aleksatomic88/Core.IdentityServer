@@ -1,4 +1,5 @@
 using Core.Users.DAL;
+using HashidsNet;
 using IdentityModel;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
@@ -17,26 +18,30 @@ namespace IdentityServer.Services
     public class ProfileService : IProfileService
     {
         private readonly UsersDbContext _ctx;
+        private readonly IHashids _hashids;
 
-        public ProfileService(UsersDbContext ctx)
+        public ProfileService(UsersDbContext ctx, 
+                              IHashids hashids)
         {
             _ctx = ctx;
+            _hashids = hashids;
         }
 
         public async Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
-            var id = int.Parse(context.Subject.FindFirstValue("sub"));
+            var id = context.Subject.FindFirstValue("sub");
             var scope = context.ValidatedRequest.Raw.Get("scope");
 
-            var user = await _ctx.Users.Include("UserRoles.Role").FirstAsync(x => x.Id == id);
+            var user = await _ctx.Users.Include("UserRoles.Role").FirstAsync(x => x.Id == _hashids.DecodeSingle(id));
 
             var claims = new List<Claim>
             {
-                new Claim(JwtClaimTypes.Id, user.Id.ToString()),
+                new Claim(JwtClaimTypes.Id, id),
                 new Claim(JwtClaimTypes.GivenName, user.FirstName ?? string.Empty),
                 new Claim(JwtClaimTypes.FamilyName, user.LastName ?? string.Empty),
                 new Claim(JwtClaimTypes.Name, user.FullName),                
                 new Claim(JwtClaimTypes.Email, user.Email),
+                new Claim(JwtClaimTypes.Confirmation, user.IsVerified.ToString()),
             };
 
             foreach (var role in user.Roles)
@@ -49,9 +54,9 @@ namespace IdentityServer.Services
 
         public async Task IsActiveAsync(IsActiveContext context)
         {
-            var sub = context.Subject.FindFirstValue("sub");
+            var id = context.Subject.FindFirstValue("sub");
 
-            var user = await _ctx.Users.FirstOrDefaultAsync(x => x.Id == int.Parse(sub));
+            var user = await _ctx.Users.FirstOrDefaultAsync(x => x.Id == _hashids.DecodeSingle(id));
 
             context.IsActive = user?.IsVerified ?? false;
         }

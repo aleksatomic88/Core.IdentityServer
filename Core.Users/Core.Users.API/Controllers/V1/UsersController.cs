@@ -97,6 +97,8 @@ namespace Core.Users.API.Controllers
             return new Response<bool>(result);
         }
 
+
+        // TODO add CUSTOMER as default ROLE if UCUrrentUser is null
         /// <summary>
         /// SignUp an User
         /// </summary>s

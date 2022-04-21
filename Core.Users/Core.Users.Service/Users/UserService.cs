@@ -138,6 +138,7 @@ namespace Users.Core.Service
             if (user == default) return false;
 
             user.Status = UserVerificationStatus.Verified;
+            user.VerificationExp = System.DateTime.Now;
 
             await _ctx.SaveChangesAsync();
 
@@ -182,6 +183,7 @@ namespace Users.Core.Service
 
             user.Password = SecurePasswordHasher.Hash(cmd.Password);
             user.Status = UserVerificationStatus.Verified;
+            user.ResetExp = System.DateTime.Now;
 
             await _ctx.SaveChangesAsync();
 

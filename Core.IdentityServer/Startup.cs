@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using IdentityServer.Extensions;
 using Microsoft.Extensions.Configuration;
 using Core.Users.DAL;
+using HashidsNet;
+using System;
 
 namespace IdentityServer
 {
@@ -29,6 +31,9 @@ namespace IdentityServer
             services.AddDbContext<UsersDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("IdentityDatabase")));
 
             services.AddIdentityServerService();
+
+            var hashIdsOptions = Configuration.GetSection("HashIds");
+            services.AddSingleton<IHashids>(_ => new Hashids(hashIdsOptions["Salt"], Convert.ToInt32(hashIdsOptions["MinLength"])));
         }
 
         public void Configure(IApplicationBuilder app)
