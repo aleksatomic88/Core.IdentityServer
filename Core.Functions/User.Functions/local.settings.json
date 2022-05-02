@@ -1,0 +1,11 @@
+{
+	"IsEncrypted": false,
+	"Values": {
+		"AzureWebJobsSecretStorageType": "files",
+		"AzureWebJobsStorage": "UseDevelopmentStorage=true",
+		"EveryTableSBConnectionString": "Endpoint=sb://et-dev.servicebus.windows.net/;SharedAccessKeyName=appdev;SharedAccessKey=FphyENZXmcFAhkknCMd8Et/KX2PRQxRLGXI1eyrTvtU=;TransportType=NetMessaging",
+		"EveryTableSubscripionName": "userregistered-sendverificationemail",
+		"EveryTableTopicName": "userregistered",
+		"FUNCTIONS_WORKER_RUNTIME": "dotnet"
+	}
+}
