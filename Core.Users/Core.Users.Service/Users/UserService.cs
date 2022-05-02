@@ -15,6 +15,8 @@ using Microsoft.EntityFrameworkCore;
 using Core.Users.Service.Users.Extensions;
 using Microsoft.Extensions.Localization;
 using Localization.Resources;
+using Common.ServiceBus.Interfaces;
+using Common.Model.ServiceBus;
 
 namespace Users.Core.Service
 {
@@ -26,6 +28,7 @@ namespace Users.Core.Service
         private readonly EmailVerificationValidator _emailVerificationValidator;
         private readonly ChangePasswordValidator _changePasswordValidator;
         private readonly IStringLocalizer<SharedResource> _stringLocalizer;
+        private readonly IServiceBusSender _serviceBusSender;
 
         public UserService(UsersDbContext ctx,
                            IMapper mapper,
@@ -33,6 +36,7 @@ namespace Users.Core.Service
                            UpdateUserCommandValidator updateUserCmdValidator,
                            EmailVerificationValidator emailVerificationValidator,
                            IStringLocalizer<SharedResource> stringLocalizer,
+                           IServiceBusSender serviceBusSender,                           
                            ChangePasswordValidator changePasswordValidator)
              : base(ctx,
                     mapper)
@@ -41,6 +45,7 @@ namespace Users.Core.Service
             _updateUserCmdValidator = updateUserCmdValidator;
             _emailVerificationValidator = emailVerificationValidator;
             _stringLocalizer = stringLocalizer;
+            _serviceBusSender = serviceBusSender;
             _changePasswordValidator = changePasswordValidator;
         }
 
@@ -69,6 +74,10 @@ namespace Users.Core.Service
                 await _ctx.SaveChangesAsync();
 
                 scope.Complete();
+
+                var userServiceBusMessage = _mapper.Map<UserServiceBusMessageObject>(user);
+                userServiceBusMessage.Subject = NotificationEnum.Created;
+                await _serviceBusSender.SendServiceBusMessages(new List<UserServiceBusMessageObject> { userServiceBusMessage });
 
                 return user;
             }
@@ -156,6 +165,11 @@ namespace Users.Core.Service
 
             await _ctx.SaveChangesAsync();
 
+            // TODO EMIT User with Validation Token
+            var userServiceBusMessage = _mapper.Map<UserServiceBusMessageObject>(user);
+            userServiceBusMessage.Subject = NotificationEnum.Resend;
+            await _serviceBusSender.SendServiceBusMessages(new List<UserServiceBusMessageObject> { userServiceBusMessage });
+
             return user.VerificationToken;
         }       
 
@@ -203,10 +217,10 @@ namespace Users.Core.Service
                 querable.Where(e => e.FirstName.Contains(searchQuery.FirstName)) : querable;
             querable = !string.IsNullOrEmpty(searchQuery.LastName) ?
                 querable.Where(e => e.LastName.Contains(searchQuery.LastName)) : querable;
-            querable = !string.IsNullOrEmpty(searchQuery.FullName)  ?
+            querable = !string.IsNullOrEmpty(searchQuery.FullName) ?
                 querable.Where(e => e.FullName.Contains(searchQuery.FullName)) : querable;      // Contains uses table scan allways
-                //querable.Where(e => e.FullName.StartsWith(searchQuery.FullName)) : querable;  // StartsWith uses index if available
-                //querable.Where(e => e.FullName == searchQuery.FullName) : querable;
+                                                                                                //querable.Where(e => e.FullName.StartsWith(searchQuery.FullName)) : querable;  // StartsWith uses index if available
+                                                                                                //querable.Where(e => e.FullName == searchQuery.FullName) : querable;
             querable = !string.IsNullOrEmpty(searchQuery.Email) ?
                 querable.Where(e => e.Email.Contains(searchQuery.Email)) : querable;
             querable = !string.IsNullOrEmpty(searchQuery.PhoneNumber) ?
@@ -216,14 +230,13 @@ namespace Users.Core.Service
 
             return querable.OrderByDescending(x => x.Id);
         }
-        
+
         private async Task CheckIfDeleteUserIsSuperAdmin(int id)
         {
             var user = await Get(id);
 
             if (user.IsSuperAdmin)
                 throw new ValidationError(new List<ApiError>() { new ApiError(400, _stringLocalizer["CannotDeleteSuperAdminUser"]) });
-        }
-        
+        }        
     }
 }

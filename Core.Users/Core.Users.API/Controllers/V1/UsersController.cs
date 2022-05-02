@@ -23,15 +23,13 @@ namespace Core.Users.API.Controllers
 
         private readonly IUserService _service;
         private readonly IHashids _hashids;
-        private readonly IServiceBusSender _serviceBusSender;
         private readonly IMapper _mapper;
 
-        public UsersController(IUserService userService, IServiceBusSender serviceBusSender,
+        public UsersController(IUserService userService,
                                IHashids hashids, IMapper mapper)
         {
             _service = userService;
             _hashids = hashids;
-            _serviceBusSender = serviceBusSender;
             _mapper = mapper;
         }
 
@@ -67,9 +65,6 @@ namespace Core.Users.API.Controllers
         {
             var user = await _service.Create(cmd);
 
-            // TODO EMIT User with Validation Token
-            await _serviceBusSender.SendServiceBusMessages(new List<UserServiceBusMessageObject> { _mapper.Map<UserServiceBusMessageObject>(user) });
-
             return await Get(_hashids.Encode(user.Id));
         }
 
@@ -104,13 +99,10 @@ namespace Core.Users.API.Controllers
         [AllowAnonymous]
         public async Task<Response<UserResponse>> SignUp([FromBody] RegisterUserCommand cmd)
         {
-            // add CUSTOMER role as default 
-            cmd.Roles = new List<string>() { "customer" };
-
             var user = await _service.Create(cmd);
 
-            // TODO EMIT User with Validation Token - from Service
-            await _serviceBusSender.SendServiceBusMessages(new List<UserServiceBusMessageObject> { _mapper.Map<UserServiceBusMessageObject>(user) });
+            // TODO EMIT User with Validation Token
+          //  await _serviceBusSender.SendServiceBusMessages(new List<UserServiceBusMessageObject> { _mapper.Map<UserServiceBusMessageObject>(user) });
 
             return await Get(_hashids.Encode(user.Id));
         }
@@ -122,9 +114,9 @@ namespace Core.Users.API.Controllers
         [AllowAnonymous]
         public async Task<Response<bool>> EmailVerification([FromBody] EmailVerificationCommand cmd)
         {
-           var result = await _service.EmailVerification(cmd);
+            var result = await _service.EmailVerification(cmd);
 
-           return new Response<bool>(result);
+            return new Response<bool>(result);
         }
 
         /// <summary>
@@ -134,23 +126,10 @@ namespace Core.Users.API.Controllers
         [AllowAnonymous]
         public async Task<Response<bool>> ResendEmailVerification(string email)
         {
-            var token = await _service.ResendEmailVerification(email);
+            var token = await _service.ResendEmailVerification(email);            
 
-            // TODO EMIT User with Validation Token - from Service
-
-            return new Response<bool>(!string.IsNullOrEmpty(token));
-        }
-
-        /// <summary>
-        /// Reset Password - starts/restarts reset password process
-        /// </summary>s
-        [HttpPost("reset-password/{email}")]
-        [AllowAnonymous]
-        public async Task<Response<bool>> ResetPassword(string email)
-        {
-            var token = await _service.ResetPassword(email);
-
-            // TODO EMIT User with RESET Token - from Service
+            // TODO EMIT User with Validation Token
+            //await _serviceBusSender.SendServiceBusMessages(new List<UserServiceBusMessageObject> { _mapper.Map<UserServiceBusMessageObject>(user) });
 
             return new Response<bool>(!string.IsNullOrEmpty(token));
         }
@@ -172,7 +151,7 @@ namespace Core.Users.API.Controllers
         /// </summary>s
         [HttpPost("quick-validation")]
         [AllowAnonymous]
-        public async Task<Response<bool>> QuickValidation([FromQuery]string field, [FromQuery] string value)
+        public async Task<Response<bool>> QuickValidation([FromQuery] string field, [FromQuery] string value)
         {
             var result = await _service.QuickValidation(field, value);
 
