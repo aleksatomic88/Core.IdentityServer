@@ -1,8 +1,8 @@
-﻿
-namespace Common.Model.ServiceBus
+﻿namespace User.Functions.Domain.Model
 {
-    public class UserServiceBusMessageObject
+    public class UserVerificationEmail
     {
+
         public string UserID { get; set; }
 
         public string FirstName { get; set; }

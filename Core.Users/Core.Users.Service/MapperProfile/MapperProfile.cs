@@ -23,8 +23,10 @@ namespace Users.Core.Service.MapperProfile
 
             CreateMap<User, UserServiceBusMessageObject>()
                 .ForMember(dst => dst.UserID, opt => opt.MapFrom(src => _hashids.Encode(src.Id)))
-                .ForMember(dst => dst.To, opt => opt.MapFrom(src => src.Email))
-                .ForMember(dst => dst.Token, opt => opt.MapFrom(src => src.Id));
+                .ForMember(dst => dst.FirstName, opt => opt.MapFrom(src => src.FirstName))
+                .ForMember(dst => dst.Token, opt => opt.MapFrom(src => src.VerificationToken != null ? src.VerificationToken : src.ResetToken))
+                .ForMember(dst => dst.Email, opt => opt.MapFrom(src => src.Email));
+
             CreateMap<Role, RoleResponse>();
         }
     }

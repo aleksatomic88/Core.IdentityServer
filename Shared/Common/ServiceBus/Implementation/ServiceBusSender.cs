@@ -18,7 +18,9 @@ namespace Common.ServiceBus.Implementation
         public async Task SendServiceBusMessages(IEnumerable<object> messageObjects)
         {
             await using var serviceBusSender = _serviceBusConfiguration.GetServiceBusSender();
-            await serviceBusSender.SendMessagesAsync(messageObjects.Select(s => SerializeToServiceBusMessage(s)).ToList());
+            var messages = messageObjects.Select(s => SerializeToServiceBusMessage(s)).ToList();
+
+            await serviceBusSender.SendMessagesAsync(messages);
         }
 
         public async Task SendUserServiceBusMessage(IEnumerable<UserServiceBusMessageObject> messageObjects)

@@ -1,22 +1,22 @@
 using AutoMapper;
-using Core.Users.DAL.Entity;
+using Common.Extensions;
+using Common.Model;
+using Common.Model.ServiceBus;
+using Common.ServiceBus.Interfaces;
 using Common.Utilities;
+using Core.Users.DAL;
+using Core.Users.DAL.Constants;
+using Core.Users.DAL.Entity;
+using Core.Users.Service;
+using Core.Users.Service.Users.Extensions;
+using Localization.Resources;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Transactions;
 using Users.Core.Service.Interface;
-using Core.Users.Service;
-using Common.Extensions;
-using Core.Users.DAL;
-using Common.Model;
-using System.Collections.Generic;
-using Core.Users.DAL.Constants;
-using Microsoft.EntityFrameworkCore;
-using Core.Users.Service.Users.Extensions;
-using Microsoft.Extensions.Localization;
-using Localization.Resources;
-using Common.ServiceBus.Interfaces;
-using Common.Model.ServiceBus;
 
 namespace Users.Core.Service
 {
@@ -36,7 +36,7 @@ namespace Users.Core.Service
                            UpdateUserCommandValidator updateUserCmdValidator,
                            EmailVerificationValidator emailVerificationValidator,
                            IStringLocalizer<SharedResource> stringLocalizer,
-                           IServiceBusSender serviceBusSender,                           
+                           IServiceBusSender serviceBusSender,
                            ChangePasswordValidator changePasswordValidator)
              : base(ctx,
                     mapper)
@@ -52,10 +52,10 @@ namespace Users.Core.Service
         public async Task<User> Create(RegisterUserCommand cmd)
         {
             _registerUserCmdValidator.ValidateCmd(cmd);
-
+            User user = null;
             using (var scope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled))
             {
-                var user = new User
+                user = new User
                 {
                     FirstName = cmd.FirstName,
                     LastName = cmd.LastName,
@@ -72,15 +72,15 @@ namespace Users.Core.Service
                 var result = await _ctx.Users.AddAsync(user);
 
                 await _ctx.SaveChangesAsync();
-
                 scope.Complete();
-
-                var userServiceBusMessage = _mapper.Map<UserServiceBusMessageObject>(user);
-                userServiceBusMessage.Subject = NotificationEnum.Created;
-                await _serviceBusSender.SendServiceBusMessages(new List<UserServiceBusMessageObject> { userServiceBusMessage });
-
-                return user;
             }
+            if (user != null)
+            {
+                UserServiceBusMessageObject userServiceBusMessage = _mapper.Map<UserServiceBusMessageObject>(user);
+                userServiceBusMessage.NotificationEnum = NotificationEnum.Created;
+                await _serviceBusSender.SendServiceBusMessages(new List<UserServiceBusMessageObject>() { userServiceBusMessage });
+            }
+            return user;
         }
 
         public async Task<User> Update(int id, UpdateUserCommand cmd)
@@ -165,13 +165,15 @@ namespace Users.Core.Service
 
             await _ctx.SaveChangesAsync();
 
-            // TODO EMIT User with Validation Token
-            var userServiceBusMessage = _mapper.Map<UserServiceBusMessageObject>(user);
-            userServiceBusMessage.Subject = NotificationEnum.Resend;
-            await _serviceBusSender.SendServiceBusMessages(new List<UserServiceBusMessageObject> { userServiceBusMessage });
+            if (user != null)
+            {
+                var userServiceBusMessage = _mapper.Map<UserServiceBusMessageObject>(user);
+                userServiceBusMessage.NotificationEnum = NotificationEnum.Resend;
+                await _serviceBusSender.SendServiceBusMessages(new List<UserServiceBusMessageObject>() { userServiceBusMessage });
+            }
 
             return user.VerificationToken;
-        }       
+        }
 
         public async Task<string> ResetPassword(string email)
         {
@@ -237,6 +239,6 @@ namespace Users.Core.Service
 
             if (user.IsSuperAdmin)
                 throw new ValidationError(new List<ApiError>() { new ApiError(400, _stringLocalizer["CannotDeleteSuperAdminUser"]) });
-        }        
+        }
     }
 }
