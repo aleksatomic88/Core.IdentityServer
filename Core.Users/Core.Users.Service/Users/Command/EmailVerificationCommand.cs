@@ -11,6 +11,8 @@ namespace Core.Users.Service
     {
         public string Email { get; set; }
 
+        public string Password { get; set; }
+
         public string Token { get; set; }
     }
 
@@ -27,6 +29,11 @@ namespace Core.Users.Service
 
             RuleFor(cmd => cmd.Email).NotEmpty().EmailAddress();
             RuleFor(cmd => cmd.Token).NotEmpty();
+
+            RuleFor(cmd => cmd.Password)
+               .Must(password => AuthValidations.IsPasswordOk(password))
+               .When(cmd => !string.IsNullOrEmpty(cmd.Password))
+               .WithMessage(stringLocalizer["PasswordRules"]);
 
             RuleFor(cmd => cmd)
                 .MustAsync((cmd, cancellationToken) => VerifyTokenAsync(cmd))

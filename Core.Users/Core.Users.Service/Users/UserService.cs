@@ -3,7 +3,6 @@ using Common.Extensions;
 using Common.Model;
 using Common.Model.ServiceBus;
 using Common.ServiceBus.Interfaces;
-using Common.Utilities;
 using Core.Users.DAL;
 using Core.Users.DAL.Constants;
 using Core.Users.DAL.Entity;
@@ -52,9 +51,7 @@ namespace Users.Core.Service
         public async Task<User> Create(RegisterUserCommand cmd)
         {
             _registerUserCmdValidator.ValidateCmd(cmd);
-            User user = null;
-
-            var password = cmd.Password != null ? SecurePasswordHasher.Hash(cmd.Password) : null;
+            User user = null;           
 
             using (var scope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled))
             {
@@ -65,11 +62,11 @@ namespace Users.Core.Service
                     Email = cmd.Email,
                     PhoneNumber = cmd.PhoneNumber,
                     Status = UserVerificationStatus.EmailNotVerified,
-                    Password = password,
                     CreatedById = _ctx.CurrentUser.Id,
                     UpdatedById = _ctx.CurrentUser.Id,
                     UserRoles = new() { new UserRole { Role = _ctx.Roles.First(r => r.Name == cmd.Roles.First()) } }
                 }
+                .SetPassword(cmd.Password)
                 .GenerateVerificationToken();
 
                 var result = await _ctx.Users.AddAsync(user);
@@ -78,6 +75,7 @@ namespace Users.Core.Service
                 scope.Complete();
             }
 
+            // TODO extract in method
             if (user != null)
             {
                 UserServiceBusMessageObject userServiceBusMessage = _mapper.Map<UserServiceBusMessageObject>(user);
@@ -154,6 +152,8 @@ namespace Users.Core.Service
             user.Status = UserVerificationStatus.Verified;
             user.VerificationExp = System.DateTime.Now;
 
+            user.SetPassword(cmd.Password);
+
             await _ctx.SaveChangesAsync();
 
             return true;
@@ -170,6 +170,7 @@ namespace Users.Core.Service
 
             await _ctx.SaveChangesAsync();
 
+            // TODO extract in method
             if (user != null)
             {
                 var userServiceBusMessage = _mapper.Map<UserServiceBusMessageObject>(user);
@@ -204,7 +205,8 @@ namespace Users.Core.Service
 
             if (user == default) return false;
 
-            user.Password = SecurePasswordHasher.Hash(cmd.Password);
+            user.SetPassword(cmd.Password);
+
             user.Status = UserVerificationStatus.Verified;
             user.ResetExp = System.DateTime.Now;
 
@@ -228,8 +230,8 @@ namespace Users.Core.Service
                 querable.Where(e => e.LastName.Contains(searchQuery.LastName)) : querable;
             querable = !string.IsNullOrEmpty(searchQuery.FullName) ?
                 querable.Where(e => e.FullName.Contains(searchQuery.FullName)) : querable;      // Contains uses table scan allways
-                                                                                                //querable.Where(e => e.FullName.StartsWith(searchQuery.FullName)) : querable;  // StartsWith uses index if available
-                                                                                                //querable.Where(e => e.FullName == searchQuery.FullName) : querable;
+                //querable.Where(e => e.FullName.StartsWith(searchQuery.FullName)) : querable;  // StartsWith uses index if available
+                //querable.Where(e => e.FullName == searchQuery.FullName) : querable;
             querable = !string.IsNullOrEmpty(searchQuery.Email) ?
                 querable.Where(e => e.Email.Contains(searchQuery.Email)) : querable;
             querable = !string.IsNullOrEmpty(searchQuery.PhoneNumber) ?

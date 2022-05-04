@@ -1,3 +1,4 @@
+using Common.Utilities;
 using Core.Users.DAL.Constants;
 using Core.Users.DAL.Entity;
 using System;
@@ -20,6 +21,14 @@ namespace Core.Users.Service.Users.Extensions
             user.ResetToken = "reset_" + Guid.NewGuid().ToString().Replace("-", "");
 
             user.ResetExp = DateTime.Now.AddHours(UsersConstants.ResetTokenValidityDuration);
+
+            return user;
+        }
+
+        public static User SetPassword(this User user, string password)
+        {
+            if (string.IsNullOrEmpty(password))
+                user.Password = SecurePasswordHasher.Hash(password);
 
             return user;
         }
