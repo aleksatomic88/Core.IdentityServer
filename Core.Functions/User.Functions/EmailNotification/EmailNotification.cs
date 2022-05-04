@@ -1,13 +1,12 @@
 using Azure.Messaging.ServiceBus;
 using Microsoft.Azure.WebJobs;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System.Text;
 using System.Threading.Tasks;
 using User.Functions.Domain.Interfaces;
 using User.Functions.Domain.Model;
 
-namespace User.Functions
+namespace User.Functions.EmailNotification
 {
     public class EmailNotification
     {
@@ -23,8 +22,6 @@ namespace User.Functions
         {
             var email = JsonConvert.DeserializeObject<UserVerificationEmail>(Encoding.UTF8.GetString(message.Body));
             await _mailJetService.SendMailAsync(email);
-            //_logger.LogInformation($"C# ServiceBus topic trigger function processed message : {message}");
-
         }
     }
 }

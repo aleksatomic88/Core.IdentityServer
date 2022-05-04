@@ -1,21 +1,26 @@
-﻿using AutoMapper;
-using Mailjet.Client;
+﻿using Mailjet.Client;
 using Mailjet.Client.Resources;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 using User.Functions.Domain.Interfaces;
 using User.Functions.Domain.Model;
 
+
 namespace User.Functions.Domain.Services
 {
     public class MailJetService : IMailJetService
     {
         private readonly ILogger<MailJetService> _logger;
+        private readonly IConfiguration _configuration;
+        private readonly string _url;
 
-        public MailJetService(ILogger<MailJetService> logging, IMapper mapper)
+        public MailJetService(ILogger<MailJetService> logging, IConfiguration configuration)
         {
             _logger = logging;
+            _configuration = configuration;
+            _url = configuration.GetSection("VerificationUrl").Value;
         }
         public async Task SendMailAsync(UserVerificationEmail email)
         {
@@ -44,29 +49,25 @@ namespace User.Functions.Domain.Services
         }
         private MailjetRequest CreateMailRequest(UserVerificationEmail email)
         {
-            // var emailAdress = "milos.mijatovic88@gmail.com";
-            // var name = "Milos";
-            var url = "https://everytable.com/";
-
             return new MailjetRequest
             {
                 Resource = Send.Resource,
             }
-                 .Property(Send.FromEmail, "aleksa@jupiterlabs.co") // do not change
-                 .Property(Send.FromName, "Everytable")
-                 .Property(Send.Subject, "Email verification")
-                 .Property(Send.MjTemplateID, "3882699")
-                 .Property(Send.MjTemplateLanguage, "True")
-                 //.Property(Send.MjTemplateErrorReporting, "aleksa@jupiterlabs.co")
-                 //.Property(Send.MjTemplateErrorDeliver, "true")
-                 .Property(Send.Recipients, new JArray
-                 {
+     .Property(Send.FromEmail, "aleksa@jupiterlabs.co") // do not change
+     .Property(Send.FromName, "Everytable")
+     .Property(Send.Subject, "Email verification")
+     .Property(Send.MjTemplateID, "3882699")
+     .Property(Send.MjTemplateLanguage, "True")
+     //.Property(Send.MjTemplateErrorReporting, "aleksa@jupiterlabs.co")
+     //.Property(Send.MjTemplateErrorDeliver, "true")
+     .Property(Send.Recipients, new JArray
+     {
                     new JObject {
                                 {"Email", email.Email},
                                 {"Name", email.FirstName},
-                                {"Vars", new JObject {{"name", email.FirstName },{"url", url}}}
+                                {"Vars", new JObject {{"name", email.FirstName },{"url", _url } }}
                                 }
-                  });
+      });
         }
     }
 }
