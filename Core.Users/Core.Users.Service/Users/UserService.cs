@@ -77,7 +77,7 @@ namespace Users.Core.Service
             if (user != null)
             {
                 UserServiceBusMessageObject userServiceBusMessage = _mapper.Map<UserServiceBusMessageObject>(user);
-                userServiceBusMessage.NotificationEnum = NotificationEnum.Created;
+                userServiceBusMessage.NotificationEnum = NotificationEnum.UserCreated;
                 await _serviceBusSender.SendServiceBusMessages(new List<UserServiceBusMessageObject>() { userServiceBusMessage });
             }
             return user;
@@ -168,7 +168,7 @@ namespace Users.Core.Service
             if (user != null)
             {
                 var userServiceBusMessage = _mapper.Map<UserServiceBusMessageObject>(user);
-                userServiceBusMessage.NotificationEnum = NotificationEnum.Resend;
+                userServiceBusMessage.NotificationEnum = NotificationEnum.UserVerificationTokenCreated;
                 await _serviceBusSender.SendServiceBusMessages(new List<UserServiceBusMessageObject>() { userServiceBusMessage });
             }
 
@@ -183,6 +183,8 @@ namespace Users.Core.Service
 
             user.GenerateResetToken();
             user.Status = UserVerificationStatus.PasswordResetRequested;
+
+            // TODO EMIT User with RESET Token - from Service
 
             await _ctx.SaveChangesAsync();
 

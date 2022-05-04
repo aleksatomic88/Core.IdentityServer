@@ -6,10 +6,7 @@ using Core.Users.Service;
 using Common.Model.Search;
 using HashidsNet;
 using Microsoft.AspNetCore.Authorization;
-using Common.ServiceBus.Interfaces;
 using System.Collections.Generic;
-using Common.Model.ServiceBus;
-using AutoMapper;
 
 namespace Core.Users.API.Controllers
 {
@@ -23,14 +20,12 @@ namespace Core.Users.API.Controllers
 
         private readonly IUserService _service;
         private readonly IHashids _hashids;
-        private readonly IMapper _mapper;
 
         public UsersController(IUserService userService,
-                               IHashids hashids, IMapper mapper)
+                               IHashids hashids)
         {
             _service = userService;
             _hashids = hashids;
-            _mapper = mapper;
         }
 
         /// <summary>
@@ -99,10 +94,10 @@ namespace Core.Users.API.Controllers
         [AllowAnonymous]
         public async Task<Response<UserResponse>> SignUp([FromBody] RegisterUserCommand cmd)
         {
-            var user = await _service.Create(cmd);
+            // Add CUSTOMER role as default 
+            cmd.Roles = new List<string>() { "customer" };
 
-            // TODO EMIT User with Validation Token
-          //  await _serviceBusSender.SendServiceBusMessages(new List<UserServiceBusMessageObject> { _mapper.Map<UserServiceBusMessageObject>(user) });
+            var user = await _service.Create(cmd);
 
             return await Get(_hashids.Encode(user.Id));
         }
@@ -126,10 +121,19 @@ namespace Core.Users.API.Controllers
         [AllowAnonymous]
         public async Task<Response<bool>> ResendEmailVerification(string email)
         {
-            var token = await _service.ResendEmailVerification(email);            
+            var token = await _service.ResendEmailVerification(email);
 
-            // TODO EMIT User with Validation Token
-            //await _serviceBusSender.SendServiceBusMessages(new List<UserServiceBusMessageObject> { _mapper.Map<UserServiceBusMessageObject>(user) });
+            return new Response<bool>(!string.IsNullOrEmpty(token));
+        }
+
+        /// <summary>
+        /// Reset Password - starts/restarts reset password process
+        /// </summary>s
+        [HttpPost("reset-password/{email}")]
+        [AllowAnonymous]
+        public async Task<Response<bool>> ResetPassword(string email)
+        {
+            var token = await _service.ResetPassword(email);           
 
             return new Response<bool>(!string.IsNullOrEmpty(token));
         }
