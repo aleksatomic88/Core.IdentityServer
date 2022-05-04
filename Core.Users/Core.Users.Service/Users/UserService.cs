@@ -53,6 +53,9 @@ namespace Users.Core.Service
         {
             _registerUserCmdValidator.ValidateCmd(cmd);
             User user = null;
+
+            var password = cmd.Password != null ? SecurePasswordHasher.Hash(cmd.Password) : null;
+
             using (var scope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled))
             {
                 user = new User
@@ -62,7 +65,7 @@ namespace Users.Core.Service
                     Email = cmd.Email,
                     PhoneNumber = cmd.PhoneNumber,
                     Status = UserVerificationStatus.EmailNotVerified,
-                    Password = SecurePasswordHasher.Hash(cmd.Password),
+                    Password = password,
                     CreatedById = _ctx.CurrentUser.Id,
                     UpdatedById = _ctx.CurrentUser.Id,
                     UserRoles = new() { new UserRole { Role = _ctx.Roles.First(r => r.Name == cmd.Roles.First()) } }
@@ -74,12 +77,14 @@ namespace Users.Core.Service
                 await _ctx.SaveChangesAsync();
                 scope.Complete();
             }
+
             if (user != null)
             {
                 UserServiceBusMessageObject userServiceBusMessage = _mapper.Map<UserServiceBusMessageObject>(user);
                 userServiceBusMessage.NotificationEnum = NotificationEnum.UserCreated;
                 await _serviceBusSender.SendServiceBusMessages(new List<UserServiceBusMessageObject>() { userServiceBusMessage });
             }
+
             return user;
         }
 

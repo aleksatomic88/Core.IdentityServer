@@ -34,11 +34,15 @@ namespace Core.Users.Service
             _ctx = ctx;
             _authValidations = authValidations;
 
-            // RuleFor(cmd => cmd.FirstName).NotEmpty();
-            // RuleFor(cmd => cmd.LastName).NotEmpty();
+            RuleFor(cmd => cmd.FirstName).NotEmpty();
+            RuleFor(cmd => cmd.LastName).NotEmpty();
+
             // RuleFor(cmd => cmd.PhoneNumber).NotEmpty();
+
             RuleFor(cmd => cmd.Email).NotEmpty().EmailAddress();
-            RuleFor(cmd => cmd.Password).NotEmpty();
+
+            // Password can be empty for Invite Flow
+            // RuleFor(cmd => cmd.Password).NotEmpty();
 
             RuleFor(cmd => cmd.Password)
                 .Must(password => AuthValidations.IsPasswordOk(password))

@@ -8,6 +8,6 @@ namespace Common.Constants
         public const string ManagerRole = "manager";
         public const string EmployeeRole = "employee";
 
-        public const string CustomerRole = "customer"; // default for sign up
+        public const string CustomerRole = "customer";      // default for sign up
     }
 }
