@@ -30,7 +30,7 @@ namespace IdentityServer
 
             services.AddDbContext<UsersDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("IdentityDatabase")));
 
-            services.AddIdentityServerService();
+            services.AddIdentityServerService(Configuration);
 
             var hashIdsOptions = Configuration.GetSection("HashIds");
             services.AddSingleton<IHashids>(_ => new Hashids(hashIdsOptions["Salt"], Convert.ToInt32(hashIdsOptions["MinLength"])));
@@ -43,7 +43,7 @@ namespace IdentityServer
                 app.UseDeveloperExceptionPage();
             }
             
-            app.UseIdentityServer();
+           app.UseIdentityServer();
         }
     }
 }

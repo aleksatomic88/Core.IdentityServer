@@ -1,5 +1,6 @@
 using IdentityModel;
 using IdentityServer4.Models;
+using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 
 namespace IdentityServer
@@ -28,16 +29,16 @@ namespace IdentityServer
             new ApiScope("addresses-api", "Address Endpoints"),
         };
 
-        public static IEnumerable<Client> GetClients() => new List<Client>
+        public static IEnumerable<Client> GetClients(IConfigurationSection clientConfigs) => new List<Client>
         {
             new Client
             {
-                ClientId = "NonInteractiveApp",
+                ClientId = clientConfigs.GetSection("NonInteractiveApp")["ClientId"],
 
                 AllowedGrantTypes = { GrantType.ResourceOwnerPassword },
                 AllowOfflineAccess = true,
 
-                ClientSecrets = { new Secret("secret".Sha256()) },
+                ClientSecrets = { new Secret(clientConfigs.GetSection("NonInteractiveApp")["Secret"].Sha256()) },
 
                 AllowedScopes = new []{
                                         "sub",
@@ -47,12 +48,12 @@ namespace IdentityServer
             },
             new Client
             {
-                ClientId = "ClientApp",
+                ClientId = clientConfigs.GetSection("ClientApp")["ClientId"],
 
                 AllowedGrantTypes = { GrantType.ClientCredentials },
                 AllowOfflineAccess = true,
 
-                ClientSecrets = { new Secret("secret".Sha256()) },
+                ClientSecrets = { new Secret(clientConfigs.GetSection("ClientApp")["Secret"].Sha256()) },
 
                 AllowedScopes = new []{
                                         "sub",

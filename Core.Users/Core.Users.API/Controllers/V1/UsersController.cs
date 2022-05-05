@@ -13,7 +13,7 @@ namespace Core.Users.API.Controllers
     [ApiController]
     [Route("[controller]")]
     [ApiVersion("1.0")]
-    // [Authorize]
+    [Authorize]
 #pragma warning disable CS1591
     public class UsersController : ControllerBase
     {
@@ -41,7 +41,7 @@ namespace Core.Users.API.Controllers
         }
 
         /// <summary>
-        /// Return All Users
+        /// Search all Users by search query
         /// </summary>s
         [HttpGet]
         public async Task<Response<SearchResponse<UserBasicResponse>>> Search([FromQuery] UserQuery searchQuery)
