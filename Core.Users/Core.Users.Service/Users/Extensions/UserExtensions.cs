@@ -27,7 +27,7 @@ namespace Core.Users.Service.Users.Extensions
 
         public static User SetPassword(this User user, string password)
         {
-            if (string.IsNullOrEmpty(password))
+            if (!string.IsNullOrEmpty(password))
                 user.Password = SecurePasswordHasher.Hash(password);
 
             return user;

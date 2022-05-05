@@ -60,27 +60,27 @@ namespace Core.Users.DAL.Initializers
         {
             new Role
             {
-                Name = Roles.SuperAdminRole,
+                Name = RoleConstants.SuperAdminRole,
                 Description = "Super Administrator"
             },
             new Role
             {
-                Name = Roles.AdminRole,
+                Name = RoleConstants.AdminRole,
                 Description = "Administrator"
             },
             new Role
             {
-                Name = Roles.CustomerRole,
+                Name = RoleConstants.CustomerRole,
                 Description = "Customer"
             },
             new Role
             {
-                Name = Roles.ManagerRole,
+                Name = RoleConstants.ManagerRole,
                 Description = "Manager"
             },
             new Role
             {
-                Name = Roles.EmployeeRole,
+                Name = RoleConstants.EmployeeRole,
                 Description = "Employee"
             }
         };

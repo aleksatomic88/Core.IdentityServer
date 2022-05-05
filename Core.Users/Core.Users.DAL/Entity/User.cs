@@ -1,3 +1,4 @@
+using Common.Constants;
 using Common.Extensions;
 using Core.Users.DAL.Constants;
 using DelegateDecompiler;
@@ -30,7 +31,7 @@ namespace Core.Users.DAL.Entity
 
         public DateTime ResetExp { get; set; }
 
-        public List<UserRole> UserRoles { get; set; }
+        public IEnumerable<UserRole> UserRoles { get; set; }
 
         [NotMapped]
         [Computed]
@@ -41,14 +42,21 @@ namespace Core.Users.DAL.Entity
         public string FullName => FirstName + " " + LastName;
 
         [NotMapped]
+        [Computed]
+        public bool IsExternal => Roles.First().Name == RoleConstants.CustomerRole; // External Roles
+
+        [NotMapped]
+        [Computed]
+        public bool IsSuperAdmin => Roles.First().Name == RoleConstants.SuperAdminRole;
+
+        [NotMapped]
         public string StatusDisplay => Status.ToDisplayName();
 
         [NotMapped]
-        public List<Role> Roles
-            => UserRoles != null ? UserRoles.Select(ur => ur.Role).ToList() : new List<Role>();
+        [Computed]
+        public IEnumerable<Role> Roles => UserRoles.Select(ur => ur.Role).ToList();
 
-        public bool HasRole(string roleName)
-            => Roles.Any(r => r.Name == roleName);
+        public bool HasRole(string roleName)=> Roles.Any(r => r.Name == roleName);
 
     }
 }

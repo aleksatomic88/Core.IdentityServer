@@ -64,7 +64,7 @@ namespace Users.Core.Service
                     Status = UserVerificationStatus.EmailNotVerified,
                     CreatedById = _ctx.CurrentUser.Id,
                     UpdatedById = _ctx.CurrentUser.Id,
-                    UserRoles = new() { new UserRole { Role = _ctx.Roles.First(r => r.Name == cmd.Roles.First()) } }
+                    UserRoles = new List<UserRole>() { new UserRole { Role = _ctx.Roles.First(r => r.Name == cmd.Roles.First()) } }
                 }
                 .SetPassword(cmd.Password)
                 .GenerateVerificationToken();
@@ -100,8 +100,8 @@ namespace Users.Core.Service
 
                 if (user.Roles.First().Name != cmd.Roles.First())
                 {
-                    user.Roles.Clear();
-                    user.UserRoles = new() { new UserRole { Role = _ctx.Roles.First(r => r.Name == cmd.Roles.First()) } };
+                    user.Roles.ToList().Clear();
+                    user.UserRoles = new List<UserRole>() { new UserRole { Role = _ctx.Roles.First(r => r.Name == cmd.Roles.First()) } };
                 }
 
                 await _ctx.SaveChangesAsync();
@@ -153,6 +153,9 @@ namespace Users.Core.Service
             user.VerificationExp = System.DateTime.Now;
 
             user.SetPassword(cmd.Password);
+
+            if (string.IsNullOrEmpty(user.Password))
+                throw new ValidationError(new List<ApiError>() { new ApiError(400, _stringLocalizer["CannotValidateUserWithoutPassword"]) });
 
             await _ctx.SaveChangesAsync();
 
@@ -222,6 +225,13 @@ namespace Users.Core.Service
             };
         }
 
+        protected override string[] SearchIncludes()
+        {
+            return new string[] {
+                "UserRoles.Role"
+            };
+        }
+
         protected override IQueryable<User> SearchQueryInternal(IQueryable<User> querable, UserQuery searchQuery)
         {
             querable = !string.IsNullOrEmpty(searchQuery.FirstName) ?
@@ -239,7 +249,15 @@ namespace Users.Core.Service
             querable = searchQuery.IsVerified != null ?
                 querable.Where(e => e.IsVerified == searchQuery.IsVerified) : querable;
 
-            return querable.OrderByDescending(x => x.Id);
+            querable = querable.Where(e => e.IsExternal == searchQuery.IsExternal);
+
+            if (searchQuery.ExcludeSuperAdmin)
+                querable = querable.Where(e => !e.IsSuperAdmin);
+
+
+            querable = querable.OrderByDescending(x => x.Id);
+
+            return querable;
         }
 
         private async Task CheckIfDeleteUserIsSuperAdmin(int id)

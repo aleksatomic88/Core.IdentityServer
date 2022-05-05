@@ -126,6 +126,9 @@
   <data name="CannotDeleteSuperAdminUser" xml:space="preserve">
     <value>It is not possible to delete Super Admin user!</value>
   </data>
+  <data name="CannotValidateUserWithoutPassword" xml:space="preserve">
+    <value>It is not possible to validate email/phone without setting valid password!</value>
+  </data>
   <data name="InvalidEmailVerificationAttempt_TokenExpired" xml:space="preserve">
     <value>Verification Token Expired</value>
   </data>

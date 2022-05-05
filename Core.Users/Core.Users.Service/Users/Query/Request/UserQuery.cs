@@ -15,5 +15,9 @@ namespace Core.Users.Service
         public string PhoneNumber { get; set; }
 
         public bool? IsVerified { get; set; }
+
+        public bool IsExternal { get; set; }
+
+        public bool ExcludeSuperAdmin { get; set; }
     }
 }

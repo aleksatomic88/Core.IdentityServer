@@ -3,6 +3,7 @@ using Common.Utilities;
 using System.Linq;
 using Core.Users.DAL.Initializers;
 using Common.Constants;
+using System.Collections.Generic;
 
 namespace Core.Users.DAL.Seeders
 {
@@ -26,7 +27,7 @@ namespace Core.Users.DAL.Seeders
         private void InsertUsers()
         {
             var customerEmail = "test@test.test";
-            var customerRole = _ctx.Roles.First(r => r.Name == Roles.CustomerRole);
+            var customerRole = _ctx.Roles.First(r => r.Name == RoleConstants.CustomerRole);
             var customerUser = _ctx.Users.FirstOrDefault(u => u.Email == customerEmail);
 
             if (customerUser == null)
@@ -38,7 +39,7 @@ namespace Core.Users.DAL.Seeders
                     Email = customerEmail,
                     Status = Constants.UserVerificationStatus.Verified,
                     Password = SecurePasswordHasher.Hash("Pass123!"),
-                    UserRoles = new() { new UserRole { Role = customerRole } }
+                    UserRoles = new List<UserRole>() { new UserRole { Role = customerRole } }
                 });
 
                 _ctx.SaveChanges();

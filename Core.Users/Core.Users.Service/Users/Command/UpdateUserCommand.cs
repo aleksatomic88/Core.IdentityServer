@@ -38,7 +38,7 @@ namespace Core.Users.Service
                 .WithMessage(stringLocalizer["InvalidRegisterAttempt_SingleRole"]);
 
             RuleFor(cmd => cmd.Roles)
-              .Must(roles => roles[0] != Common.Constants.Roles.SuperAdminRole)
+              .Must(roles => roles[0] != Common.Constants.RoleConstants.SuperAdminRole)
               .When(cmd => cmd.Roles != null && cmd.Roles.Count > 0)
               .WithMessage(stringLocalizer["CannotAssignSuperAdminRole"]);
         }

@@ -18,9 +18,9 @@ namespace Common.Model
 
         public List<string> Roles { get; set; } = new List<string>();
 
-        public bool IsSuperAdmin => Roles.Any(p => p == Constants.Roles.SuperAdminRole);
+        public bool IsSuperAdmin => Roles.Any(p => p == Constants.RoleConstants.SuperAdminRole);
 
-        public bool IsAdmin => Roles.Any(p => p == Constants.Roles.AdminRole);
+        public bool IsAdmin => Roles.Any(p => p == Constants.RoleConstants.AdminRole);
 
         public bool HasRole(string permission)
         {

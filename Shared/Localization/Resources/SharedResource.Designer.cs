@@ -88,6 +88,15 @@ namespace Localization.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to It is not possible to validate email/phone without setting valid password!.
+        /// </summary>
+        public static string CannotValidateUserWithoutPassword {
+            get {
+                return ResourceManager.GetString("CannotValidateUserWithoutPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Verification Token Expired.
         /// </summary>
         public static string InvalidEmailVerificationAttempt_TokenExpired {

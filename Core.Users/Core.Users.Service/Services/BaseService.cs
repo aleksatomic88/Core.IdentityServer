@@ -32,11 +32,11 @@ namespace Users.Core.Service
 
         public virtual async Task<TResponse> Get(int id)
         {
-            var result = await GetQueryable(Includes())
+            var entity = await GetQueryable(Includes())
                                 .DecompileAsync()
                                 .FirstOrDefaultAsync(x => x.Id == id);
 
-            return _mapper.Map<TResponse>(result);            
+            return _mapper.Map<TResponse>(entity);            
         }
 
         public async Task<SearchResponse<TBasicResponse>> Search(TSearchQuery searchQuery)
@@ -44,11 +44,10 @@ namespace Users.Core.Service
             var pageSize = searchQuery.PageSize <= 0 ? PageSize : searchQuery.PageSize;
             var pageNumber = searchQuery.PageNumber <= 0 ? 1 : searchQuery.PageNumber;
 
-            var querable = SearchQuery(GetQueryable(SearchIncludes()), searchQuery);
+            var querable = SearchQuery(GetQueryable(SearchIncludes()), searchQuery).DecompileAsync();
 
             var entities = await querable.Skip((pageNumber - 1) * pageSize)
                                          .Take(pageSize)
-                                         .DecompileAsync()
                                          .ToListAsync();
 
             return new SearchResponse<TBasicResponse>

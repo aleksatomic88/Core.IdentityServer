@@ -7,7 +7,7 @@ namespace Core.Users.Service
     {
         public List<RoleResponse> Roles { get; set; }
 
-        public bool IsSuperAdmin => Roles.Any(x => x.Name == Common.Constants.Roles.SuperAdminRole);
+        public bool IsSuperAdmin => Roles.Any(x => x.Name == Common.Constants.RoleConstants.SuperAdminRole);
 
     }
 }

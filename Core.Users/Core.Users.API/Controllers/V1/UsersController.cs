@@ -13,7 +13,7 @@ namespace Core.Users.API.Controllers
     [ApiController]
     [Route("[controller]")]
     [ApiVersion("1.0")]
-    [Authorize]
+    // [Authorize]
 #pragma warning disable CS1591
     public class UsersController : ControllerBase
     {
