@@ -36,6 +36,7 @@ namespace Core.Users.DAL.Seeders
                 {
                     FirstName = "Test",
                     LastName = "Customer",
+                    PhoneNumber = "00987654321",
                     Email = customerEmail,
                     Status = Constants.UserVerificationStatus.Verified,
                     Password = SecurePasswordHasher.Hash("Pass123!"),

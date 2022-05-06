@@ -63,7 +63,7 @@ namespace Users.Core.Service
                     FirstName = cmd.FirstName,
                     LastName = cmd.LastName,
                     Email = cmd.Email,
-                    PhoneNumber = cmd.PhoneNumber,
+                    PhoneNumber = cmd.PhoneNumber.ToPhoneNumberWithoutSpecialCharacters(),
                     Status = UserVerificationStatus.EmailNotVerified,
                     CreatedById = _ctx.CurrentUser.Id,
                     UpdatedById = _ctx.CurrentUser.Id,
@@ -93,13 +93,15 @@ namespace Users.Core.Service
         {
             _updateUserCmdValidator.ValidateCmd(cmd);
 
+            var phoneNumber = cmd.PhoneNumber.ToPhoneNumberWithoutSpecialCharacters();
+
             using (var scope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled))
             {
                 var user = await GetQueryable(Includes()).FirstAsync(x => x.Id == id);
 
                 user.FirstName = user.FirstName == cmd.FirstName ? user.FirstName : cmd.FirstName;
                 user.LastName = user.LastName == cmd.LastName ? user.LastName : cmd.LastName;
-                user.PhoneNumber = user.PhoneNumber == cmd.PhoneNumber ? user.PhoneNumber : cmd.PhoneNumber;
+                user.PhoneNumber = user.PhoneNumber == phoneNumber ? user.PhoneNumber : phoneNumber;
 
                 if (user.Roles.First().Name != cmd.Roles.First())
                 {
@@ -250,10 +252,10 @@ namespace Users.Core.Service
 
             querable = querable.Where(e => e.IsExternal == searchQuery.IsExternal);
 
-            if (searchQuery.ExcludeSuperAdmin)
-                querable = querable.Where(e => !e.IsSuperAdmin);
+            // remove SeperAdmins from result set
+            querable = querable.Where(e => !e.IsSuperAdmin);
 
-
+            // defult ortder
             querable = querable.OrderByDescending(x => x.Id);
 
             return querable;

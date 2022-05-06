@@ -44,6 +44,7 @@ namespace Core.Users.DAL.Initializers
                 {
                     FirstName = "Super",
                     LastName = "Admin",
+                    PhoneNumber = "00123456789",
                     Email = superAdminEmail,
                     Status = Constants.UserVerificationStatus.Verified,
                     Password = SecurePasswordHasher.Hash("Pass123!"),

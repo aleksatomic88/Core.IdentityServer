@@ -1,5 +1,6 @@
 using Core.Users.DAL;
 using Core.Users.DAL.Constants;
+using Core.Users.Service.Users.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -34,8 +35,9 @@ namespace Core.Users.Service
 
         public async Task<bool> UserWithPhoneNumberNotExistsAsync(string phoneNumber)
         {
-            return !await _ctx.Users.AnyAsync(u => u.PhoneNumber.Replace("+", string.Empty).Replace("-", string.Empty).Replace("/", string.Empty).Replace(" ", string.Empty) ==
-                                                     phoneNumber.Replace("+", string.Empty).Replace("-", string.Empty).Replace("/", string.Empty).Replace(" ", string.Empty));
+            phoneNumber = phoneNumber.ToPhoneNumberWithoutSpecialCharacters();
+
+            return !await _ctx.Users.AnyAsync(u => u.PhoneNumber == phoneNumber);
         }
 
         public static bool IsPasswordOk(string password)
@@ -45,17 +47,5 @@ namespace Core.Users.Service
                    && password.Any(char.IsUpper)
                    && (password.Any(char.IsSymbol) || password.Any(char.IsPunctuation));
         }
-    }
-
-    public static class Extensions
-    {
-        static readonly List<char> SpecialCharsToRemoveFromPhoneNumber = new() { '+', '(', ')', '-', '/', ' ' };
-
-        public static string RemoveSpecialCharsFromPhoneNumber(this string str)
-        {
-            SpecialCharsToRemoveFromPhoneNumber.ForEach(c => str = str.Replace(c.ToString(), string.Empty));
-
-            return str;
-        }
-    }
+    }    
 }
