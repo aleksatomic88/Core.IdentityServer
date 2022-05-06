@@ -1,7 +1,6 @@
 using Core.Users.DAL.Entity;
 using Common.Utilities;
 using System.Linq;
-using Core.Users.DAL.Initializers;
 using Common.Constants;
 using System.Collections.Generic;
 

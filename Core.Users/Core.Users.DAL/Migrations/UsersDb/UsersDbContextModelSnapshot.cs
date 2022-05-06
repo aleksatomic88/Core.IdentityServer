@@ -58,6 +58,9 @@ namespace Core.Users.DAL.Migrations.UsersDb
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
@@ -76,9 +79,6 @@ namespace Core.Users.DAL.Migrations.UsersDb
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2")
                         .HasColumnName("PeriodStart");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ResetExp")
                         .HasColumnType("datetime2");
@@ -108,6 +108,10 @@ namespace Core.Users.DAL.Migrations.UsersDb
                     b.HasIndex("Email")
                         .IsUnique()
                         .HasFilter("[Email] IS NOT NULL");
+
+                    b.HasIndex("PhoneNumber")
+                       .IsUnique()
+                       .HasFilter("[PhoneNumber] IS NOT NULL");
 
                     b.ToTable("Users", (string)null);
 

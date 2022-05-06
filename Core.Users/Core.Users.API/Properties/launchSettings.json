@@ -11,13 +11,12 @@
   "profiles": {
     "IIS Express": {
       "commandName": "IISExpress",
-      "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "sqlDebugging": false,
-      "nativeDebugging": false
+      "nativeDebugging": true
     },
     "Core.Users.API": {
       "commandName": "Project",
@@ -29,7 +28,7 @@
       "sqlDebugging": false,
       "hotReloadEnabled": true,
       "applicationUrl": "https://localhost:5002;http://localhost:50002",
-      "nativeDebugging": false
+      "nativeDebugging": true
     }
   }
 }

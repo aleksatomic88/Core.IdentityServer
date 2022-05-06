@@ -102,6 +102,7 @@ namespace Users.Core.Service
                 user.FirstName = user.FirstName == cmd.FirstName ? user.FirstName : cmd.FirstName;
                 user.LastName = user.LastName == cmd.LastName ? user.LastName : cmd.LastName;
                 user.PhoneNumber = user.PhoneNumber == phoneNumber ? user.PhoneNumber : phoneNumber;
+                user.UpdatedById = _ctx.CurrentUser.Id;
 
                 if (user.Roles.First().Name != cmd.Roles.First())
                 {
