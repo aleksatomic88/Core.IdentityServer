@@ -37,8 +37,7 @@ namespace Core.Users.Service
             RuleFor(cmd => cmd.FirstName).NotEmpty();
             RuleFor(cmd => cmd.LastName).NotEmpty();
 
-            // RuleFor(cmd => cmd.PhoneNumber).NotEmpty();
-
+            RuleFor(cmd => cmd.PhoneNumber).NotEmpty();
             RuleFor(cmd => cmd.Email).NotEmpty().EmailAddress();
 
             // Password can be empty for Invite Flow
@@ -50,8 +49,16 @@ namespace Core.Users.Service
                 .WithMessage(stringLocalizer["PasswordRules"]);                
 
             RuleFor(cmd => cmd)
-                .MustAsync((cmd, cancellationToken) => CanRegister(cmd))
+                .MustAsync((cmd, cancellationToken) => _authValidations.UserWithPhoneNumberNotExistsAsync(cmd.PhoneNumber))
+                .WithMessage(stringLocalizer["InvalidRegisterAttempt_PhoneNumberAlreadyUsed"]);
+
+            RuleFor(cmd => cmd)
+                .MustAsync((cmd, cancellationToken) => _authValidations.UserWithEmailNotExistsAsync(cmd.Email))
                 .WithMessage(stringLocalizer["InvalidRegisterAttempt_EmailAlreadyUsed"]);
+
+            RuleFor(cmd => cmd)
+                .MustAsync((cmd, cancellationToken) => CanRegister(cmd))
+                .WithMessage(stringLocalizer["InvalidRegisterAttempt_UnknownError"]);
 
             RuleFor(cmd => cmd.Roles).NotEmpty();
 
@@ -68,7 +75,8 @@ namespace Core.Users.Service
 
         private async Task<bool> CanRegister(RegisterUserCommand cmd)
         {
-           return !await _authValidations.UserWithEmailExistsAsync(cmd.Email);
+           return await _authValidations.UserWithEmailNotExistsAsync(cmd.Email) &&
+                  await _authValidations.UserWithPhoneNumberNotExistsAsync(cmd.PhoneNumber);
         }
     }
 }

@@ -28,6 +28,7 @@ namespace Users.Core.Service
         private readonly ChangePasswordValidator _changePasswordValidator;
         private readonly IStringLocalizer<SharedResource> _stringLocalizer;
         private readonly IServiceBusSender _serviceBusSender;
+        private readonly AuthValidations _authValidations;
 
         public UserService(UsersDbContext ctx,
                            IMapper mapper,
@@ -36,7 +37,8 @@ namespace Users.Core.Service
                            EmailVerificationValidator emailVerificationValidator,
                            IStringLocalizer<SharedResource> stringLocalizer,
                            IServiceBusSender serviceBusSender,
-                           ChangePasswordValidator changePasswordValidator)
+                           ChangePasswordValidator changePasswordValidator,
+                           AuthValidations authValidations)
              : base(ctx,
                     mapper)
         {
@@ -46,6 +48,7 @@ namespace Users.Core.Service
             _stringLocalizer = stringLocalizer;
             _serviceBusSender = serviceBusSender;
             _changePasswordValidator = changePasswordValidator;
+            _authValidations = authValidations;
         }
 
         public async Task<User> Create(RegisterUserCommand cmd)
@@ -126,16 +129,12 @@ namespace Users.Core.Service
 
             if (field.ToLower().Trim().Contains("email"))
             {
-                var user = await GetQueryable(Includes()).FirstOrDefaultAsync(x => x.Email == value);
-
-                return user == default;
+                return await _authValidations.UserWithEmailNotExistsAsync(value);
             }
 
             if (field.ToLower().Trim().Contains("phone"))
             {
-                var user = await GetQueryable(Includes()).FirstOrDefaultAsync(x => x.PhoneNumber == value);
-
-                return user == default;
+                return await _authValidations.UserWithPhoneNumberNotExistsAsync(value);
             }
 
             return false;

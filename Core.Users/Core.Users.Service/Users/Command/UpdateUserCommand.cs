@@ -30,7 +30,8 @@ namespace Core.Users.Service
 
             RuleFor(cmd => cmd.FirstName).NotEmpty();
             RuleFor(cmd => cmd.LastName).NotEmpty();
-            
+            RuleFor(cmd => cmd.PhoneNumber).NotEmpty();
+
             RuleFor(cmd => cmd.Roles).NotEmpty();
             RuleFor(cmd => cmd.Roles)
                 .Must(roles => roles.Count == 1)

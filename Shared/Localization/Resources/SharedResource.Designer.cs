@@ -106,7 +106,7 @@ namespace Localization.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Registration failed. Email address is already in use..
+        ///   Looks up a localized string similar to Invalid atttempt. Email address is already in use..
         /// </summary>
         public static string InvalidRegisterAttempt_EmailAlreadyUsed {
             get {
@@ -115,7 +115,16 @@ namespace Localization.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Registration failed. More than one role provided..
+        ///   Looks up a localized string similar to Invalid atttempt. Phone number is already in use..
+        /// </summary>
+        public static string InvalidRegisterAttempt_PhoneNumberAlreadyUsed {
+            get {
+                return ResourceManager.GetString("InvalidRegisterAttempt_PhoneNumberAlreadyUsed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid atttempt. More than one role provided..
         /// </summary>
         public static string InvalidRegisterAttempt_SingleRole {
             get {

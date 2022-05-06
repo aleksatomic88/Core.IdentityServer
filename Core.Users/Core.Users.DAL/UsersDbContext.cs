@@ -25,6 +25,10 @@ namespace Core.Users.DAL
                         .HasIndex(u => u.Email)
                         .IsUnique();
 
+            //modelBuilder.Entity<User>()
+            //            .HasIndex(u => u.PhoneNumber)
+            //            .IsUnique();
+
             modelBuilder.Entity<User>()
                         .ToTable("Users", b => b.IsTemporal());
         }

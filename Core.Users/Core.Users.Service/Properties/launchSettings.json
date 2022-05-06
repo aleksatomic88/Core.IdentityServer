@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Core.Users.Service": {
+      "commandName": "Project",
+      "hotReloadEnabled": true
+    }
+  }
+}

@@ -132,11 +132,14 @@
   <data name="InvalidEmailVerificationAttempt_TokenExpired" xml:space="preserve">
     <value>Verification Token Expired</value>
   </data>
+  <data name="InvalidRegisterAttempt_PhoneNumberAlreadyUsed" xml:space="preserve">
+    <value>Invalid atttempt. Phone number is already in use.</value>
+  </data>
   <data name="InvalidRegisterAttempt_EmailAlreadyUsed" xml:space="preserve">
-    <value>Registration failed. Email address is already in use.</value>
+    <value>Invalid atttempt. Email address is already in use.</value>
   </data>
   <data name="InvalidRegisterAttempt_SingleRole" xml:space="preserve">
-    <value>Registration failed. More than one role provided.</value>
+    <value>Invalid atttempt. More than one role provided.</value>
   </data>
   <data name="InvalidRegisterAttempt_UnknownError" xml:space="preserve">
     <value>Registration failed.</value>
