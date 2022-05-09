@@ -32,6 +32,8 @@ namespace IdentityServer
 
             services.AddIdentityServerService(Configuration);
 
+            services.AddExternalProviders(Configuration);
+
             var hashIdsOptions = Configuration.GetSection("HashIds");
             services.AddSingleton<IHashids>(_ => new Hashids(hashIdsOptions["Salt"], Convert.ToInt32(hashIdsOptions["MinLength"])));
         }
